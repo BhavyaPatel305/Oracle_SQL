@@ -1,0 +1,241 @@
+SQL> 
+SQL> REM DML STATEMENTS
+SQL> 
+SQL> REM TCL STATEMENTS
+SQL> 
+SQL> REM ALTER TABLE ...
+SQL> 
+SQL> REM FLASHBACK TABLE ...
+SQL> 
+SQL> REM VERSIONS QUERY
+SQL> 
+SQL> REM CONCEPTS : CONCURRENCY , LOCKING , DEAD LOCK SITUATION , TRANSACTION , READ CONSISTENCY
+SQL> 
+SQL> REM DROP TABLE , FLASHBACK TABLE , PURGE TABLE , TRUNCATE TABLE
+SQL> 
+SQL> 
+SQL> 
+SQL> REM SQL SUB LANGUAGES : 1 DRL/DQL 2 DML 3 TCL 4 DCL 5 DDL
+SQL> 
+SQL> REM DRL/DQL : DATA RETRIEVAL/QUERY LANGUAGE : SELECT
+SQL> 
+SQL> REM DML : DATA MANIPULATION LANGUAGE : INSERT UPDATE DELETE      MERGE
+SQL> 
+SQL> REM TCL : TRANSACTION CONTROL LANGUAGE : COMMIT ROLLBACK SAVEPOINT
+SQL> 
+SQL> REM DCL : GRANT REVOKE
+SQL> 
+SQL> REM DDL : CREATE ALTER DROP TRUNCATE FLASHBACK COMMENT PURGE RENAME
+SQL> 
+SQL> 
+SQL> REM MANIPULATION : ANY TYPE OF CHANGES
+SQL> 
+SQL> REM INSERT : TO ADD NEW ROW(S) TO THE EXISTING TABLE
+SQL> 
+SQL> REM UPDATE : TO CHANGE/EDIT/MODIFY/UPDATE EXISTING ROW VALUES
+SQL> 
+SQL> REM DELETE : TO DELETE/REMOVE EXISTING ROWS FROM TABLE
+SQL> 
+SQL> 
+SQL> 
+SQL> REM MERGE : COMBO OF INSERT + UPDATE + DELETE
+SQL> 
+SQL> 
+SQL> REM TRANSACTION : BUNCH OR GROUP OF DML STATEMENTS EXECUTED ON SINGLE OR MULTIPLE TABLES WITHIN SESSION
+SQL> 
+SQL> 
+SQL> 
+SQL> REM ALL THE CHANGES DONE USING DML STATEMENTS WITHIN TRANSACTION IS ONLY LIMITED TO MEMORY/RAM BY DEFAULT.
+SQL> 
+SQL> 
+SQL> REM TCL : TRANSACTION CONTROL LANGUAGE
+SQL> 
+SQL> REM COMMIT : TO SAVE CHANGES DONE IN CURRENT TRANSACTION WHICH ARE IN OPEN STATE.
+SQL> 
+SQL> REM ROLLBACK : TO UNDO FULLY/PARTIALLY CHANGES DONE IN CURRENT TRANSACTION. IF WE USE ONLY ROLLBACK IT WILL FULLY UNDO THE CHANGES FROM MEMORY. IF WE USE ROLLBACK WITH SOME SAVEPOINT NAME, IT WILL UNDO CHANGES DONE AFTER THAT SAVEPOINT.
+SQL> 
+SQL> REM SAVEPOINT : TO BREAK TRANSACTION INTO PARTS, SO THAT AFTERWARDS USING SAVPOINTS WE CAN UNDO PARTIAL CHANGES OF TRANSACTION.
+SQL> 
+SQL> 
+SQL> DROP TABLE R1;
+
+Table dropped.
+
+SQL> CREATE TABLE R1 AS SELECT * FROM REGIONS WHERE 1 = 2;
+
+Table created.
+
+SQL> DESC R1
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ REGION_ID                                 NOT NULL NUMBER
+ REGION_NAME                                        VARCHAR2(25)
+
+SQL> SELECT * FROM R1;
+
+no rows selected
+
+SQL> REM TRANSACTION STARTS WITH FIRST DML STATEMENT AND ENDS WITH COMMIT/ROLLBACK STATEMENT.
+SQL> 
+SQL> INSERT INTO R1 VALUES (1,'ASIA');
+
+1 row created.
+
+SQL> REM MEMORY = 1 ROW , TABLE = 0
+SQL> 
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                          
+---------- -------------------------                                            
+         1 ASIA                                                                 
+
+SQL> INSERT INTO R1 VALUES (2,'AMERICA');
+
+1 row created.
+
+SQL> REM MEMORY = 2 ROW , TABLE = 0
+SQL> 
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                          
+---------- -------------------------                                            
+         1 ASIA                                                                 
+         2 AMERICA                                                              
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> REM MEMORY = 0 ROW , TABLE = 0 ROW
+SQL> 
+SQL> SELECT * FROM R1;
+
+no rows selected
+
+SQL> REM BELOW COMMAND WILL CREATE NEW TRANSACTION
+SQL> 
+SQL> INSERT INTO R1 VALUES (1,'ASIA');
+
+1 row created.
+
+SQL> REM MEMORY = 1 ROW , TABLE = 0
+SQL> 
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                          
+---------- -------------------------                                            
+         1 ASIA                                                                 
+
+SQL> INSERT INTO R1 VALUES (2,'AMERICA');
+
+1 row created.
+
+SQL> REM MEMORY = 2 ROW , TABLE = 0
+SQL> 
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                          
+---------- -------------------------                                            
+         1 ASIA                                                                 
+         2 AMERICA                                                              
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> REM THE ABOVE COMMAND WILL SAVE ALL THE CHANGES I.E. TWO INSERTS IN TABLE.
+SQL> 
+SQL> REM MEMORY = 0 ROW , TABLE = 2 ROWS
+SQL> 
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                          
+---------- -------------------------                                            
+         1 ASIA                                                                 
+         2 AMERICA                                                              
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                          
+---------- -------------------------                                            
+         1 ASIA                                                                 
+         2 AMERICA                                                              
+
+SQL> REM MEMORY = 0 ROW , TABLE = 2 ROWS
+SQL> 
+SQL> REM BELOW COMMAND WILL CREATE NEW TRANSACTION
+SQL> 
+SQL> INSERT INTO R1 VALUES (3,'AUSTRALIA');
+
+1 row created.
+
+SQL> REM MEMORY = 1 ROW , TABLE = 2 ROWS
+SQL> 
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                          
+---------- -------------------------                                            
+         1 ASIA                                                                 
+         2 AMERICA                                                              
+         3 AUSTRALIA                                                            
+
+SQL> SAVEPOINT A;
+
+Savepoint created.
+
+SQL> INSERT INTO R1 VALUES (4,'AFRICA');
+
+1 row created.
+
+SQL> REM MEMORY = 2 ROW , TABLE = 2 ROWS
+SQL> 
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                          
+---------- -------------------------                                            
+         1 ASIA                                                                 
+         2 AMERICA                                                              
+         3 AUSTRALIA                                                            
+         4 AFRICA                                                               
+
+SQL> REM AT THIS POINT OF TIME WE HAVE 3 CHOICES
+SQL> 
+SQL> REM 1 COMMIT : WILL SAVE BOTH THE CHANGES IN TABLE PERMANENTLY AND REMOVE SAVEPOINT
+SQL> 
+SQL> REM 2 ROLLBACK : WILL UNDO BOTH THE CHANGES FROM MEMORY AND REMOVE SAVEPOINT
+SQL> 
+SQL> REM 3 ROLLBACK TO A; + COMMIT; : ROLLBACK TO A; WILL UNDO THE SECOND INSERT + COMMIT : WILL SAVE THE FIRST INSERT
+SQL> 
+SQL> ROLLBACK TO A;
+
+Rollback complete.
+
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                          
+---------- -------------------------                                            
+         1 ASIA                                                                 
+         2 AMERICA                                                              
+         3 AUSTRALIA                                                            
+
+SQL> REM MEMORY = 1 ROW , TABLE = 2 ROWS
+SQL> 
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> REM MEMORY = 0 ROW , TABLE = 3 ROWS
+SQL> 
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                          
+---------- -------------------------                                            
+         1 ASIA                                                                 
+         2 AMERICA                                                              
+         3 AUSTRALIA                                                            
+
+SQL> SPOOL OFF

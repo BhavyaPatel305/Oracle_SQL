@@ -1,0 +1,376 @@
+SQL> 
+SQL> REM SUB QUERY IS NOTHING BUT SELECT STATEMENT WITHIN ANOTHER STATEMENT.
+SQL> 
+SQL> REM OUTER STATEMENT MAY BE SELECT  , INSERT , UPDATE , DELETER , CREATE ..., BUT GENERALLY INNER STATEMENT IS SELECT ONLY.
+SQL> 
+SQL> REM WHEN WE USE SUB QUERY, IT GETS EXECUTED FIRST, IT'S RESULT IS REPLACED AND USED BY MAIN QUERY.
+SQL> 
+SQL> REM WE NEED TO USE SUB QUERY IN BELOW 4 SITUATIONS :
+SQL> 
+SQL> REM 1 IF WE WANT TO COMPARE SUMMARY ITEM IN 'WHERE' CLAUSE.
+SQL> 
+SQL> REM 2 IF OUR MAIN REQUIREMENT HAS SOME HIDDEN REQUIREMENT.
+SQL> 
+SQL> REM 3 IF WE WANT TO COMPARE NESTED SUMMARY ITEM IN 'HAVING' CLAUSE.
+SQL> 
+SQL> REM 4 IF WE WANT TO USE RESULT OF SUB QUERY AS TABLE FOR MAIN QUERY.
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> REM 1 IF WE WANT TO COMPARE SUMMARY ITEM IN 'WHERE' CLAUSE.
+SQL> 
+SQL> REM SYNTACTICAL PRECEDENCE : SELECT ... FROM ... WHERE ... GROUP BY / HAVING ... ORDER BY ... OFFSET ... FETCH ...;
+SQL> 
+SQL> REM EXECUTION PRECEDENCE : FROM ... WHERE ... GROUP BY ... HAVING ... COLUMN ALIAS ... ORDER BY ... OFFSET ... FETCH ... SELECT ...;
+SQL> 
+SQL> REM DISPLAY INFO. ABOUT EMPLOYEE WHO GETS HIGHEST SALARY IN COMPANY.
+SQL> 
+SQL> REM SALARY = MAX(SALARY)
+SQL> 
+SQL> REM NON-SUMMARY/SCALAR = SUMMARY ITEM
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY = MAX(SALARY);
+SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY = MAX(SALARY)
+                                                         *
+ERROR at line 1:
+ORA-00934: group function is not allowed here 
+
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY = (SELECT MAX(SALARY) FROM EMPLOYEES);
+
+FIRST_NAME          SALARY                                                      
+--------------- ----------                                                      
+Steven               24000                                                      
+
+SQL> REM DISPLAY INFO. ABOUT EMPLOYEE WHO WERE HIRED FIRST IN COMPANY.
+SQL> 
+SQL> SELECT FIRST_NAME,HIRE_DATE FROM EMPLOYEES WHERE HIRE_DATE = (SELECT MIN(HIRE_DATE) FROM EMPLOYEES);
+
+FIRST_NAME      HIRE_DATE                                                       
+--------------- ---------                                                       
+Steven          17-JUL-87                                                       
+
+SQL> REM DISPLAY INFO. ABOUT EMPLOYEE WHO GETS HIGHEST COMMISSION_PCT.
+SQL> 
+SQL> SELECT FIRST_NAME,COMMISSION_PCT FROM EMPLOYEES WHERE COMMISSION_PCT = (SELECT MAX(COMMISSION_PCT) FROM EMPLOYEES);
+
+FIRST_NAME      COMMISSION_PCT                                                  
+--------------- --------------                                                  
+Ellen                       .3                                                  
+Jonathon                    .3                                                  
+
+SQL> REM DISPLAY INFO. ABOUT EMPLOYEE WHO GETS LOWEST COMMISSION AMOUNT.
+SQL> 
+SQL> SELECT FIRST_NAME, COMMISSION_PCT*SALARY C_AMT FROM EMPLOYEES WHERE C_AMT = (SELECT MIN(COMMISSION_PCT*SALARY) FROM EMPLOYEES);
+SELECT FIRST_NAME, COMMISSION_PCT*SALARY C_AMT FROM EMPLOYEES WHERE C_AMT = (SELECT MIN(COMMISSION_PCT*SALARY) FROM EMPLOYEES)
+                                                                    *
+ERROR at line 1:
+ORA-00904: "C_AMT": invalid identifier 
+
+
+SQL> SELECT FIRST_NAME, COMMISSION_PCT*SALARY  FROM EMPLOYEES WHERE COMMISSION_PCT*SALARY = (SELECT MIN(COMMISSION_PCT*SALARY) FROM EMPLOYEES);
+
+FIRST_NAME      COMMISSION_PCT*SALARY                                           
+--------------- ---------------------                                           
+Kimerely                         1050                                           
+
+SQL> REM DISPLAY THOSE WHO GET HIGHER SALARY THAN AVERAGE SALARY PAID BY COMPANY.
+SQL> 
+SQL> SELECT FIRST_NAME,SALARY FROM EMPLOYEES WHERE SALARY > (SELECT AVG(SALARY) FROM EMPLOYEES);
+
+FIRST_NAME          SALARY                                                      
+--------------- ----------                                                      
+Steven               24000                                                      
+Neena                17000                                                      
+Lex                  17000                                                      
+Alexander             9000                                                      
+Eleni                10500                                                      
+Ellen                11000                                                      
+Michael              13000                                                      
+Shelley              12000                                                      
+
+8 rows selected.
+
+SQL> REM DISPLAY THOSE WHO GETS EITHER LOWEST OR HIGHEST SALARY IN COMPANY.
+SQL> 
+SQL> SELECT FIRST_NAME,SALARY FROM EMPLOYEES WHERE SALARY =  (SELECT MIN(SALARY) FROM EMPLOYEES) OR SALARY = (SELECT MAX(SALARY) FROM EMPLOYEES);
+
+FIRST_NAME          SALARY                                                      
+--------------- ----------                                                      
+Steven               24000                                                      
+Peter                 2500                                                      
+
+SQL> SELECT FIRST_NAME, SALARY FROM EMPLOYEES WHERE SALARY = ANY (SELECT MIN(SALARY) FROM EMPLOYEES, SELECT MAX(SALARY) FROM EMPLOYEES);
+SELECT FIRST_NAME, SALARY FROM EMPLOYEES WHERE SALARY = ANY (SELECT MIN(SALARY) FROM EMPLOYEES, SELECT MAX(SALARY) FROM EMPLOYEES)
+                                                                                                *
+ERROR at line 1:
+ORA-00903: invalid table name 
+
+
+SQL> SELECT FIRST_NAME, SALARY FROM EMPLOYEES WHERE SALARY = ANY ((SELECT MIN(SALARY) FROM EMPLOYEES), (SELECT MAX(SALARY) FROM EMPLOYEES));
+
+FIRST_NAME          SALARY                                                      
+--------------- ----------                                                      
+Steven               24000                                                      
+Peter                 2500                                                      
+
+SQL> SELECT FIRST_NAME, SALARY FROM EMPLOYEES WHERE SALARY = SOME ((SELECT MIN(SALARY) FROM EMPLOYEES), (SELECT MAX(SALARY) FROM EMPLOYEES));
+
+FIRST_NAME          SALARY                                                      
+--------------- ----------                                                      
+Steven               24000                                                      
+Peter                 2500                                                      
+
+SQL> SELECT FIRST_NAME, SALARY FROM EMPLOYEES WHERE SALARY IN ((SELECT MIN(SALARY) FROM EMPLOYEES), (SELECT MAX(SALARY) FROM EMPLOYEES));
+
+FIRST_NAME          SALARY                                                      
+--------------- ----------                                                      
+Steven               24000                                                      
+Peter                 2500                                                      
+
+SQL> REM DISPLAY ALL EXCEPT THOSE WHO WERE HIRED EITHER FIRST OR LAST IN COMPANY.
+SQL> 
+SQL> SELECT FIRST_NAME,HIRE_DATE FROM EMPLOYEES WHERE HIRE_DATE NOT IN ((SELECT MIN(HIRE_DATE) FROM EMPLOYEES),(SELECT MAX(HIRE_DATE) FROM EMPLOYEES));
+
+FIRST_NAME      HIRE_DATE                                                       
+--------------- ---------                                                       
+Neena           21-SEP-89                                                       
+Lex             13-JAN-93                                                       
+Alexander       03-JAN-90                                                       
+Bruce           21-MAY-91                                                       
+Diana           07-FEB-99                                                       
+Kevin           16-NOV-99                                                       
+Trenna          17-OCT-95                                                       
+Curtis          29-JAN-97                                                       
+Randall         15-MAR-98                                                       
+Peter           09-JUL-98                                                       
+Ellen           11-MAY-96                                                       
+
+FIRST_NAME      HIRE_DATE                                                       
+--------------- ---------                                                       
+Jonathon        24-MAR-98                                                       
+Kimerely        24-MAY-99                                                       
+Jennifer        17-SEP-87                                                       
+Michael         17-FEB-96                                                       
+Pat             17-AUG-97                                                       
+Shelley         07-JUN-94                                                       
+William         07-JUN-94                                                       
+
+18 rows selected.
+
+SQL> SELECT FIRST_NAME,HIRE_DATE FROM EMPLOYEES WHERE HIRE_DATE <> ALL((SELECT MIN(HIRE_DATE) FROM EMPLOYEES),(SELECT MAX(HIRE_DATE) FROM EMPLOYEES));
+
+FIRST_NAME      HIRE_DATE                                                       
+--------------- ---------                                                       
+Neena           21-SEP-89                                                       
+Lex             13-JAN-93                                                       
+Alexander       03-JAN-90                                                       
+Bruce           21-MAY-91                                                       
+Diana           07-FEB-99                                                       
+Kevin           16-NOV-99                                                       
+Trenna          17-OCT-95                                                       
+Curtis          29-JAN-97                                                       
+Randall         15-MAR-98                                                       
+Peter           09-JUL-98                                                       
+Ellen           11-MAY-96                                                       
+
+FIRST_NAME      HIRE_DATE                                                       
+--------------- ---------                                                       
+Jonathon        24-MAR-98                                                       
+Kimerely        24-MAY-99                                                       
+Jennifer        17-SEP-87                                                       
+Michael         17-FEB-96                                                       
+Pat             17-AUG-97                                                       
+Shelley         07-JUN-94                                                       
+William         07-JUN-94                                                       
+
+18 rows selected.
+
+SQL> SELECT FIRST_NAME,HIRE_DATE FROM EMPLOYEES WHERE NOT HIRE_DATE = (SELECT MIN(HIRE_DATE) FROM EMPLOYEES) OR HIRE_DATE =  (SELECT MAX(HIRE_DATE) FROM EMPLOYEES);
+
+FIRST_NAME      HIRE_DATE                                                       
+--------------- ---------                                                       
+Neena           21-SEP-89                                                       
+Lex             13-JAN-93                                                       
+Alexander       03-JAN-90                                                       
+Bruce           21-MAY-91                                                       
+Diana           07-FEB-99                                                       
+Kevin           16-NOV-99                                                       
+Trenna          17-OCT-95                                                       
+Curtis          29-JAN-97                                                       
+Randall         15-MAR-98                                                       
+Peter           09-JUL-98                                                       
+Eleni           29-JAN-00                                                       
+
+FIRST_NAME      HIRE_DATE                                                       
+--------------- ---------                                                       
+Ellen           11-MAY-96                                                       
+Jonathon        24-MAR-98                                                       
+Kimerely        24-MAY-99                                                       
+Jennifer        17-SEP-87                                                       
+Michael         17-FEB-96                                                       
+Pat             17-AUG-97                                                       
+Shelley         07-JUN-94                                                       
+William         07-JUN-94                                                       
+
+19 rows selected.
+
+SQL> SELECT FIRST_NAME,HIRE_DATE FROM EMPLOYEES WHERE NOT (HIRE_DATE = (SELECT MIN(HIRE_DATE) FROM EMPLOYEES) OR HIRE_DATE =  (SELECT MAX(HIRE_DATE) FROM EMPLOYEES));
+
+FIRST_NAME      HIRE_DATE                                                       
+--------------- ---------                                                       
+Neena           21-SEP-89                                                       
+Lex             13-JAN-93                                                       
+Alexander       03-JAN-90                                                       
+Bruce           21-MAY-91                                                       
+Diana           07-FEB-99                                                       
+Kevin           16-NOV-99                                                       
+Trenna          17-OCT-95                                                       
+Curtis          29-JAN-97                                                       
+Randall         15-MAR-98                                                       
+Peter           09-JUL-98                                                       
+Ellen           11-MAY-96                                                       
+
+FIRST_NAME      HIRE_DATE                                                       
+--------------- ---------                                                       
+Jonathon        24-MAR-98                                                       
+Kimerely        24-MAY-99                                                       
+Jennifer        17-SEP-87                                                       
+Michael         17-FEB-96                                                       
+Pat             17-AUG-97                                                       
+Shelley         07-JUN-94                                                       
+William         07-JUN-94                                                       
+
+18 rows selected.
+
+SQL> REM DISPLAY ALL EXCEPT THOSE WHO WERE HIRED EITHER FIRST OR LAST IN COMPANY.
+SQL> 
+SQL> SELECT FIRST_NAME,HIRE_DATE FROM EMPLOYEES WHERE HIRE_DATE BETWEEN (SELECT MIN(HIRE_DATE) FROM EMPLOYEES) AND (SELECT MAX(HIRE_DATE) FROM EMPLOYEES);
+
+FIRST_NAME      HIRE_DATE                                                       
+--------------- ---------                                                       
+Steven          17-JUL-87                                                       
+Neena           21-SEP-89                                                       
+Lex             13-JAN-93                                                       
+Alexander       03-JAN-90                                                       
+Bruce           21-MAY-91                                                       
+Diana           07-FEB-99                                                       
+Kevin           16-NOV-99                                                       
+Trenna          17-OCT-95                                                       
+Curtis          29-JAN-97                                                       
+Randall         15-MAR-98                                                       
+Peter           09-JUL-98                                                       
+
+FIRST_NAME      HIRE_DATE                                                       
+--------------- ---------                                                       
+Eleni           29-JAN-00                                                       
+Ellen           11-MAY-96                                                       
+Jonathon        24-MAR-98                                                       
+Kimerely        24-MAY-99                                                       
+Jennifer        17-SEP-87                                                       
+Michael         17-FEB-96                                                       
+Pat             17-AUG-97                                                       
+Shelley         07-JUN-94                                                       
+William         07-JUN-94                                                       
+
+20 rows selected.
+
+SQL> SET LINES 200 PAGES 24
+SQL> 
+SQL> SELECT LAST_NAME , LAST_DAY(HIRE_DATE) , HIRE_DATE FROM EMPLOYEES;
+
+LAST_NAME       LAST_DAY( HIRE_DATE                                                                                                                                                                     
+--------------- --------- ---------                                                                                                                                                                     
+King            31-JUL-87 17-JUL-87                                                                                                                                                                     
+Kochhar         30-SEP-89 21-SEP-89                                                                                                                                                                     
+De Haan         31-JAN-93 13-JAN-93                                                                                                                                                                     
+Hunold          31-JAN-90 03-JAN-90                                                                                                                                                                     
+Ernst           31-MAY-91 21-MAY-91                                                                                                                                                                     
+Lorentz         28-FEB-99 07-FEB-99                                                                                                                                                                     
+Mourgos         30-NOV-99 16-NOV-99                                                                                                                                                                     
+Rajs            31-OCT-95 17-OCT-95                                                                                                                                                                     
+Davies          31-JAN-97 29-JAN-97                                                                                                                                                                     
+Matos           31-MAR-98 15-MAR-98                                                                                                                                                                     
+Vargas          31-JUL-98 09-JUL-98                                                                                                                                                                     
+Zlotkey         31-JAN-00 29-JAN-00                                                                                                                                                                     
+Abel            31-MAY-96 11-MAY-96                                                                                                                                                                     
+Taylor          31-MAR-98 24-MAR-98                                                                                                                                                                     
+Grant           31-MAY-99 24-MAY-99                                                                                                                                                                     
+Whalen          30-SEP-87 17-SEP-87                                                                                                                                                                     
+Hartstein       29-FEB-96 17-FEB-96                                                                                                                                                                     
+Fay             31-AUG-97 17-AUG-97                                                                                                                                                                     
+Higgins         30-JUN-94 07-JUN-94                                                                                                                                                                     
+Gietz           30-JUN-94 07-JUN-94                                                                                                                                                                     
+
+20 rows selected.
+
+SQL> SELECT LAST_NAME , LAST_DAY(HIRE_DATE) , HIRE_DATE , LAST_DAY(HIRE_DATE) - HIRE_DATEFROM EMPLOYEES;
+SELECT LAST_NAME , LAST_DAY(HIRE_DATE) , HIRE_DATE , LAST_DAY(HIRE_DATE) - HIRE_DATEFROM EMPLOYEES
+                                                                                                 *
+ERROR at line 1:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> SELECT LAST_NAME , LAST_DAY(HIRE_DATE) , HIRE_DATE , LAST_DAY(HIRE_DATE) - HIRE_DATE FROM EMPLOYEES;
+
+LAST_NAME       LAST_DAY( HIRE_DATE LAST_DAY(HIRE_DATE)-HIRE_DATE                                                                                                                                       
+--------------- --------- --------- -----------------------------                                                                                                                                       
+King            31-JUL-87 17-JUL-87                            14                                                                                                                                       
+Kochhar         30-SEP-89 21-SEP-89                             9                                                                                                                                       
+De Haan         31-JAN-93 13-JAN-93                            18                                                                                                                                       
+Hunold          31-JAN-90 03-JAN-90                            28                                                                                                                                       
+Ernst           31-MAY-91 21-MAY-91                            10                                                                                                                                       
+Lorentz         28-FEB-99 07-FEB-99                            21                                                                                                                                       
+Mourgos         30-NOV-99 16-NOV-99                            14                                                                                                                                       
+Rajs            31-OCT-95 17-OCT-95                            14                                                                                                                                       
+Davies          31-JAN-97 29-JAN-97                             2                                                                                                                                       
+Matos           31-MAR-98 15-MAR-98                            16                                                                                                                                       
+Vargas          31-JUL-98 09-JUL-98                            22                                                                                                                                       
+Zlotkey         31-JAN-00 29-JAN-00                             2                                                                                                                                       
+Abel            31-MAY-96 11-MAY-96                            20                                                                                                                                       
+Taylor          31-MAR-98 24-MAR-98                             7                                                                                                                                       
+Grant           31-MAY-99 24-MAY-99                             7                                                                                                                                       
+Whalen          30-SEP-87 17-SEP-87                            13                                                                                                                                       
+Hartstein       29-FEB-96 17-FEB-96                            12                                                                                                                                       
+Fay             31-AUG-97 17-AUG-97                            14                                                                                                                                       
+Higgins         30-JUN-94 07-JUN-94                            23                                                                                                                                       
+Gietz           30-JUN-94 07-JUN-94                            23                                                                                                                                       
+
+20 rows selected.
+
+SQL> REM DISPLAY ALL EXCEPT THOSE WHO WERE HIRED EITHER FIRST OR LAST IN COMPANY.
+SQL> 
+SQL> SELECT LAST_DAY(HIRE_DATE) - HIRE_DATE FROM EMPLOYEES WHERE LAST_DAY(HIRE_DATE) - HIRE_DATE <=(SELECT MIN(LAST_DAY(HIRE_DATE) - HIRE_DATE) OR LAST_DAY(HIRE_DATE) - HIRE_DATE >=(SELECT MAX(LAST_DAY(HIRE_DATE) - HIRE_DATE);
+SELECT LAST_DAY(HIRE_DATE) - HIRE_DATE FROM EMPLOYEES WHERE LAST_DAY(HIRE_DATE) - HIRE_DATE <=(SELECT MIN(LAST_DAY(HIRE_DATE) - HIRE_DATE) OR LAST_DAY(HIRE_DATE) - HIRE_DATE >=(SELECT MAX(LAST_DAY(HIRE_DATE) - HIRE_DATE)
+                                                                                               *
+ERROR at line 1:
+ORA-00921: unexpected end of SQL command 
+
+
+SQL> SELECT FIRST_NAME,HIRE_DATE FROM EMPLOYEES WHERE HIRE_DATE BETWEEN (SELECT MIN(HIRE_DATE)+1 FROM EMPLOYEES) AND (SELECT MAX(HIRE_DATE)-1 FROM EMPLOYEES);
+
+FIRST_NAME      HIRE_DATE                                                                                                                                                                               
+--------------- ---------                                                                                                                                                                               
+Neena           21-SEP-89                                                                                                                                                                               
+Lex             13-JAN-93                                                                                                                                                                               
+Alexander       03-JAN-90                                                                                                                                                                               
+Bruce           21-MAY-91                                                                                                                                                                               
+Diana           07-FEB-99                                                                                                                                                                               
+Kevin           16-NOV-99                                                                                                                                                                               
+Trenna          17-OCT-95                                                                                                                                                                               
+Curtis          29-JAN-97                                                                                                                                                                               
+Randall         15-MAR-98                                                                                                                                                                               
+Peter           09-JUL-98                                                                                                                                                                               
+Ellen           11-MAY-96                                                                                                                                                                               
+Jonathon        24-MAR-98                                                                                                                                                                               
+Kimerely        24-MAY-99                                                                                                                                                                               
+Jennifer        17-SEP-87                                                                                                                                                                               
+Michael         17-FEB-96                                                                                                                                                                               
+Pat             17-AUG-97                                                                                                                                                                               
+Shelley         07-JUN-94                                                                                                                                                                               
+William         07-JUN-94                                                                                                                                                                               
+
+18 rows selected.
+
+SQL> SPOOL OFF

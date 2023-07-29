@@ -1,0 +1,936 @@
+SQL> CL SCR
+
+SQL> REM DELETE - TRUNCATE - DROP - PURGE
+SQL> 
+SQL> REM DELETE : IT CAN DELETE SELETED ROWS. IT CAN BE ROLLED BACK OR FLASHED BACK. DEFINITION IS KEPT INTACT. TABLE WILL STILL OCCUPY STORAGE SPACE.
+SQL> 
+SQL> REM TRUNCATE : IT WILL DELETE ALL ROWS. THE DELETION IS PERMANENT. WE CAN'T GET THOSE ROWS BACK ANY WAY. DEFINITION IS KEPT INTACT. STORAGE SPACE IS RELEASED.
+SQL> 
+SQL> REM DROP : IT WILL ACTUALLY RENAME TABLE AND PUT IT INSIDE ORACLE'S RECYCLEBIN. THE TABLE IS STILL ACCESSIBLE FOR SELECT FROM RECYCLEBIN. WE CAN REFER THE TABLE USING RECYCLE NAME.
+SQL> 
+SQL> REM PURGE : IT WILL REMOVE TABLE FROM RECYLEBIN PERMANENTLY. WE CAN'T GET TABLE BACK ANY WAY.
+SQL> 
+SQL> SELECT * FROM E1;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          14400                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       9960                       205           110                                                     
+
+20 rows selected.
+
+SQL> DELETE E1 WHERE SALARY < 10000;
+
+13 rows deleted.
+
+SQL> SELECT * FROM E1;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          14400                       101           110                                                     
+
+7 rows selected.
+
+SQL> DESC E1
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ EMPLOYEE_ID                                                                                                       NOT NULL NUMBER(6)
+ FIRST_NAME                                                                                                                 VARCHAR2(15)
+ LAST_NAME                                                                                                         NOT NULL VARCHAR2(15)
+ EMAIL                                                                                                                      VARCHAR2(10)
+ PHONE_NUMBER                                                                                                               VARCHAR2(20)
+ HIRE_DATE                                                                                                         NOT NULL DATE
+ JOB_ID                                                                                                            NOT NULL VARCHAR2(10)
+ SALARY                                                                                                                     NUMBER(8,2)
+ COMMISSION_PCT                                                                                                             NUMBER(2,2)
+ MANAGER_ID                                                                                                                 NUMBER(6)
+ DEPARTMENT_ID                                                                                                              NUMBER(4)
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> SELECT * FROM E1;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          14400                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       9960                       205           110                                                     
+
+20 rows selected.
+
+SQL> DELETE E1 WHERE SALARY < 10000;
+
+13 rows deleted.
+
+SQL> SELECT * FROM E1;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          14400                       101           110                                                     
+
+7 rows selected.
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> SELECT * FROM E1;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          14400                       101           110                                                     
+
+7 rows selected.
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> REM VERSIONS QUERY : 1 SELECT ... VERSIONS BETWEEN ... 2 SELECT ... AS OF TIMESTAMP ...
+SQL> 
+SQL> 
+SQL> SELECT * FROM E1;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          14400                       101           110                                                     
+
+7 rows selected.
+
+SQL> SELECT * FROM E1 VERSIONS BETWEEN TIMESTAMP MINVALUE AND MAXVALUE;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       9960                       205           110                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          14400                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       9960                       205           110                                                     
+
+33 rows selected.
+
+SQL> SELECT * FROM E1 AS OF TIMESTAMP SYSTIMESTAMP - INTERVAL '1' MINUTE;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          14400                       101           110                                                     
+
+7 rows selected.
+
+SQL> SELECT * FROM E1 AS OF TIMESTAMP SYSTIMESTAMP - INTERVAL '2' MINUTE;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          14400                       101           110                                                     
+
+7 rows selected.
+
+SQL> SELECT * FROM E1 AS OF TIMESTAMP SYSTIMESTAMP - INTERVAL '3' MINUTE;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          14400                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       9960                       205           110                                                     
+
+20 rows selected.
+
+SQL> SELECT * FROM E1 AS OF TIMESTAMP SYSTIMESTAMP - INTERVAL '4' MINUTE;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          14400                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       9960                       205           110                                                     
+
+20 rows selected.
+
+SQL> FLASHBACK TABLE E1 TO TIMESTAMP SYSTIMESTAMP - INTERVAL '3' MINUTE;
+FLASHBACK TABLE E1 TO TIMESTAMP SYSTIMESTAMP - INTERVAL '3' MINUTE
+                *
+ERROR at line 1:
+ORA-08189: cannot flashback the table because row movement is not enabled 
+
+
+SQL> ALTER TABLE E1 ENABLE ROW MOVEMENT;
+
+Table altered.
+
+SQL> SELECT * FROM E1 AS OF TIMESTAMP SYSTIMESTAMP - INTERVAL '4' MINUTE;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          14400                       101           110                                                     
+
+7 rows selected.
+
+SQL> SELECT * FROM E1 AS OF TIMESTAMP SYSTIMESTAMP - INTERVAL '5' MINUTE;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          14400                       101           110                                                     
+
+7 rows selected.
+
+SQL> SELECT * FROM E1 AS OF TIMESTAMP SYSTIMESTAMP - INTERVAL '6' MINUTE;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          14400                       101           110                                                     
+
+7 rows selected.
+
+SQL> SELECT * FROM E1 AS OF TIMESTAMP SYSTIMESTAMP - INTERVAL '7' MINUTE;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          14400                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       9960                       205           110                                                     
+
+20 rows selected.
+
+SQL> FLASHBACK TABLE E1 TO TIMESTAMP SYSTIMESTAMP - INTERVAL '7' MINUTE;
+
+Flashback complete.
+
+SQL> SELECT * FROM E1;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          14400                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       9960                       205           110                                                     
+
+20 rows selected.
+
+SQL> ALTER TABLE E1 DISABLE ROW MOVEMENT;
+
+Table altered.
+
+SQL> REM FLASHBACK ... TO TIMESTAMP : IS USED TO UNCOMMIT THE COMMITTED TRANSACTION.
+SQL> 
+SQL> DESC E1
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ EMPLOYEE_ID                                                                                                       NOT NULL NUMBER(6)
+ FIRST_NAME                                                                                                                 VARCHAR2(15)
+ LAST_NAME                                                                                                         NOT NULL VARCHAR2(15)
+ EMAIL                                                                                                                      VARCHAR2(10)
+ PHONE_NUMBER                                                                                                               VARCHAR2(20)
+ HIRE_DATE                                                                                                         NOT NULL DATE
+ JOB_ID                                                                                                            NOT NULL VARCHAR2(10)
+ SALARY                                                                                                                     NUMBER(8,2)
+ COMMISSION_PCT                                                                                                             NUMBER(2,2)
+ MANAGER_ID                                                                                                                 NUMBER(6)
+ DEPARTMENT_ID                                                                                                              NUMBER(4)
+
+SQL> SELECT * FROM E1;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          14400                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       9960                       205           110                                                     
+
+20 rows selected.
+
+SQL> TRUNCATE TABLE E1;
+
+Table truncated.
+
+SQL> DESC E1
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ EMPLOYEE_ID                                                                                                       NOT NULL NUMBER(6)
+ FIRST_NAME                                                                                                                 VARCHAR2(15)
+ LAST_NAME                                                                                                         NOT NULL VARCHAR2(15)
+ EMAIL                                                                                                                      VARCHAR2(10)
+ PHONE_NUMBER                                                                                                               VARCHAR2(20)
+ HIRE_DATE                                                                                                         NOT NULL DATE
+ JOB_ID                                                                                                            NOT NULL VARCHAR2(10)
+ SALARY                                                                                                                     NUMBER(8,2)
+ COMMISSION_PCT                                                                                                             NUMBER(2,2)
+ MANAGER_ID                                                                                                                 NUMBER(6)
+ DEPARTMENT_ID                                                                                                              NUMBER(4)
+
+SQL> SELECT * FROM E1;
+
+no rows selected
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> SELECT * FROM E1;
+
+no rows selected
+
+SQL> FLASHBACK TABLE E1 TO TIMESTAMP SYSTIMESTAMP - INTERVAL '2' MINUTE;
+FLASHBACK TABLE E1 TO TIMESTAMP SYSTIMESTAMP - INTERVAL '2' MINUTE
+                *
+ERROR at line 1:
+ORA-08189: cannot flashback the table because row movement is not enabled 
+
+
+SQL> ALTER TABLE E1 ENABLE ROW MOVEMENT;
+
+Table altered.
+
+SQL> FLASHBACK TABLE E1 TO TIMESTAMP SYSTIMESTAMP - INTERVAL '3' MINUTE;
+FLASHBACK TABLE E1 TO TIMESTAMP SYSTIMESTAMP - INTERVAL '3' MINUTE
+                *
+ERROR at line 1:
+ORA-01466: unable to read data - table definition has changed 
+
+
+SQL> INSERT INTO E1 SELECT * FROM EMPLOYEES;
+
+20 rows created.
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> SELECT * FROM E1;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                     
+
+20 rows selected.
+
+SQL> SHOW RECYCLEBIN
+ORIGINAL NAME    RECYCLEBIN NAME                OBJECT TYPE  DROP TIME                                                                                                                                  
+---------------- ------------------------------ ------------ -------------------                                                                                                                        
+E1               BIN$nYBI2WexQbqwDGm/rPSPSQ==$0 TABLE        2023-01-26:09:39:19                                                                                                                        
+E1               BIN$97P9p1wxSOunaIwuqMWogA==$0 TABLE        2023-01-26:08:21:01                                                                                                                        
+E10              BIN$oGAB2hMHQNyeBPsAwI3Fxw==$0 TABLE        2023-01-26:08:30:18                                                                                                                        
+E11              BIN$Is4qiRiNT8Wv/grSF2ZCqA==$0 TABLE        2023-01-26:08:30:19                                                                                                                        
+E12              BIN$GHxX36W9RBOPy35qJpUknA==$0 TABLE        2023-01-26:08:30:20                                                                                                                        
+E13              BIN$2RT/lUMtQpucfzY1HLDXcg==$0 TABLE        2023-01-26:08:30:21                                                                                                                        
+E2               BIN$UDOO3YdpTeKTZVh12cUuZw==$0 TABLE        2023-01-26:08:30:03                                                                                                                        
+E3               BIN$B2AkirNRRsWYpIog5EoNjA==$0 TABLE        2023-01-26:08:30:05                                                                                                                        
+E4               BIN$h+t6NMhERruNaH6+1c4IKA==$0 TABLE        2023-01-26:08:30:06                                                                                                                        
+E5               BIN$JtKf8coXQlauHRRMK4yJUA==$0 TABLE        2023-01-26:08:30:08                                                                                                                        
+E6               BIN$lGXyiA3PSqaRRiR0DfMz9Q==$0 TABLE        2023-01-26:08:30:09                                                                                                                        
+E7               BIN$RldYG6ewR0+3f3IbwcvflQ==$0 TABLE        2023-01-26:08:30:10                                                                                                                        
+E8               BIN$SfB4qZ7KTaaA9XcBmA9KtQ==$0 TABLE        2023-01-26:08:30:15                                                                                                                        
+E9               BIN$qOQnmhOBQOyAtQpvD9EHhw==$0 TABLE        2023-01-26:08:30:16                                                                                                                        
+R1               BIN$JpbGcKhiQNO/GS8GycjLdg==$0 TABLE        2023-01-24:09:24:43                                                                                                                        
+SQL> DROP TABLE E1;
+
+Table dropped.
+
+SQL> DESC E`
+SP2-0565: Illegal identifier.
+SQL> DESC E1
+ERROR:
+ORA-04043: object E1 does not exist 
+
+
+SQL> SELECT * FROM E1;
+SELECT * FROM E1
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> DESC E1
+ERROR:
+ORA-04043: object E1 does not exist 
+
+
+SQL> SELECT * FROM E1;
+SELECT * FROM E1
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> FLASHBACK TABLE E1 TO TIMESTAMP SYSTIMESTAMP - INTERVAL '5' MINUTE;
+FLASHBACK TABLE E1 TO TIMESTAMP SYSTIMESTAMP - INTERVAL '5' MINUTE
+                *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> SHOW RECYC
+ORIGINAL NAME    RECYCLEBIN NAME                OBJECT TYPE  DROP TIME                                                                                                                                  
+---------------- ------------------------------ ------------ -------------------                                                                                                                        
+E1               BIN$ScIopQkURyCSYu6RgC7ezg==$0 TABLE        2023-02-02:08:54:48                                                                                                                        
+E1               BIN$nYBI2WexQbqwDGm/rPSPSQ==$0 TABLE        2023-01-26:09:39:19                                                                                                                        
+E1               BIN$97P9p1wxSOunaIwuqMWogA==$0 TABLE        2023-01-26:08:21:01                                                                                                                        
+E10              BIN$oGAB2hMHQNyeBPsAwI3Fxw==$0 TABLE        2023-01-26:08:30:18                                                                                                                        
+E11              BIN$Is4qiRiNT8Wv/grSF2ZCqA==$0 TABLE        2023-01-26:08:30:19                                                                                                                        
+E12              BIN$GHxX36W9RBOPy35qJpUknA==$0 TABLE        2023-01-26:08:30:20                                                                                                                        
+E13              BIN$2RT/lUMtQpucfzY1HLDXcg==$0 TABLE        2023-01-26:08:30:21                                                                                                                        
+E2               BIN$UDOO3YdpTeKTZVh12cUuZw==$0 TABLE        2023-01-26:08:30:03                                                                                                                        
+E3               BIN$B2AkirNRRsWYpIog5EoNjA==$0 TABLE        2023-01-26:08:30:05                                                                                                                        
+E4               BIN$h+t6NMhERruNaH6+1c4IKA==$0 TABLE        2023-01-26:08:30:06                                                                                                                        
+E5               BIN$JtKf8coXQlauHRRMK4yJUA==$0 TABLE        2023-01-26:08:30:08                                                                                                                        
+E6               BIN$lGXyiA3PSqaRRiR0DfMz9Q==$0 TABLE        2023-01-26:08:30:09                                                                                                                        
+E7               BIN$RldYG6ewR0+3f3IbwcvflQ==$0 TABLE        2023-01-26:08:30:10                                                                                                                        
+E8               BIN$SfB4qZ7KTaaA9XcBmA9KtQ==$0 TABLE        2023-01-26:08:30:15                                                                                                                        
+E9               BIN$qOQnmhOBQOyAtQpvD9EHhw==$0 TABLE        2023-01-26:08:30:16                                                                                                                        
+R1               BIN$JpbGcKhiQNO/GS8GycjLdg==$0 TABLE        2023-01-24:09:24:43                                                                                                                        
+SQL> SELECT * FROM E1;
+SELECT * FROM E1
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> SELECT * FROM BIN$ScIopQkURyCSYu6RgC7ezg==$0;
+SELECT * FROM BIN$ScIopQkURyCSYu6RgC7ezg==$0
+                                        *
+ERROR at line 1:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT * FROM "BIN$ScIopQkURyCSYu6RgC7ezg==$0";
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                     
+
+20 rows selected.
+
+SQL> DELETE "BIN$ScIopQkURyCSYu6RgC7ezg==$0";
+DELETE "BIN$ScIopQkURyCSYu6RgC7ezg==$0"
+       *
+ERROR at line 1:
+ORA-38301: can not perform DDL/DML over objects in Recycle Bin 
+
+
+SQL> FLASHBACK TABLE E1 TO BEFORE DROP;
+
+Flashback complete.
+
+SQL> SHOW RECYC
+ORIGINAL NAME    RECYCLEBIN NAME                OBJECT TYPE  DROP TIME                                                                                                                                  
+---------------- ------------------------------ ------------ -------------------                                                                                                                        
+E1               BIN$nYBI2WexQbqwDGm/rPSPSQ==$0 TABLE        2023-01-26:09:39:19                                                                                                                        
+E1               BIN$97P9p1wxSOunaIwuqMWogA==$0 TABLE        2023-01-26:08:21:01                                                                                                                        
+E10              BIN$oGAB2hMHQNyeBPsAwI3Fxw==$0 TABLE        2023-01-26:08:30:18                                                                                                                        
+E11              BIN$Is4qiRiNT8Wv/grSF2ZCqA==$0 TABLE        2023-01-26:08:30:19                                                                                                                        
+E12              BIN$GHxX36W9RBOPy35qJpUknA==$0 TABLE        2023-01-26:08:30:20                                                                                                                        
+E13              BIN$2RT/lUMtQpucfzY1HLDXcg==$0 TABLE        2023-01-26:08:30:21                                                                                                                        
+E2               BIN$UDOO3YdpTeKTZVh12cUuZw==$0 TABLE        2023-01-26:08:30:03                                                                                                                        
+E3               BIN$B2AkirNRRsWYpIog5EoNjA==$0 TABLE        2023-01-26:08:30:05                                                                                                                        
+E4               BIN$h+t6NMhERruNaH6+1c4IKA==$0 TABLE        2023-01-26:08:30:06                                                                                                                        
+E5               BIN$JtKf8coXQlauHRRMK4yJUA==$0 TABLE        2023-01-26:08:30:08                                                                                                                        
+E6               BIN$lGXyiA3PSqaRRiR0DfMz9Q==$0 TABLE        2023-01-26:08:30:09                                                                                                                        
+E7               BIN$RldYG6ewR0+3f3IbwcvflQ==$0 TABLE        2023-01-26:08:30:10                                                                                                                        
+E8               BIN$SfB4qZ7KTaaA9XcBmA9KtQ==$0 TABLE        2023-01-26:08:30:15                                                                                                                        
+E9               BIN$qOQnmhOBQOyAtQpvD9EHhw==$0 TABLE        2023-01-26:08:30:16                                                                                                                        
+R1               BIN$JpbGcKhiQNO/GS8GycjLdg==$0 TABLE        2023-01-24:09:24:43                                                                                                                        
+SQL> REM FLASHBACK WORKS ON LIFO (LAST IN FIRST OUT)
+SQL> 
+SQL> DESC E`1
+SP2-0565: Illegal identifier.
+SQL> DESC E1
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ EMPLOYEE_ID                                                                                                       NOT NULL NUMBER(6)
+ FIRST_NAME                                                                                                                 VARCHAR2(15)
+ LAST_NAME                                                                                                         NOT NULL VARCHAR2(15)
+ EMAIL                                                                                                                      VARCHAR2(10)
+ PHONE_NUMBER                                                                                                               VARCHAR2(20)
+ HIRE_DATE                                                                                                         NOT NULL DATE
+ JOB_ID                                                                                                            NOT NULL VARCHAR2(10)
+ SALARY                                                                                                                     NUMBER(8,2)
+ COMMISSION_PCT                                                                                                             NUMBER(2,2)
+ MANAGER_ID                                                                                                                 NUMBER(6)
+ DEPARTMENT_ID                                                                                                              NUMBER(4)
+
+SQL> SELECT* FROM E1;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                     
+
+20 rows selected.
+
+SQL> REM FLASHBACK ... TO BEFORE DROP : IS USED TO UNDROP THE DROPPED TABLE, WHICH IS AVAILABLE IN RECYCLEBIN
+SQL> 
+SQL> SHOW RECYC
+ORIGINAL NAME    RECYCLEBIN NAME                OBJECT TYPE  DROP TIME                                                                                                                                  
+---------------- ------------------------------ ------------ -------------------                                                                                                                        
+E1               BIN$nYBI2WexQbqwDGm/rPSPSQ==$0 TABLE        2023-01-26:09:39:19                                                                                                                        
+E1               BIN$97P9p1wxSOunaIwuqMWogA==$0 TABLE        2023-01-26:08:21:01                                                                                                                        
+E10              BIN$oGAB2hMHQNyeBPsAwI3Fxw==$0 TABLE        2023-01-26:08:30:18                                                                                                                        
+E11              BIN$Is4qiRiNT8Wv/grSF2ZCqA==$0 TABLE        2023-01-26:08:30:19                                                                                                                        
+E12              BIN$GHxX36W9RBOPy35qJpUknA==$0 TABLE        2023-01-26:08:30:20                                                                                                                        
+E13              BIN$2RT/lUMtQpucfzY1HLDXcg==$0 TABLE        2023-01-26:08:30:21                                                                                                                        
+E2               BIN$UDOO3YdpTeKTZVh12cUuZw==$0 TABLE        2023-01-26:08:30:03                                                                                                                        
+E3               BIN$B2AkirNRRsWYpIog5EoNjA==$0 TABLE        2023-01-26:08:30:05                                                                                                                        
+E4               BIN$h+t6NMhERruNaH6+1c4IKA==$0 TABLE        2023-01-26:08:30:06                                                                                                                        
+E5               BIN$JtKf8coXQlauHRRMK4yJUA==$0 TABLE        2023-01-26:08:30:08                                                                                                                        
+E6               BIN$lGXyiA3PSqaRRiR0DfMz9Q==$0 TABLE        2023-01-26:08:30:09                                                                                                                        
+E7               BIN$RldYG6ewR0+3f3IbwcvflQ==$0 TABLE        2023-01-26:08:30:10                                                                                                                        
+E8               BIN$SfB4qZ7KTaaA9XcBmA9KtQ==$0 TABLE        2023-01-26:08:30:15                                                                                                                        
+E9               BIN$qOQnmhOBQOyAtQpvD9EHhw==$0 TABLE        2023-01-26:08:30:16                                                                                                                        
+R1               BIN$JpbGcKhiQNO/GS8GycjLdg==$0 TABLE        2023-01-24:09:24:43                                                                                                                        
+SQL> FLAHBACK TABLE E1 TO BEFORE DROP;
+SP2-0734: unknown command beginning "FLAHBACK T..." - rest of line ignored.
+SQL> FLASHBACK TABLE E1 TO BEFORE DROP;
+FLASHBACK TABLE E1 TO BEFORE DROP
+*
+ERROR at line 1:
+ORA-38312: original name is used by an existing object 
+
+
+SQL> FLASHBACK TABLE E1 TO BEFORE DROP RENAME TO E2;
+FLASHBACK TABLE E1 TO BEFORE DROP RENAME TO E2
+*
+ERROR at line 1:
+ORA-38312: original name is used by an existing object 
+
+
+SQL> FLASHBACK TABLE E1 TO BEFORE DROP RENAME TO E3;
+
+Flashback complete.
+
+SQL> SHOW RECYC
+ORIGINAL NAME    RECYCLEBIN NAME                OBJECT TYPE  DROP TIME                                                                                                                                  
+---------------- ------------------------------ ------------ -------------------                                                                                                                        
+E1               BIN$97P9p1wxSOunaIwuqMWogA==$0 TABLE        2023-01-26:08:21:01                                                                                                                        
+E10              BIN$oGAB2hMHQNyeBPsAwI3Fxw==$0 TABLE        2023-01-26:08:30:18                                                                                                                        
+E11              BIN$Is4qiRiNT8Wv/grSF2ZCqA==$0 TABLE        2023-01-26:08:30:19                                                                                                                        
+E12              BIN$GHxX36W9RBOPy35qJpUknA==$0 TABLE        2023-01-26:08:30:20                                                                                                                        
+E13              BIN$2RT/lUMtQpucfzY1HLDXcg==$0 TABLE        2023-01-26:08:30:21                                                                                                                        
+E2               BIN$UDOO3YdpTeKTZVh12cUuZw==$0 TABLE        2023-01-26:08:30:03                                                                                                                        
+E3               BIN$B2AkirNRRsWYpIog5EoNjA==$0 TABLE        2023-01-26:08:30:05                                                                                                                        
+E4               BIN$h+t6NMhERruNaH6+1c4IKA==$0 TABLE        2023-01-26:08:30:06                                                                                                                        
+E5               BIN$JtKf8coXQlauHRRMK4yJUA==$0 TABLE        2023-01-26:08:30:08                                                                                                                        
+E6               BIN$lGXyiA3PSqaRRiR0DfMz9Q==$0 TABLE        2023-01-26:08:30:09                                                                                                                        
+E7               BIN$RldYG6ewR0+3f3IbwcvflQ==$0 TABLE        2023-01-26:08:30:10                                                                                                                        
+E8               BIN$SfB4qZ7KTaaA9XcBmA9KtQ==$0 TABLE        2023-01-26:08:30:15                                                                                                                        
+E9               BIN$qOQnmhOBQOyAtQpvD9EHhw==$0 TABLE        2023-01-26:08:30:16                                                                                                                        
+R1               BIN$JpbGcKhiQNO/GS8GycjLdg==$0 TABLE        2023-01-24:09:24:43                                                                                                                        
+SQL> SELECT * FROM E3;
+
+       EID FNM             HD                                                                                                                                                                           
+---------- --------------- ---------                                                                                                                                                                    
+         1 GANESH          26-JAN-23                                                                                                                                                                    
+         2 RIDDHI          04-APR-05                                                                                                                                                                    
+         3                 05-MAY-05                                                                                                                                                                    
+         4 SIDDHI          07-MAY-05                                                                                                                                                                    
+        10 SIDDHI          07-MAY-05                                                                                                                                                                    
+
+SQL> DROP TABLE E3;
+
+Table dropped.
+
+SQL> SHOW RECYC
+ORIGINAL NAME    RECYCLEBIN NAME                OBJECT TYPE  DROP TIME                                                                                                                                  
+---------------- ------------------------------ ------------ -------------------                                                                                                                        
+E1               BIN$97P9p1wxSOunaIwuqMWogA==$0 TABLE        2023-01-26:08:21:01                                                                                                                        
+E10              BIN$oGAB2hMHQNyeBPsAwI3Fxw==$0 TABLE        2023-01-26:08:30:18                                                                                                                        
+E11              BIN$Is4qiRiNT8Wv/grSF2ZCqA==$0 TABLE        2023-01-26:08:30:19                                                                                                                        
+E12              BIN$GHxX36W9RBOPy35qJpUknA==$0 TABLE        2023-01-26:08:30:20                                                                                                                        
+E13              BIN$2RT/lUMtQpucfzY1HLDXcg==$0 TABLE        2023-01-26:08:30:21                                                                                                                        
+E2               BIN$UDOO3YdpTeKTZVh12cUuZw==$0 TABLE        2023-01-26:08:30:03                                                                                                                        
+E3               BIN$OtBHKY/bRg+hKu755e5RSw==$0 TABLE        2023-02-02:09:06:37                                                                                                                        
+E3               BIN$B2AkirNRRsWYpIog5EoNjA==$0 TABLE        2023-01-26:08:30:05                                                                                                                        
+E4               BIN$h+t6NMhERruNaH6+1c4IKA==$0 TABLE        2023-01-26:08:30:06                                                                                                                        
+E5               BIN$JtKf8coXQlauHRRMK4yJUA==$0 TABLE        2023-01-26:08:30:08                                                                                                                        
+E6               BIN$lGXyiA3PSqaRRiR0DfMz9Q==$0 TABLE        2023-01-26:08:30:09                                                                                                                        
+E7               BIN$RldYG6ewR0+3f3IbwcvflQ==$0 TABLE        2023-01-26:08:30:10                                                                                                                        
+E8               BIN$SfB4qZ7KTaaA9XcBmA9KtQ==$0 TABLE        2023-01-26:08:30:15                                                                                                                        
+E9               BIN$qOQnmhOBQOyAtQpvD9EHhw==$0 TABLE        2023-01-26:08:30:16                                                                                                                        
+R1               BIN$JpbGcKhiQNO/GS8GycjLdg==$0 TABLE        2023-01-24:09:24:43                                                                                                                        
+SQL> PURGE TABLE E3;
+
+Table purged.
+
+SQL> REM PURGE WORKS ON FIFO (FIRST IN FIRST OUT)
+SQL> 
+SQL> SHOW RECYC
+ORIGINAL NAME    RECYCLEBIN NAME                OBJECT TYPE  DROP TIME                                                                                                                                  
+---------------- ------------------------------ ------------ -------------------                                                                                                                        
+E1               BIN$97P9p1wxSOunaIwuqMWogA==$0 TABLE        2023-01-26:08:21:01                                                                                                                        
+E10              BIN$oGAB2hMHQNyeBPsAwI3Fxw==$0 TABLE        2023-01-26:08:30:18                                                                                                                        
+E11              BIN$Is4qiRiNT8Wv/grSF2ZCqA==$0 TABLE        2023-01-26:08:30:19                                                                                                                        
+E12              BIN$GHxX36W9RBOPy35qJpUknA==$0 TABLE        2023-01-26:08:30:20                                                                                                                        
+E13              BIN$2RT/lUMtQpucfzY1HLDXcg==$0 TABLE        2023-01-26:08:30:21                                                                                                                        
+E2               BIN$UDOO3YdpTeKTZVh12cUuZw==$0 TABLE        2023-01-26:08:30:03                                                                                                                        
+E3               BIN$OtBHKY/bRg+hKu755e5RSw==$0 TABLE        2023-02-02:09:06:37                                                                                                                        
+E4               BIN$h+t6NMhERruNaH6+1c4IKA==$0 TABLE        2023-01-26:08:30:06                                                                                                                        
+E5               BIN$JtKf8coXQlauHRRMK4yJUA==$0 TABLE        2023-01-26:08:30:08                                                                                                                        
+E6               BIN$lGXyiA3PSqaRRiR0DfMz9Q==$0 TABLE        2023-01-26:08:30:09                                                                                                                        
+E7               BIN$RldYG6ewR0+3f3IbwcvflQ==$0 TABLE        2023-01-26:08:30:10                                                                                                                        
+E8               BIN$SfB4qZ7KTaaA9XcBmA9KtQ==$0 TABLE        2023-01-26:08:30:15                                                                                                                        
+E9               BIN$qOQnmhOBQOyAtQpvD9EHhw==$0 TABLE        2023-01-26:08:30:16                                                                                                                        
+R1               BIN$JpbGcKhiQNO/GS8GycjLdg==$0 TABLE        2023-01-24:09:24:43                                                                                                                        
+SQL> 
+SQL> 
+SQL> DESC E1
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ EMPLOYEE_ID                                                                                                       NOT NULL NUMBER(6)
+ FIRST_NAME                                                                                                                 VARCHAR2(15)
+ LAST_NAME                                                                                                         NOT NULL VARCHAR2(15)
+ EMAIL                                                                                                                      VARCHAR2(10)
+ PHONE_NUMBER                                                                                                               VARCHAR2(20)
+ HIRE_DATE                                                                                                         NOT NULL DATE
+ JOB_ID                                                                                                            NOT NULL VARCHAR2(10)
+ SALARY                                                                                                                     NUMBER(8,2)
+ COMMISSION_PCT                                                                                                             NUMBER(2,2)
+ MANAGER_ID                                                                                                                 NUMBER(6)
+ DEPARTMENT_ID                                                                                                              NUMBER(4)
+
+SQL> SELECT * FROM E1;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                     
+
+20 rows selected.
+
+SQL> DROP TABLE E1 PURGE;
+
+Table dropped.
+
+SQL> DESC E1
+ERROR:
+ORA-04043: object E1 does not exist 
+
+
+SQL> SELECT * FROM E1;
+SELECT * FROM E1
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> SHOW RECYC
+ORIGINAL NAME    RECYCLEBIN NAME                OBJECT TYPE  DROP TIME                                                                                                                                  
+---------------- ------------------------------ ------------ -------------------                                                                                                                        
+E1               BIN$97P9p1wxSOunaIwuqMWogA==$0 TABLE        2023-01-26:08:21:01                                                                                                                        
+E10              BIN$oGAB2hMHQNyeBPsAwI3Fxw==$0 TABLE        2023-01-26:08:30:18                                                                                                                        
+E11              BIN$Is4qiRiNT8Wv/grSF2ZCqA==$0 TABLE        2023-01-26:08:30:19                                                                                                                        
+E12              BIN$GHxX36W9RBOPy35qJpUknA==$0 TABLE        2023-01-26:08:30:20                                                                                                                        
+E13              BIN$2RT/lUMtQpucfzY1HLDXcg==$0 TABLE        2023-01-26:08:30:21                                                                                                                        
+E2               BIN$UDOO3YdpTeKTZVh12cUuZw==$0 TABLE        2023-01-26:08:30:03                                                                                                                        
+E3               BIN$OtBHKY/bRg+hKu755e5RSw==$0 TABLE        2023-02-02:09:06:37                                                                                                                        
+E4               BIN$h+t6NMhERruNaH6+1c4IKA==$0 TABLE        2023-01-26:08:30:06                                                                                                                        
+E5               BIN$JtKf8coXQlauHRRMK4yJUA==$0 TABLE        2023-01-26:08:30:08                                                                                                                        
+E6               BIN$lGXyiA3PSqaRRiR0DfMz9Q==$0 TABLE        2023-01-26:08:30:09                                                                                                                        
+E7               BIN$RldYG6ewR0+3f3IbwcvflQ==$0 TABLE        2023-01-26:08:30:10                                                                                                                        
+E8               BIN$SfB4qZ7KTaaA9XcBmA9KtQ==$0 TABLE        2023-01-26:08:30:15                                                                                                                        
+E9               BIN$qOQnmhOBQOyAtQpvD9EHhw==$0 TABLE        2023-01-26:08:30:16                                                                                                                        
+R1               BIN$JpbGcKhiQNO/GS8GycjLdg==$0 TABLE        2023-01-24:09:24:43                                                                                                                        
+SQL> REM DELETE
+SQL> 
+SQL> REM TRUNCATE
+SQL> 
+SQL> REM DROP
+SQL> 
+SQL> REM PURGE
+SQL> 
+SQL> REM FLASHBACK ... TO ... TIMESTAMP
+SQL> 
+SQL> REM FLASHBACK ... TO BEFORE DROP ...
+SQL> 
+SQL> REM SHOW RECYC
+SQL> 
+SQL> REM ALTER ... ENABLE ... ROW MOVEMENT
+SQL> 
+SQL> REM ALTER ... DISABLE ... ROW MOVEMENT
+SQL> 
+SQL> REM SELECT ... AS OF TIMESTAMP ...
+SQL> 
+SQL> REM SELECT ... VERSIONS BETWEEN TIMESTAMP ...
+SQL> 
+SQL> REM DROP ... PURGE
+SQL> 
+SQL> SPOOL OFF

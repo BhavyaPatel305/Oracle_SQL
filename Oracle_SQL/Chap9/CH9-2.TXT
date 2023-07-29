@@ -1,0 +1,1076 @@
+SQL> 
+SQL> CL SCR
+
+SQL> REM INSERT HAS TWO SYNTAXES : 1 INSERT ... VALUES ... 2 INSERT ... SUB QUERY
+SQL> 
+SQL> REM INSERT ... VALUES : IT CAN INSERT SINGLE ROW PER SINGLE EXECUTION OF INSERT STATEMENT.
+SQL> 
+SQL> REM INSERT ... SUB QUERY : IT CAN INSERT 0 , 1, MULTIPLE OR ALL ROWS OF SUB QUERY TABLE.
+SQL> 
+SQL> CREATE TABLE E1 AS SELECT EMPLOYEE_ID EID , FIRST_NAME FNM , HIRE_DATE HD FROM EMPLOYEES WHERE 1 = 2;
+CREATE TABLE E1 AS SELECT EMPLOYEE_ID EID , FIRST_NAME FNM , HIRE_DATE HD FROM EMPLOYEES WHERE 1 = 2
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+SQL> DROP TABLE E1;
+
+Table dropped.
+
+SQL> CREATE TABLE E1 AS SELECT EMPLOYEE_ID EID , FIRST_NAME FNM , HIRE_DATE HD FROM EMPLOYEES WHERE 1 = 2;
+
+Table created.
+
+SQL> DESC E1
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EID                                       NOT NULL NUMBER(6)
+ FNM                                                VARCHAR2(15)
+ HD                                        NOT NULL DATE
+
+SQL> SELECT * FROM E1;
+
+no rows selected
+
+SQL> INSERT INTO E1 VALUES (1,'GANESH',SYSDATE);
+
+1 row created.
+
+SQL> INSERT INTO E1 VALUES (2,'RIDDHI','4-APR-05');
+
+1 row created.
+
+SQL> INSERT INTO (EID,HD) VALUES (3,'5-MAY-2005');
+INSERT INTO (EID,HD) VALUES (3,'5-MAY-2005')
+             *
+ERROR at line 1:
+ORA-00928: missing SELECT keyword 
+
+
+SQL> INSERT INTO E1 (EID,HD) VALUES (3,'5-MAY-2005');
+
+1 row created.
+
+SQL> INSERT INTO E1 (FNM,EID,HD) VALUES ('SIDDHI',4,'7-MAY-2005');
+
+1 row created.
+
+SQL> SELECT * FROM E1;
+
+       EID FNM             HD                                                   
+---------- --------------- ---------                                            
+         1 GANESH          26-JAN-23                                            
+         2 RIDDHI          04-APR-05                                            
+         3                 05-MAY-05                                            
+         4 SIDDHI          07-MAY-05                                            
+
+SQL> INSERT INTO E1 (FNM,EID,HD) VALUES ('SIDDHI',&EID,'7-MAY-2005');
+Enter value for eid: 10
+old   1: INSERT INTO E1 (FNM,EID,HD) VALUES ('SIDDHI',&EID,'7-MAY-2005')
+new   1: INSERT INTO E1 (FNM,EID,HD) VALUES ('SIDDHI',10,'7-MAY-2005')
+
+1 row created.
+
+SQL> SELECT * FROM E1;
+
+       EID FNM             HD                                                   
+---------- --------------- ---------                                            
+         1 GANESH          26-JAN-23                                            
+         2 RIDDHI          04-APR-05                                            
+         3                 05-MAY-05                                            
+         4 SIDDHI          07-MAY-05                                            
+        10 SIDDHI          07-MAY-05                                            
+
+SQL> CREATE SEQUENCE E2SEQ START WITH 101;
+
+Sequence created.
+
+SQL> CREATE TABLE E2 (EID NUMBER(4) DEFAULT E2SEQ.NEXTVAL,FN VARCHAR2(10));
+CREATE TABLE E2 (EID NUMBER(4) DEFAULT E2SEQ.NEXTVAL,FN VARCHAR2(10))
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+SQL> DROP TABLE E2;
+
+Table dropped.
+
+SQL> DROP TABLE E3;
+
+Table dropped.
+
+SQL> DROP TABLE E4;
+
+Table dropped.
+
+SQL> DROP TABLE E5;
+
+Table dropped.
+
+SQL> DROP TABLE E6;
+
+Table dropped.
+
+SQL> DROP TABLE E7;
+
+Table dropped.
+
+SQL> DROP TABLE E8;
+
+Table dropped.
+
+SQL> DROP TABLE E9;
+
+Table dropped.
+
+SQL> DROP TABLE E10;
+
+Table dropped.
+
+SQL> DROP TABLE E11;
+
+Table dropped.
+
+SQL> DROP TABLE E12;
+
+Table dropped.
+
+SQL> DROP TABLE E13;
+
+Table dropped.
+
+SQL> DROP TABLE E14;
+DROP TABLE E14
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> DROP TABLE E15;
+DROP TABLE E15
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> CREATE TABLE E2 (EID NUMBER(4) DEFAULT E2SEQ.NEXTVAL,FN VARCHAR2(10));
+
+Table created.
+
+SQL> INSERT INTO E2 (FNM) VALUES ('&FNM');
+Enter value for fnm: GANESH
+old   1: INSERT INTO E2 (FNM) VALUES ('&FNM')
+new   1: INSERT INTO E2 (FNM) VALUES ('GANESH')
+INSERT INTO E2 (FNM) VALUES ('GANESH')
+                *
+ERROR at line 1:
+ORA-00904: "FNM": invalid identifier 
+
+
+SQL> INSERT INTO E2 (FN) VALUES ('&FN');
+Enter value for fn: GANESH
+old   1: INSERT INTO E2 (FN) VALUES ('&FN')
+new   1: INSERT INTO E2 (FN) VALUES ('GANESH')
+
+1 row created.
+
+SQL> /
+Enter value for fn: RIDDHI
+old   1: INSERT INTO E2 (FN) VALUES ('&FN')
+new   1: INSERT INTO E2 (FN) VALUES ('RIDDHI')
+
+1 row created.
+
+SQL> /
+Enter value for fn: SIDDHI
+old   1: INSERT INTO E2 (FN) VALUES ('&FN')
+new   1: INSERT INTO E2 (FN) VALUES ('SIDDHI')
+
+1 row created.
+
+SQL> SELECT * FRMO E2;
+SELECT * FRMO E2
+         *
+ERROR at line 1:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> SELECT * FROM E2;
+
+       EID FN                                                                   
+---------- ----------                                                           
+       101 GANESH                                                               
+       102 RIDDHI                                                               
+       103 SIDDHI                                                               
+
+SQL> ALTER TABLE E2 MODIFY EID PRIMARY KEY;
+
+Table altered.
+
+SQL> INSERT INTO E2 VALUES (105,'LABH');
+
+1 row created.
+
+SQL> INSERT INTO E2 (FN) VALUES ('&FN');
+Enter value for fn: SHUBH
+old   1: INSERT INTO E2 (FN) VALUES ('&FN')
+new   1: INSERT INTO E2 (FN) VALUES ('SHUBH')
+
+1 row created.
+
+SQL> /
+Enter value for fn: LAXMI
+old   1: INSERT INTO E2 (FN) VALUES ('&FN')
+new   1: INSERT INTO E2 (FN) VALUES ('LAXMI')
+INSERT INTO E2 (FN) VALUES ('LAXMI')
+*
+ERROR at line 1:
+ORA-00001: unique constraint (SCOTT.SYS_C0048273) violated 
+
+
+SQL> SELECT * FROM E2;
+
+       EID FN                                                                   
+---------- ----------                                                           
+       101 GANESH                                                               
+       102 RIDDHI                                                               
+       103 SIDDHI                                                               
+       105 LABH                                                                 
+       104 SHUBH                                                                
+
+SQL> /
+
+       EID FN                                                                   
+---------- ----------                                                           
+       101 GANESH                                                               
+       102 RIDDHI                                                               
+       103 SIDDHI                                                               
+       105 LABH                                                                 
+       104 SHUBH                                                                
+
+SQL> INSERT INTO E2 (FN) VALUES ('&FN');
+Enter value for fn: LAXMI
+old   1: INSERT INTO E2 (FN) VALUES ('&FN')
+new   1: INSERT INTO E2 (FN) VALUES ('LAXMI')
+
+1 row created.
+
+SQL> SELECT * FROM E2;
+
+       EID FN                                                                   
+---------- ----------                                                           
+       101 GANESH                                                               
+       102 RIDDHI                                                               
+       103 SIDDHI                                                               
+       105 LABH                                                                 
+       104 SHUBH                                                                
+       106 LAXMI                                                                
+
+6 rows selected.
+
+SQL> REM 101 102 103 104 ...
+SQL> 
+SQL> REM 1001 1011 1021 ...
+SQL> 
+SQL> INSERT INTO E2 VALUES (111,(SELECT FIRST_NAME FROM EMPLOYEES WHERE EMPLOYEE_ID = 124));
+
+1 row created.
+
+SQL> SELECT * FROM E2;
+
+       EID FN                                                                   
+---------- ----------                                                           
+       101 GANESH                                                               
+       102 RIDDHI                                                               
+       103 SIDDHI                                                               
+       105 LABH                                                                 
+       104 SHUBH                                                                
+       106 LAXMI                                                                
+       111 Kevin                                                                
+
+7 rows selected.
+
+SQL> INSERT INTO E2 VALUES (112,(SELECT FIRST_NAME , LAST_NAME FROM EMPLOYEES WHERE EMPLOYEE_ID = 124));
+INSERT INTO E2 VALUES (112,(SELECT FIRST_NAME , LAST_NAME FROM EMPLOYEES WHERE EMPLOYEE_ID = 124))
+                            *
+ERROR at line 1:
+ORA-00913: too many values 
+
+
+SQL> INSERT INTO E2 VALUES (112,(SELECT FIRST_NAME FROM EMPLOYEES WHERE EMPLOYEE_ID = ANY (124,149));
+INSERT INTO E2 VALUES (112,(SELECT FIRST_NAME FROM EMPLOYEES WHERE EMPLOYEE_ID = ANY (124,149))
+                                                                                              *
+ERROR at line 1:
+ORA-00917: missing comma 
+
+
+SQL> INSERT INTO E2 VALUES (112,(SELECT FIRST_NAME FROM EMPLOYEES WHERE EMPLOYEE_ID = ANY (124,149)));
+INSERT INTO E2 VALUES (112,(SELECT FIRST_NAME FROM EMPLOYEES WHERE EMPLOYEE_ID = ANY (124,149)))
+                            *
+ERROR at line 1:
+ORA-01427: single-row subquery returns more than one row 
+
+
+SQL> REM VALUES : LITERAL , SUBSTITUTION VARIABLE , PSEUDOCOLUMN , FORMULA , FUNCTION , SCALAR SUB QUERY
+SQL> 
+SQL> INSERT INTO E2 VALUES (110+7,LOWER('HI HELLO'));
+
+1 row created.
+
+SQL> SELECT * FROM E2;
+
+       EID FN                                                                   
+---------- ----------                                                           
+       101 GANESH                                                               
+       102 RIDDHI                                                               
+       103 SIDDHI                                                               
+       105 LABH                                                                 
+       104 SHUBH                                                                
+       106 LAXMI                                                                
+       111 Kevin                                                                
+       117 hi hello                                                             
+
+8 rows selected.
+
+SQL> REM VALUES : LITERAL , SUBSTITUTION VARIABLE , PSEUDOCOLUMN , FORMULA , FUNCTION , SCALAR SUB QUERY , NULL , DEFAULT
+SQL> 
+SQL> INSERT INTO E2 VALUES (110+8,NULL);
+
+1 row created.
+
+SQL> INSERT INTO E2 VALUES (110+9,DEFAULT);
+
+1 row created.
+
+SQL> SELECT * FROM E2;
+
+       EID FN                                                                   
+---------- ----------                                                           
+       101 GANESH                                                               
+       102 RIDDHI                                                               
+       103 SIDDHI                                                               
+       105 LABH                                                                 
+       104 SHUBH                                                                
+       106 LAXMI                                                                
+       111 Kevin                                                                
+       117 hi hello                                                             
+       118                                                                      
+       119                                                                      
+
+10 rows selected.
+
+SQL> ALTER TABLE E2 MODIFY FN DEFAULT 'ANAMIKA';
+
+Table altered.
+
+SQL> INSERT INTO E2 VALUES (110+10,DEFAULT);
+
+1 row created.
+
+SQL> SELECT * FROM E2;
+
+       EID FN                                                                   
+---------- ----------                                                           
+       101 GANESH                                                               
+       102 RIDDHI                                                               
+       103 SIDDHI                                                               
+       105 LABH                                                                 
+       104 SHUBH                                                                
+       106 LAXMI                                                                
+       111 Kevin                                                                
+       117 hi hello                                                             
+       118                                                                      
+       119                                                                      
+       120 ANAMIKA                                                              
+
+11 rows selected.
+
+SQL> INSERT INTO E2 (EID) VALUES (888);
+
+1 row created.
+
+SQL> SELECT * FROM E2;
+
+       EID FN                                                                   
+---------- ----------                                                           
+       101 GANESH                                                               
+       102 RIDDHI                                                               
+       103 SIDDHI                                                               
+       105 LABH                                                                 
+       104 SHUBH                                                                
+       106 LAXMI                                                                
+       111 Kevin                                                                
+       117 hi hello                                                             
+       118                                                                      
+       119                                                                      
+       120 ANAMIKA                                                              
+
+       EID FN                                                                   
+---------- ----------                                                           
+       888 ANAMIKA                                                              
+
+12 rows selected.
+
+SQL> DROP TABLE D1;
+DROP TABLE D1
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> CREATE TABLE D1 AS SELECT * FROM DEPARTMENTS WHERE 1 = 2;
+
+Table created.
+
+SQL> DESC DEPARTMENTS
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DEPARTMENT_ID                             NOT NULL NUMBER(4)
+ DEPARTMENT_NAME                           NOT NULL VARCHAR2(30)
+ MANAGER_ID                                         NUMBER(6)
+ LOCATION_ID                                        NUMBER(4)
+
+SQL> DESC E1
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EID                                       NOT NULL NUMBER(6)
+ FNM                                                VARCHAR2(15)
+ HD                                        NOT NULL DATE
+
+SQL> DESC D1
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DEPARTMENT_ID                                      NUMBER(4)
+ DEPARTMENT_NAME                           NOT NULL VARCHAR2(30)
+ MANAGER_ID                                         NUMBER(6)
+ LOCATION_ID                                        NUMBER(4)
+
+SQL> SELECT * FROM DEPARTMENTS;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID             
+------------- ------------------------------ ---------- -----------             
+           10 Administration                        200        1700             
+           20 Marketing                             201        1800             
+           50 Shiping                               124        1500             
+           60 IT                                    103        1400             
+           80 Sales                                 149        2500             
+           90 Executive                             100        1700             
+          110 Accounting                            205        1700             
+          190 Contracting                                      1700             
+
+8 rows selected.
+
+SQL> SELECT * FROM D1;
+
+no rows selected
+
+SQL> INSERT INTO D1 SELECT * FROM DEPATMENTS WHERE DEPARTMENT_ID = 10;
+INSERT INTO D1 SELECT * FROM DEPATMENTS WHERE DEPARTMENT_ID = 10
+                             *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> INSERT INTO D1 SELECT * FROM DEPARTMENTS WHERE DEPARTMENT_ID = 10;
+
+1 row created.
+
+SQL> INSERT INTO D1 SELECT * FROM DEPARTMENTS WHERE DEPARTMENT_ID IN (50,90);
+
+2 rows created.
+
+SQL> INSERT INTO D1 SELECT * FROM DEPARTMENTS;
+
+8 rows created.
+
+SQL> INSERT INTO D1 SELECT * FROM DEPARTMENTS WHERE DEPARTMENT_ID IN (500);
+
+0 rows created.
+
+SQL> REN INSERT ... SUB QUERY : IT CAN INSERT 0 , 1 , MULTIPLE OR ALL ROWS.
+SP2-0734: unknown command beginning "REN INSERT..." - rest of line ignored.
+SQL> 
+SQL> REM INSERT ... SUB QUERY : IT CAN INSERT 0 , 1 , MULTIPLE OR ALL ROWS.
+SQL> 
+SQL> SELECT * FROM D1;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID             
+------------- ------------------------------ ---------- -----------             
+           10 Administration                        200        1700             
+           50 Shiping                               124        1500             
+           90 Executive                             100        1700             
+           10 Administration                        200        1700             
+           20 Marketing                             201        1800             
+           50 Shiping                               124        1500             
+           60 IT                                    103        1400             
+           80 Sales                                 149        2500             
+           90 Executive                             100        1700             
+          110 Accounting                            205        1700             
+          190 Contracting                                      1700             
+
+11 rows selected.
+
+SQL> REM UPDATE : IS USED TO UPDATE/EDIT/CHANGE/MODIFY EXISTING ROW VALUES/DATA.
+SQL> 
+SQL> REM UPDATE tablename SET columnname = value , columnname = value ... WHERE condition(s);
+SQL> 
+SQL> UPDATE D1 SET DEPARTMENT_NAME = UPPER(DEPARTMENT_NAME);
+
+11 rows updated.
+
+SQL> SELECT * FROM D1;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID             
+------------- ------------------------------ ---------- -----------             
+           10 ADMINISTRATION                        200        1700             
+           50 SHIPING                               124        1500             
+           90 EXECUTIVE                             100        1700             
+           10 ADMINISTRATION                        200        1700             
+           20 MARKETING                             201        1800             
+           50 SHIPING                               124        1500             
+           60 IT                                    103        1400             
+           80 SALES                                 149        2500             
+           90 EXECUTIVE                             100        1700             
+          110 ACCOUNTING                            205        1700             
+          190 CONTRACTING                                      1700             
+
+11 rows selected.
+
+SQL> UPDATE D1 SET DEPARTMENT_NAME = INITCAP(DEPARTMENT_NAME) WHERE DEPARTMENT_ID NOT IN 60;
+
+10 rows updated.
+
+SQL> SELECT * FROM D1;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID             
+------------- ------------------------------ ---------- -----------             
+           10 Administration                        200        1700             
+           50 Shiping                               124        1500             
+           90 Executive                             100        1700             
+           10 Administration                        200        1700             
+           20 Marketing                             201        1800             
+           50 Shiping                               124        1500             
+           60 IT                                    103        1400             
+           80 Sales                                 149        2500             
+           90 Executive                             100        1700             
+          110 Accounting                            205        1700             
+          190 Contracting                                      1700             
+
+11 rows selected.
+
+SQL> UPDATE D1 SET DEPARTMENT_NAME = UPPER(DEPARTMENT_NAME) WHERE DEPARTMENT_ID IN (20,110,190);
+
+3 rows updated.
+
+SQL> SELECT * FROM D1;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID             
+------------- ------------------------------ ---------- -----------             
+           10 Administration                        200        1700             
+           50 Shiping                               124        1500             
+           90 Executive                             100        1700             
+           10 Administration                        200        1700             
+           20 MARKETING                             201        1800             
+           50 Shiping                               124        1500             
+           60 IT                                    103        1400             
+           80 Sales                                 149        2500             
+           90 Executive                             100        1700             
+          110 ACCOUNTING                            205        1700             
+          190 CONTRACTING                                      1700             
+
+11 rows selected.
+
+SQL> UPDATE D1 SET DEPARTMENT_NAME = INITCAP(DEPARTMENT_NAME) WHERE DEPARTMENT_ID IN 80;
+
+1 row updated.
+
+SQL> SELECT * FROM D1;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID             
+------------- ------------------------------ ---------- -----------             
+           10 Administration                        200        1700             
+           50 Shiping                               124        1500             
+           90 Executive                             100        1700             
+           10 Administration                        200        1700             
+           20 MARKETING                             201        1800             
+           50 Shiping                               124        1500             
+           60 IT                                    103        1400             
+           80 Sales                                 149        2500             
+           90 Executive                             100        1700             
+          110 ACCOUNTING                            205        1700             
+          190 CONTRACTING                                      1700             
+
+11 rows selected.
+
+SQL> UPDATE D1 SET DEPARTMENT_NAME = UPPER(DEPARTMENT_NAME) WHERE DEPARTMENT_ID IN 80;
+
+1 row updated.
+
+SQL> SELECT * FROM D1;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID             
+------------- ------------------------------ ---------- -----------             
+           10 Administration                        200        1700             
+           50 Shiping                               124        1500             
+           90 Executive                             100        1700             
+           10 Administration                        200        1700             
+           20 MARKETING                             201        1800             
+           50 Shiping                               124        1500             
+           60 IT                                    103        1400             
+           80 SALES                                 149        2500             
+           90 Executive                             100        1700             
+          110 ACCOUNTING                            205        1700             
+          190 CONTRACTING                                      1700             
+
+11 rows selected.
+
+SQL> UPDATE D1 SET DEPARTMENT_ID = DEPARTMENT_ID + 1 , MANAGER_ID = MANAGER_ID - 1 WHERE DEPARTMENT_LIKE '%o%';
+UPDATE D1 SET DEPARTMENT_ID = DEPARTMENT_ID + 1 , MANAGER_ID = MANAGER_ID - 1 WHERE DEPARTMENT_LIKE '%o%'
+                                                                                                    *
+ERROR at line 1:
+ORA-00920: invalid relational operator 
+
+
+SQL> UPDATE D1 SET DEPARTMENT_ID = DEPARTMENT_ID + 1 , MANAGER_ID = MANAGER_ID - 1 WHERE DEPARTMENT_NAME LIKE '%o%';
+
+2 rows updated.
+
+SQL> SELECT * FROM D1;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID             
+------------- ------------------------------ ---------- -----------             
+           11 Administration                        199        1700             
+           50 Shiping                               124        1500             
+           90 Executive                             100        1700             
+           11 Administration                        199        1700             
+           20 MARKETING                             201        1800             
+           50 Shiping                               124        1500             
+           60 IT                                    103        1400             
+           80 SALES                                 149        2500             
+           90 Executive                             100        1700             
+          110 ACCOUNTING                            205        1700             
+          190 CONTRACTING                                      1700             
+
+11 rows selected.
+
+SQL> DESC D1
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DEPARTMENT_ID                                      NUMBER(4)
+ DEPARTMENT_NAME                           NOT NULL VARCHAR2(30)
+ MANAGER_ID                                         NUMBER(6)
+ LOCATION_ID                                        NUMBER(4)
+
+SQL> UPDATE D1 SET DEPARTMENT_ID = NULL , MANAGER_ID = DEFAULT WHERE DEPARTMENT_NAME LIKE '%E%';
+
+4 rows updated.
+
+SQL> SELECT * FROM D1;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID             
+------------- ------------------------------ ---------- -----------             
+           11 Administration                        199        1700             
+           50 Shiping                               124        1500             
+              Executive                                        1700             
+           11 Administration                        199        1700             
+              MARKETING                                        1800             
+           50 Shiping                               124        1500             
+           60 IT                                    103        1400             
+              SALES                                            2500             
+              Executive                                        1700             
+          110 ACCOUNTING                            205        1700             
+          190 CONTRACTING                                      1700             
+
+11 rows selected.
+
+SQL> UPDATE D1 SET MANAGER_ID = 888 WHERE DEPARTMENT_ID IN 190;
+
+1 row updated.
+
+SQL> SELECT * FROM D1;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID             
+------------- ------------------------------ ---------- -----------             
+           11 Administration                        199        1700             
+           50 Shiping                               124        1500             
+              Executive                                        1700             
+           11 Administration                        199        1700             
+              MARKETING                                        1800             
+           50 Shiping                               124        1500             
+           60 IT                                    103        1400             
+              SALES                                            2500             
+              Executive                                        1700             
+          110 ACCOUNTING                            205        1700             
+          190 CONTRACTING                           888        1700             
+
+11 rows selected.
+
+SQL> UPDATE D1 SET MANAGER_ID = (SELECT EMPLOYEE_ID FROM EMPLOYEES WHERE FIRST_NAME = 'Kevin') WHERE DEPARTMENT_NAME = 'SALES';
+
+1 row updated.
+
+SQL> SELECT * FROM D1;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID             
+------------- ------------------------------ ---------- -----------             
+           11 Administration                        199        1700             
+           50 Shiping                               124        1500             
+              Executive                                        1700             
+           11 Administration                        199        1700             
+              MARKETING                                        1800             
+           50 Shiping                               124        1500             
+           60 IT                                    103        1400             
+              SALES                                 124        2500             
+              Executive                                        1700             
+          110 ACCOUNTING                            205        1700             
+          190 CONTRACTING                           888        1700             
+
+11 rows selected.
+
+SQL> SELECT * FROM DEPARTMENTS;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID             
+------------- ------------------------------ ---------- -----------             
+           10 Administration                        200        1700             
+           20 Marketing                             201        1800             
+           50 Shiping                               124        1500             
+           60 IT                                    103        1400             
+           80 Sales                                 149        2500             
+           90 Executive                             100        1700             
+          110 Accounting                            205        1700             
+          190 Contracting                                      1700             
+
+8 rows selected.
+
+SQL> UPDATE D1 SET (DEPARTMENT_ID,MANAGER_ID) = (SELECT DEPARTMENT_ID,MANAGER_ID FROM DEPARTMENTS WHERE DEPARTMENT_NAME = 'Executive') WHERE DEPARTMENT_NAME = 'Executive';
+
+2 rows updated.
+
+SQL> SELECT * FROM D1;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID             
+------------- ------------------------------ ---------- -----------             
+           11 Administration                        199        1700             
+           50 Shiping                               124        1500             
+           90 Executive                             100        1700             
+           11 Administration                        199        1700             
+              MARKETING                                        1800             
+           50 Shiping                               124        1500             
+           60 IT                                    103        1400             
+              SALES                                 124        2500             
+           90 Executive                             100        1700             
+          110 ACCOUNTING                            205        1700             
+          190 CONTRACTING                           888        1700             
+
+11 rows selected.
+
+SQL> UPDATE D1 SET LOCATION_ID = NULL WHERE DEPARTMENT_ID IN (11,50);
+
+4 rows updated.
+
+SQL> SELECT * FROM D1;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID             
+------------- ------------------------------ ---------- -----------             
+           11 Administration                        199                         
+           50 Shiping                               124                         
+           90 Executive                             100        1700             
+           11 Administration                        199                         
+              MARKETING                                        1800             
+           50 Shiping                               124                         
+           60 IT                                    103        1400             
+              SALES                                 124        2500             
+           90 Executive                             100        1700             
+          110 ACCOUNTING                            205        1700             
+          190 CONTRACTING                           888        1700             
+
+11 rows selected.
+
+SQL> SELECT * FROM LOCATIONS;
+
+LOCATION_ID STREET_ADRESS                            POSTAL_CODE                
+----------- ---------------------------------------- ------------               
+CITY                           STATE_PROVINCE            CO                     
+------------------------------ ------------------------- --                     
+       1400 2014 Jabberwocky Rd                      26192                      
+Southlake                      Texas                     US                     
+                                                                                
+       1500 2011 Interiors Blvd                      99236                      
+South San Francisco            California                US                     
+                                                                                
+       1700 2004 Charade Rd                          98199                      
+Seattle                        Washington                US                     
+                                                                                
+
+LOCATION_ID STREET_ADRESS                            POSTAL_CODE                
+----------- ---------------------------------------- ------------               
+CITY                           STATE_PROVINCE            CO                     
+------------------------------ ------------------------- --                     
+       1800 460 Bloor St. W.                         ON M5S 1X8                 
+Toronto                        Ontario                   CA                     
+                                                                                
+       2500 Magdalen Centre, The Oxford Science Park OX9 9ZB                    
+Oxford                         Oxford                    UK                     
+                                                                                
+
+SQL> SET LINES 200 PAGES 24
+SQL> 
+SQL> SELECT * FROM D1;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID                                                                                                                                     
+------------- ------------------------------ ---------- -----------                                                                                                                                     
+           11 Administration                        199                                                                                                                                                 
+           50 Shiping                               124                                                                                                                                                 
+           90 Executive                             100        1700                                                                                                                                     
+           11 Administration                        199                                                                                                                                                 
+              MARKETING                                        1800                                                                                                                                     
+           50 Shiping                               124                                                                                                                                                 
+           60 IT                                    103        1400                                                                                                                                     
+              SALES                                 124        2500                                                                                                                                     
+           90 Executive                             100        1700                                                                                                                                     
+          110 ACCOUNTING                            205        1700                                                                                                                                     
+          190 CONTRACTING                           888        1700                                                                                                                                     
+
+11 rows selected.
+
+SQL> SELECT * FROM LOCATIONS;
+
+LOCATION_ID STREET_ADRESS                            POSTAL_CODE  CITY                           STATE_PROVINCE            CO                                                                           
+----------- ---------------------------------------- ------------ ------------------------------ ------------------------- --                                                                           
+       1400 2014 Jabberwocky Rd                      26192        Southlake                      Texas                     US                                                                           
+       1500 2011 Interiors Blvd                      99236        South San Francisco            California                US                                                                           
+       1700 2004 Charade Rd                          98199        Seattle                        Washington                US                                                                           
+       1800 460 Bloor St. W.                         ON M5S 1X8   Toronto                        Ontario                   CA                                                                           
+       2500 Magdalen Centre, The Oxford Science Park OX9 9ZB      Oxford                         Oxford                    UK                                                                           
+
+SQL> UPDATE D1 SET LOCATION_ID = (SELECT LOCATION_ID FROM LOCATIONS WHERE CITY = 'Seattle') WHERE LOCATION_ID IS NULL;
+
+4 rows updated.
+
+SQL> SELECT * FROM D1;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID                                                                                                                                     
+------------- ------------------------------ ---------- -----------                                                                                                                                     
+           11 Administration                        199        1700                                                                                                                                     
+           50 Shiping                               124        1700                                                                                                                                     
+           90 Executive                             100        1700                                                                                                                                     
+           11 Administration                        199        1700                                                                                                                                     
+              MARKETING                                        1800                                                                                                                                     
+           50 Shiping                               124        1700                                                                                                                                     
+           60 IT                                    103        1400                                                                                                                                     
+              SALES                                 124        2500                                                                                                                                     
+           90 Executive                             100        1700                                                                                                                                     
+          110 ACCOUNTING                            205        1700                                                                                                                                     
+          190 CONTRACTING                           888        1700                                                                                                                                     
+
+11 rows selected.
+
+SQL> DROP TABLE E1;
+
+Table dropped.
+
+SQL> CREATE TABLE E1 AS SELECT * FROM EMPLOYEES;
+
+Table created.
+
+SQL> SELECT * FROM E1;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                     
+
+20 rows selected.
+
+SQL> SELECT * FROM DEPARTMENTS;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID                                                                                                                                     
+------------- ------------------------------ ---------- -----------                                                                                                                                     
+           10 Administration                        200        1700                                                                                                                                     
+           20 Marketing                             201        1800                                                                                                                                     
+           50 Shiping                               124        1500                                                                                                                                     
+           60 IT                                    103        1400                                                                                                                                     
+           80 Sales                                 149        2500                                                                                                                                     
+           90 Executive                             100        1700                                                                                                                                     
+          110 Accounting                            205        1700                                                                                                                                     
+          190 Contracting                                      1700                                                                                                                                     
+
+8 rows selected.
+
+SQL> UPDATE E1 SET SALARY = SALARY * 1.2 WHERE DEPARTMENT_ID IN (SELECT DEPARTMENT_ID FROM DEPARTMENTS WHERE DEPARTMENT_NAME = 'Accounting');
+
+2 rows updated.
+
+SQL> SELECT * FROM E1;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          14400                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       9960                       205           110                                                     
+
+20 rows selected.
+
+SQL> REM DELETE : TO DELETE/REMOVE EXISTING ROWS FROM TABLE
+SQL> 
+SQL> SELECT * FROM E1;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          14400                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       9960                       205           110                                                     
+
+20 rows selected.
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> DELETE E1 WHERE MANAGER_ID IS NULL OR DEPARTMENT_ID IS NULL;
+
+2 rows deleted.
+
+SQL> SELECT * FROM E1;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          14400                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       9960                       205           110                                                     
+
+18 rows selected.
+
+SQL> DELETE E1 WHERE DEPARTMENT_ID IN (SELECT DEPARTMENT_ID FROM DEPARTMENTS WHERE DEPARTMENT_NAME = 'Shiping');
+
+5 rows deleted.
+
+SQL> SELECT * FROM E1;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          14400                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       9960                       205           110                                                     
+
+13 rows selected.
+
+SQL> DELETE E1;
+
+13 rows deleted.
+
+SQL> SELECT * FROM E1;
+
+no rows selected
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> SELECT * FROM E1;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel                       011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          14400                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       9960                       205           110                                                     
+
+20 rows selected.
+
+SQL> SPOOL OFF

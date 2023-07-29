@@ -1,0 +1,858 @@
+SQL> 
+SQL> CL SCR
+
+SQL> REM 10 DISPLAY ALL FIRST NAME WHICH COMES BEFORE ALPHABET 'J'.
+SQL> 
+SQL> SELECT FIRST_NAME FROM EMPLOYEES WHERE FIRST_NAME < 'J' ORDER BY 1;
+
+FIRST_NAME                                                                      
+---------------                                                                 
+Alexander                                                                       
+Bruce                                                                           
+Curtis                                                                          
+Diana                                                                           
+Eleni                                                                           
+Ellen                                                                           
+
+6 rows selected.
+
+SQL> REM 18 DISPLAY FIRST_NAME , HIRE_DATE FOR THOSE WHO WERE HIRED IN OR BEFORE 96. SORT ON HIRE_DATE COLUMN. DISPLAY ROWS STARTING WITH 3, UPTO 7.
+SQL> 
+SQL> SELECT FIRST_NAME , HIRE_DATE
+  2  FROM EMPLOYEES
+  3  WHERE HIRE_DATE <= '31-DEC-96'
+  4  ORDER BY 2
+  5  OFFSET 2 ROWS
+  6  FETCH FIRST 5 ROWS ONLY;
+
+FIRST_NAME      HIRE_DATE                                                       
+--------------- ---------                                                       
+Neena           21-SEP-89                                                       
+Alexander       03-JAN-90                                                       
+Bruce           21-MAY-91                                                       
+Lex             13-JAN-93                                                       
+Shelley         07-JUN-94                                                       
+
+SQL> REM 23 DISPLAY ONLY THOSE FIRST_NAME WHOSE FIRST ALPHABET IS IN THE RANGE OF 'S' TO 'Z'
+SQL> 
+SQL> SELECT FIRST_NAME
+  2  FROM EMPLOYEES
+  3  WHERE FIRST_NAME BETWEEN 'S' AND 'Z'
+  4  ORDER BY 1;
+
+FIRST_NAME                                                                      
+---------------                                                                 
+Shelley                                                                         
+Steven                                                                          
+Trenna                                                                          
+William                                                                         
+
+SQL> SELECT LAST_NAME
+  2  FROM EMPLOYEES
+  3  WHERE LAST_NAME BETWEEN 'S' AND 'Z'
+  4  ORDER BY 1;
+
+LAST_NAME                                                                       
+---------------                                                                 
+Taylor                                                                          
+Vargas                                                                          
+Whalen                                                                          
+
+SQL> REM Z < Zlotkey
+SQL> 
+SQL> 
+SQL> SELECT LAST_NAME
+  2  FROM EMPLOYEES
+  3  WHERE LAST_NAME BETWEEN 'S' AND 'Z'
+  4  ORDER BY 1;
+
+LAST_NAME                                                                       
+---------------                                                                 
+Taylor                                                                          
+Vargas                                                                          
+Whalen                                                                          
+
+SQL> SELECT LAST_NAME
+  2  FROM EMPLOYEES
+  3  WHERE LAST_NAME BETWEEN 'S' AND 'Zz'
+  4  ORDER BY 1;
+
+LAST_NAME                                                                       
+---------------                                                                 
+Taylor                                                                          
+Vargas                                                                          
+Whalen                                                                          
+Zlotkey                                                                         
+
+SQL> REM 25 DISPLAY LAST_NAME , MANAGER_ID WHO REPORTS TO SOMEBODY.
+SQL> 
+SQL> SELECT LAST_NAME , MANAGER_ID
+  2  FROM EMPLOYEES
+  3  WHERE MANAGER_ID IS NOT NULL;
+
+LAST_NAME       MANAGER_ID                                                      
+--------------- ----------                                                      
+Kochhar                100                                                      
+De Haan                100                                                      
+Hunold                 102                                                      
+Ernst                  103                                                      
+Lorentz                103                                                      
+Mourgos                100                                                      
+Rajs                   124                                                      
+Davies                 124                                                      
+Matos                  124                                                      
+Vargas                 124                                                      
+Zlotkey                100                                                      
+
+LAST_NAME       MANAGER_ID                                                      
+--------------- ----------                                                      
+Abel                   149                                                      
+Taylor                 149                                                      
+Grant                  149                                                      
+Whalen                 101                                                      
+Hartstein              100                                                      
+Fay                    201                                                      
+Higgins                101                                                      
+Gietz                  205                                                      
+
+19 rows selected.
+
+SQL> SET LINES 200 PAGES 24
+SQL> 
+SQL> SELECT LAST_NAME , MANAGER_ID
+  2  FROM EMPLOYEES
+  3  WHERE NVL(MANAGER_ID,0) = 0;
+
+LAST_NAME       MANAGER_ID                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+King                                                                                                                                                                                                    
+
+SQL> SELECT LAST_NAME , MANAGER_ID
+  2  FROM EMPLOYEES
+  3  WHERE NVL(MANAGER_ID,0) <> 0;
+
+LAST_NAME       MANAGER_ID                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Kochhar                100                                                                                                                                                                              
+De Haan                100                                                                                                                                                                              
+Hunold                 102                                                                                                                                                                              
+Ernst                  103                                                                                                                                                                              
+Lorentz                103                                                                                                                                                                              
+Mourgos                100                                                                                                                                                                              
+Rajs                   124                                                                                                                                                                              
+Davies                 124                                                                                                                                                                              
+Matos                  124                                                                                                                                                                              
+Vargas                 124                                                                                                                                                                              
+Zlotkey                100                                                                                                                                                                              
+Abel                   149                                                                                                                                                                              
+Taylor                 149                                                                                                                                                                              
+Grant                  149                                                                                                                                                                              
+Whalen                 101                                                                                                                                                                              
+Hartstein              100                                                                                                                                                                              
+Fay                    201                                                                                                                                                                              
+Higgins                101                                                                                                                                                                              
+Gietz                  205                                                                                                                                                                              
+
+19 rows selected.
+
+SQL> REM 6 DISPLAY ALL OTHER THAN THOSE WHO WORKS IN DEPARTMENT_ID , MANAGER_ID 60,103  80,149   110,101
+SQL> 
+SQL> SELECT *
+  2  FROM EMPLOYEES
+  3  WHERE (DEPARTMENT_ID,MANAGER_ID) <> ALL ((60,103),(80,149),(110,101));
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                     
+
+14 rows selected.
+
+SQL> SELECT DEPARTMENT_ID , MANAGER_ID , FIRST_NAME
+  2  FROM EMPLOYEES
+  3  WHERE (DEPARTMENT_ID,MANAGER_ID) <> ALL ((60,103),(80,149),(110,101));
+
+DEPARTMENT_ID MANAGER_ID FIRST_NAME                                                                                                                                                                     
+------------- ---------- ---------------                                                                                                                                                                
+           90            Steven                                                                                                                                                                         
+           90        100 Neena                                                                                                                                                                          
+           90        100 Lex                                                                                                                                                                            
+           60        102 Alexander                                                                                                                                                                      
+           50        100 Kevin                                                                                                                                                                          
+           50        124 Trenna                                                                                                                                                                         
+           50        124 Curtis                                                                                                                                                                         
+           50        124 Randall                                                                                                                                                                        
+           50        124 Peter                                                                                                                                                                          
+           80        100 Eleni                                                                                                                                                                          
+           10        101 Jennifer                                                                                                                                                                       
+           20        100 Michael                                                                                                                                                                        
+           20        201 Pat                                                                                                                                                                            
+          110        205 William                                                                                                                                                                        
+
+14 rows selected.
+
+SQL> SELECT *
+  2  
+SQL> 
+SQL> 
+SQL> SELECT DEPARTMENT_ID , MANAGER_ID , FIRST_NAME
+  2  FROM EMPLOYEES
+  3  WHERE (DEPARTMENT_ID,MANAGER_ID) <> ALL ((60,103),(80,149),(110,101))
+  4  ORDER BY 1,2;
+
+DEPARTMENT_ID MANAGER_ID FIRST_NAME                                                                                                                                                                     
+------------- ---------- ---------------                                                                                                                                                                
+           10        101 Jennifer                                                                                                                                                                       
+           20        100 Michael                                                                                                                                                                        
+           20        201 Pat                                                                                                                                                                            
+           50        100 Kevin                                                                                                                                                                          
+           50        124 Curtis                                                                                                                                                                         
+           50        124 Peter                                                                                                                                                                          
+           50        124 Randall                                                                                                                                                                        
+           50        124 Trenna                                                                                                                                                                         
+           60        102 Alexander                                                                                                                                                                      
+           80        100 Eleni                                                                                                                                                                          
+           90        100 Neena                                                                                                                                                                          
+           90        100 Lex                                                                                                                                                                            
+           90            Steven                                                                                                                                                                         
+          110        205 William                                                                                                                                                                        
+
+14 rows selected.
+
+SQL> REM 6 DISPLAY ALL OTHER THAN THOSE WHO WORKS IN DEPARTMENT_ID , MANAGER_ID 60,103  80,149   110,101
+SQL> 
+SQL> REM 7 DISPLAY LAST_NAME , DEPARTMENT_ID , JOB_ID , MANAGER_ID WHO WORKS WITH : 50,ST_CLERK,124    60,IT_PROG,103
+SQL> 
+SQL> SELECT LAST_NAME , DEPARTMENT_ID , JOB_ID , MANAGER_ID
+  2  FROM EMPLOYEES
+  3  WHERE (DEPARTMENT_ID,JOB_ID,MANAGER_ID) = ANY ((50,'ST_CLERK',124),(60,'IT_PROG',103));
+
+LAST_NAME       DEPARTMENT_ID JOB_ID     MANAGER_ID                                                                                                                                                     
+--------------- ------------- ---------- ----------                                                                                                                                                     
+Ernst                      60 IT_PROG           103                                                                                                                                                     
+Lorentz                    60 IT_PROG           103                                                                                                                                                     
+Rajs                       50 ST_CLERK          124                                                                                                                                                     
+Davies                     50 ST_CLERK          124                                                                                                                                                     
+Matos                      50 ST_CLERK          124                                                                                                                                                     
+Vargas                     50 ST_CLERK          124                                                                                                                                                     
+
+6 rows selected.
+
+SQL> SELECT * FROM EMPLOYEES;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel            EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                     
+
+20 rows selected.
+
+SQL> REM DISPLAY DEPARTMENT_ID , JOB_ID , LAST_NAME FOR THE COMBINATIONS OF : 60 IT_PROG  80 SA_REP  110 AC_ACCOUNT
+SQL> 
+SQL> SELECT DEPARTMENT_ID , JOB_ID , LAST_NAME
+  2  FROM EMPLOYEES
+  3  WHERE (DEPARTMENT_ID,JOB_ID) = ANY ((60,'IT_PROG'),(80,'SA_REP'),(110,'AC_ACCOUNT'))
+  4  ORDER BY 1,2;
+
+DEPARTMENT_ID JOB_ID     LAST_NAME                                                                                                                                                                      
+------------- ---------- ---------------                                                                                                                                                                
+           60 IT_PROG    Hunold                                                                                                                                                                         
+           60 IT_PROG    Ernst                                                                                                                                                                          
+           60 IT_PROG    Lorentz                                                                                                                                                                        
+           80 SA_REP     Abel                                                                                                                                                                           
+           80 SA_REP     Taylor                                                                                                                                                                         
+          110 AC_ACCOUNT Gietz                                                                                                                                                                          
+
+6 rows selected.
+
+SQL> SELECT DEPARTMENT_ID , JOB_ID , LAST_NAME
+  2  FROM EMPLOYEES
+  3  WHERE (DEPARTMENT_ID,JOB_ID) = SOME ((60,'IT_PROG'),(80,'SA_REP'),(110,'AC_ACCOUNT'))
+  4  ORDER BY 1,2;
+
+DEPARTMENT_ID JOB_ID     LAST_NAME                                                                                                                                                                      
+------------- ---------- ---------------                                                                                                                                                                
+           60 IT_PROG    Hunold                                                                                                                                                                         
+           60 IT_PROG    Ernst                                                                                                                                                                          
+           60 IT_PROG    Lorentz                                                                                                                                                                        
+           80 SA_REP     Abel                                                                                                                                                                           
+           80 SA_REP     Taylor                                                                                                                                                                         
+          110 AC_ACCOUNT Gietz                                                                                                                                                                          
+
+6 rows selected.
+
+SQL> REM DISPLAY ALL EXCEPT DEPARTMENT_ID , JOB_ID , LAST_NAME FOR THE COMBINATIONS OF : 60 IT_PROG  80 SA_REP  110 AC_ACCOUNT
+SQL> 
+SQL> SELECT DEPARTMENT_ID , JOB_ID , LAST_NAME
+  2  FROM EMPLOYEES
+  3  WHERE (DEPARTMENT_ID,JOB_ID) <> ALL ((60,'IT_PROG'),(80,'SA_REP'),(110,'AC_ACCOUNT'))
+  4  ORDER BY 1,2;
+
+DEPARTMENT_ID JOB_ID     LAST_NAME                                                                                                                                                                      
+------------- ---------- ---------------                                                                                                                                                                
+           10 AD_ASST    Whalen                                                                                                                                                                         
+           20 MK_MAN     Hartstein                                                                                                                                                                      
+           20 MK_REP     Fay                                                                                                                                                                            
+           50 ST_CLERK   Matos                                                                                                                                                                          
+           50 ST_CLERK   Vargas                                                                                                                                                                         
+           50 ST_CLERK   Davies                                                                                                                                                                         
+           50 ST_CLERK   Rajs                                                                                                                                                                           
+           50 ST_MAN     Mourgos                                                                                                                                                                        
+           80 SA_MAN     Zlotkey                                                                                                                                                                        
+           90 AD_PRES    King                                                                                                                                                                           
+           90 AD_VP      Kochhar                                                                                                                                                                        
+           90 AD_VP      De Haan                                                                                                                                                                        
+          110 AC_MGR     Higgins                                                                                                                                                                        
+
+13 rows selected.
+
+SQL> SELECT DEPARTMENT_ID , JOB_ID , LAST_NAME
+  2  FROM EMPLOYEES
+  3  WHERE (DEPARTMENT_ID,JOB_ID) != ALL ((60,'IT_PROG'),(80,'SA_REP'),(110,'AC_ACCOUNT'))
+  4  ORDER BY 1,2;
+
+DEPARTMENT_ID JOB_ID     LAST_NAME                                                                                                                                                                      
+------------- ---------- ---------------                                                                                                                                                                
+           10 AD_ASST    Whalen                                                                                                                                                                         
+           20 MK_MAN     Hartstein                                                                                                                                                                      
+           20 MK_REP     Fay                                                                                                                                                                            
+           50 ST_CLERK   Matos                                                                                                                                                                          
+           50 ST_CLERK   Vargas                                                                                                                                                                         
+           50 ST_CLERK   Davies                                                                                                                                                                         
+           50 ST_CLERK   Rajs                                                                                                                                                                           
+           50 ST_MAN     Mourgos                                                                                                                                                                        
+           80 SA_MAN     Zlotkey                                                                                                                                                                        
+           90 AD_PRES    King                                                                                                                                                                           
+           90 AD_VP      Kochhar                                                                                                                                                                        
+           90 AD_VP      De Haan                                                                                                                                                                        
+          110 AC_MGR     Higgins                                                                                                                                                                        
+
+13 rows selected.
+
+SQL> SELECT DEPARTMENT_ID , JOB_ID , LAST_NAME
+  2  FROM EMPLOYEES
+  3  WHERE (DEPARTMENT_ID,JOB_ID) !^ ALL ((60,'IT_PROG'),(80,'SA_REP'),(110,'AC_ACCOUNT'))
+  4  ORDER BY 1,2;
+WHERE (DEPARTMENT_ID,JOB_ID) !^ ALL ((60,'IT_PROG'),(80,'SA_REP'),(110,'AC_ACCOUNT'))
+                              *
+ERROR at line 3:
+ORA-00920: invalid relational operator 
+
+
+SQL> SELECT DEPARTMENT_ID , JOB_ID , LAST_NAME
+  2  FROM EMPLOYEES
+  3  WHERE (DEPARTMENT_ID,JOB_ID) ^= ALL ((60,'IT_PROG'),(80,'SA_REP'),(110,'AC_ACCOUNT'))
+  4  ORDER BY 1,2;
+
+DEPARTMENT_ID JOB_ID     LAST_NAME                                                                                                                                                                      
+------------- ---------- ---------------                                                                                                                                                                
+           10 AD_ASST    Whalen                                                                                                                                                                         
+           20 MK_MAN     Hartstein                                                                                                                                                                      
+           20 MK_REP     Fay                                                                                                                                                                            
+           50 ST_CLERK   Matos                                                                                                                                                                          
+           50 ST_CLERK   Vargas                                                                                                                                                                         
+           50 ST_CLERK   Davies                                                                                                                                                                         
+           50 ST_CLERK   Rajs                                                                                                                                                                           
+           50 ST_MAN     Mourgos                                                                                                                                                                        
+           80 SA_MAN     Zlotkey                                                                                                                                                                        
+           90 AD_PRES    King                                                                                                                                                                           
+           90 AD_VP      Kochhar                                                                                                                                                                        
+           90 AD_VP      De Haan                                                                                                                                                                        
+          110 AC_MGR     Higgins                                                                                                                                                                        
+
+13 rows selected.
+
+SQL> SELECT * FROM EMPLOYEES;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel            EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                     
+
+20 rows selected.
+
+SQL> REM DISPLAY SA_REP 80   ST_CLERK 50   AD_VP 90   IT_PROG 60
+SQL> 
+SQL> SELECT * FROM EMPLOYEES WHERE (JOB_ID,DEPARTMENT_ID) = ANY ((`SA_REP',80),(`ST_CLERK',50),(`IT_PROG',60),('AD_VP',90));
+ERROR:
+ORA-01756: quoted string not properly terminated 
+
+
+SQL> SELECT * FROM EMPLOYEES WHERE (JOB_ID,DEPARTMENT_ID) = ANY (('SA_REP',80),('ST_CLERK',50),('IT_PROG',60),('AD_VP',90));
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        174 Ellen           Abel            EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+
+11 rows selected.
+
+SQL> SELECT * FROM EMPLOYEES WHERE (JOB_ID,DEPARTMENT_ID) = SOME (('SA_REP',80),('ST_CLERK',50),('IT_PROG',60),('AD_VP',90));
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        174 Ellen           Abel            EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+
+11 rows selected.
+
+SQL> SELECT * FROM EMPLOYEES;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel            EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                     
+
+20 rows selected.
+
+SQL> REM DISPLAY ALL EXCEPT : 60 103 IT_PROG   80 149 SA_REP   20 100 MK_MAN   110 101 AC_MGR
+SQL> 
+SQL> 
+SQL> SELECT  FIRST_NAME,DEPARTMENT_ID , MANAGER_ID,JOB_ID FROM EMPLOYEES WHERE (DEPARTMENT_ID , MANAGER_ID,JOB_ID)<> ALL((60,103,'IT_PROG'),(80,149,'SA_REP'),(20,100,'MK_MAN'),(110,101,'AC_MGR'));
+
+FIRST_NAME      DEPARTMENT_ID MANAGER_ID JOB_ID                                                                                                                                                         
+--------------- ------------- ---------- ----------                                                                                                                                                     
+Steven                     90            AD_PRES                                                                                                                                                        
+Neena                      90        100 AD_VP                                                                                                                                                          
+Lex                        90        100 AD_VP                                                                                                                                                          
+Alexander                  60        102 IT_PROG                                                                                                                                                        
+Kevin                      50        100 ST_MAN                                                                                                                                                         
+Trenna                     50        124 ST_CLERK                                                                                                                                                       
+Curtis                     50        124 ST_CLERK                                                                                                                                                       
+Randall                    50        124 ST_CLERK                                                                                                                                                       
+Peter                      50        124 ST_CLERK                                                                                                                                                       
+Eleni                      80        100 SA_MAN                                                                                                                                                         
+Jennifer                   10        101 AD_ASST                                                                                                                                                        
+Pat                        20        201 MK_REP                                                                                                                                                         
+William                   110        205 AC_ACCOUNT                                                                                                                                                     
+
+13 rows selected.
+
+SQL> REM SPECIAL OPERATORS : 1 IN 2 BETWEEN 3 LIKE 4 IS NULL
+SQL> 
+SQL> REM ALL SPECIAL OPERATORS CAN COMPARE ALL DATA TYPE VALUES : CHARACTER , NUMBER , DATE
+SQL> 
+SQL> REM ALL SPECIAL OPERATORS CAN BE USED FOR 1 POSITIVE CONDITION CHECKING 2 NEGATIVE CONDITION CHECKING
+SQL> 
+SQL> REM 1 IN,  NOT IN
+SQL> 
+SQL> REM 2 BETWEEN , NOT BETWEEN
+SQL> 
+SQL> REM 3 LIKE , NOT LIKE
+SQL> 
+SQL> REM 4 IS NULL , IS NOT NULL
+SQL> 
+SQL> 
+SQL> 
+SQL> REM IN : TO COMPARE MULTIPLE VALUES IN SINGLE CONDITION
+SQL> 
+SQL> REM IN IS EQUIVALENT TO = ANY OR = SOME
+SQL> 
+SQL> REM DISPLAY ALL EMPLOYEES WHO WORKS IN DEPARTMENTS 20 50 90 110
+SQL> 
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID
+  2  FROM EMPLOYEES
+  3  WHERE DEPARTMENT_ID = 20 50 90 110;
+WHERE DEPARTMENT_ID = 20 50 90 110
+                         *
+ERROR at line 3:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> 
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID
+  2  FROM EMPLOYEES
+  3  WHERE DEPARTMENT_ID = (20, 50, 90, 110);
+WHERE DEPARTMENT_ID = (20, 50, 90, 110)
+                    *
+ERROR at line 3:
+ORA-01797: this operator must be followed by ANY or ALL 
+
+
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID
+  2  FROM EMPLOYEES
+  3  WHERE DEPARTMENT_ID = ANY (20, 50, 90, 110);
+
+FIRST_NAME      DEPARTMENT_ID                                                                                                                                                                           
+--------------- -------------                                                                                                                                                                           
+Steven                     90                                                                                                                                                                           
+Neena                      90                                                                                                                                                                           
+Lex                        90                                                                                                                                                                           
+Kevin                      50                                                                                                                                                                           
+Trenna                     50                                                                                                                                                                           
+Curtis                     50                                                                                                                                                                           
+Randall                    50                                                                                                                                                                           
+Peter                      50                                                                                                                                                                           
+Michael                    20                                                                                                                                                                           
+Pat                        20                                                                                                                                                                           
+Shelley                   110                                                                                                                                                                           
+William                   110                                                                                                                                                                           
+
+12 rows selected.
+
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID
+  2  FROM EMPLOYEES
+  3  WHERE DEPARTMENT_ID = SOME (20, 50, 90, 110);
+
+FIRST_NAME      DEPARTMENT_ID                                                                                                                                                                           
+--------------- -------------                                                                                                                                                                           
+Steven                     90                                                                                                                                                                           
+Neena                      90                                                                                                                                                                           
+Lex                        90                                                                                                                                                                           
+Kevin                      50                                                                                                                                                                           
+Trenna                     50                                                                                                                                                                           
+Curtis                     50                                                                                                                                                                           
+Randall                    50                                                                                                                                                                           
+Peter                      50                                                                                                                                                                           
+Michael                    20                                                                                                                                                                           
+Pat                        20                                                                                                                                                                           
+Shelley                   110                                                                                                                                                                           
+William                   110                                                                                                                                                                           
+
+12 rows selected.
+
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID
+  2  FROM EMPLOYEES
+  3  WHERE DEPARTMENT_ID IN (20, 50, 90, 110);
+
+FIRST_NAME      DEPARTMENT_ID                                                                                                                                                                           
+--------------- -------------                                                                                                                                                                           
+Steven                     90                                                                                                                                                                           
+Neena                      90                                                                                                                                                                           
+Lex                        90                                                                                                                                                                           
+Kevin                      50                                                                                                                                                                           
+Trenna                     50                                                                                                                                                                           
+Curtis                     50                                                                                                                                                                           
+Randall                    50                                                                                                                                                                           
+Peter                      50                                                                                                                                                                           
+Michael                    20                                                                                                                                                                           
+Pat                        20                                                                                                                                                                           
+Shelley                   110                                                                                                                                                                           
+William                   110                                                                                                                                                                           
+
+12 rows selected.
+
+SQL> REM DISPLAY ALL EXCEPT THOSE EMPLOYEES WHO WORKS IN DEPARTMENTS 20 50 90 110
+SQL> 
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID
+  2  FROM EMPLOYEES
+  3  WHERE DEPARTMENT_ID <> ALL (20, 50, 90, 110);
+
+FIRST_NAME      DEPARTMENT_ID                                                                                                                                                                           
+--------------- -------------                                                                                                                                                                           
+Alexander                  60                                                                                                                                                                           
+Bruce                      60                                                                                                                                                                           
+Diana                      60                                                                                                                                                                           
+Eleni                      80                                                                                                                                                                           
+Ellen                      80                                                                                                                                                                           
+Jonathon                   80                                                                                                                                                                           
+Jennifer                   10                                                                                                                                                                           
+
+7 rows selected.
+
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID
+  2  FROM EMPLOYEES
+  3  WHERE DEPARTMENT_ID NOT IN (20, 50, 90, 110);
+
+FIRST_NAME      DEPARTMENT_ID                                                                                                                                                                           
+--------------- -------------                                                                                                                                                                           
+Alexander                  60                                                                                                                                                                           
+Bruce                      60                                                                                                                                                                           
+Diana                      60                                                                                                                                                                           
+Eleni                      80                                                                                                                                                                           
+Ellen                      80                                                                                                                                                                           
+Jonathon                   80                                                                                                                                                                           
+Jennifer                   10                                                                                                                                                                           
+
+7 rows selected.
+
+SQL> REM NOT IN IS EQUIVALENT TO <> ALL , != ALL , ^ ALL
+SQL> 
+SQL> REM PAIR WISE COMPARISON
+SQL> 
+SQL> SELECT * FROM EMPLOYEES;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel            EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                     
+
+20 rows selected.
+
+SQL> REM DISPLAY COMBINATIONS : 60 103    80 149    20 201    110 205
+SQL> 
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID , MANAGER_ID
+  2  FROM EMPLOYEES
+  3  WHERE (DEPARTMENT_ID , MANAGER_ID) = ANY ((60,103),(80,149),(20,201),(110,205));
+
+FIRST_NAME      DEPARTMENT_ID MANAGER_ID                                                                                                                                                                
+--------------- ------------- ----------                                                                                                                                                                
+Bruce                      60        103                                                                                                                                                                
+Diana                      60        103                                                                                                                                                                
+Ellen                      80        149                                                                                                                                                                
+Jonathon                   80        149                                                                                                                                                                
+Pat                        20        201                                                                                                                                                                
+William                   110        205                                                                                                                                                                
+
+6 rows selected.
+
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID , MANAGER_ID
+  2  FROM EMPLOYEES
+  3  WHERE (DEPARTMENT_ID , MANAGER_ID) = ANY ((60,103),(80,149),(20,201),(110,205))
+  4  ORDER BY 2,3;
+
+FIRST_NAME      DEPARTMENT_ID MANAGER_ID                                                                                                                                                                
+--------------- ------------- ----------                                                                                                                                                                
+Pat                        20        201                                                                                                                                                                
+Bruce                      60        103                                                                                                                                                                
+Diana                      60        103                                                                                                                                                                
+Jonathon                   80        149                                                                                                                                                                
+Ellen                      80        149                                                                                                                                                                
+William                   110        205                                                                                                                                                                
+
+6 rows selected.
+
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID , MANAGER_ID
+  2  FROM EMPLOYEES
+  3  WHERE (DEPARTMENT_ID , MANAGER_ID) = SOME ((60,103),(80,149),(20,201),(110,205))
+  4  ORDER BY 2,3;
+
+FIRST_NAME      DEPARTMENT_ID MANAGER_ID                                                                                                                                                                
+--------------- ------------- ----------                                                                                                                                                                
+Pat                        20        201                                                                                                                                                                
+Bruce                      60        103                                                                                                                                                                
+Diana                      60        103                                                                                                                                                                
+Jonathon                   80        149                                                                                                                                                                
+Ellen                      80        149                                                                                                                                                                
+William                   110        205                                                                                                                                                                
+
+6 rows selected.
+
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID , MANAGER_ID
+  2  FROM EMPLOYEES
+  3  WHERE (DEPARTMENT_ID , MANAGER_ID) IN ((60,103),(80,149),(20,201),(110,205))
+  4  ORDER BY 2,3;
+
+FIRST_NAME      DEPARTMENT_ID MANAGER_ID                                                                                                                                                                
+--------------- ------------- ----------                                                                                                                                                                
+Pat                        20        201                                                                                                                                                                
+Bruce                      60        103                                                                                                                                                                
+Diana                      60        103                                                                                                                                                                
+Jonathon                   80        149                                                                                                                                                                
+Ellen                      80        149                                                                                                                                                                
+William                   110        205                                                                                                                                                                
+
+6 rows selected.
+
+SQL> REM DISPLAY COMBINATIONS EXCEPT : 60 103    80 149    20 201    110 205
+SQL> 
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID , MANAGER_ID
+  2  FROM EMPLOYEES
+  3  WHERE (DEPARTMENT_ID , MANAGER_ID) <> ALL ((60,103),(80,149),(20,201),(110,205))
+  4  ORDER BY 2,3;
+
+FIRST_NAME      DEPARTMENT_ID MANAGER_ID                                                                                                                                                                
+--------------- ------------- ----------                                                                                                                                                                
+Jennifer                   10        101                                                                                                                                                                
+Michael                    20        100                                                                                                                                                                
+Kevin                      50        100                                                                                                                                                                
+Curtis                     50        124                                                                                                                                                                
+Peter                      50        124                                                                                                                                                                
+Randall                    50        124                                                                                                                                                                
+Trenna                     50        124                                                                                                                                                                
+Alexander                  60        102                                                                                                                                                                
+Eleni                      80        100                                                                                                                                                                
+Neena                      90        100                                                                                                                                                                
+Lex                        90        100                                                                                                                                                                
+Steven                     90                                                                                                                                                                           
+Shelley                   110        101                                                                                                                                                                
+
+13 rows selected.
+
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID , MANAGER_ID
+  2  FROM EMPLOYEES
+  3  WHERE (DEPARTMENT_ID , MANAGER_ID) NOT IN ((60,103),(80,149),(20,201),(110,205))
+  4  ORDER BY 2,3;
+
+FIRST_NAME      DEPARTMENT_ID MANAGER_ID                                                                                                                                                                
+--------------- ------------- ----------                                                                                                                                                                
+Jennifer                   10        101                                                                                                                                                                
+Michael                    20        100                                                                                                                                                                
+Kevin                      50        100                                                                                                                                                                
+Curtis                     50        124                                                                                                                                                                
+Peter                      50        124                                                                                                                                                                
+Randall                    50        124                                                                                                                                                                
+Trenna                     50        124                                                                                                                                                                
+Alexander                  60        102                                                                                                                                                                
+Eleni                      80        100                                                                                                                                                                
+Neena                      90        100                                                                                                                                                                
+Lex                        90        100                                                                                                                                                                
+Steven                     90                                                                                                                                                                           
+Shelley                   110        101                                                                                                                                                                
+
+13 rows selected.
+
+SQL> SELECT * FROM EMPLOYEES;
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        100 Steven          King            SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        141 Trenna          Rajs            TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                     
+        142 Curtis          Davies          CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                     
+        143 Randall         Matos           RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                     
+        144 Peter           Vargas          PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        174 Ellen           Abel            EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        202 Pat             Fay             PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                     
+
+20 rows selected.
+
+SQL> REM DISPLAY COMBINATIONS : IT_PROG 103   SA_REP 149   AD_VP 100
+SQL> 
+SQL> REM DISPLAY COMBINATIONS EXCEPT : 80 149   20 201  50 124  90 100
+SQL> 
+SQL> SELECT * FROM EMPLOYEES WHERE (JOB_ID, MANAGER_ID) IN (('IT_PROG', 103),('SA_REP', 149),('AD_VP', 100));
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        101 Neena           Kochhar         NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                     
+        102 Lex             De Haan         LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        174 Ellen           Abel            EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                     
+        176 Jonathon        Taylor          JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                     
+        178 Kimerely        Grant           KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                   
+
+7 rows selected.
+
+SQL> SELECT * FROM EMPLOYEES WHERE (DEPARTMENT_ID, MANAGER_ID) NOT IN ((80, 149),(20, 201),(50, 124), (90,100));
+
+EMPLOYEE_ID FIRST_NAME      LAST_NAME       EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                     
+----------- --------------- --------------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                     
+        103 Alexander       Hunold          AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                     
+        104 Bruce           Ernst           BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                     
+        107 Diana           Lorentz         DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                     
+        124 Kevin           Mourgos         KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                     
+        149 Eleni           Zlotkey         EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                     
+        200 Jennifer        Whalen          JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                     
+        201 Michael         Hartstein       MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                     
+        205 Shelley         Higgins         SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                     
+        206 William         Gietz           WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                     
+
+9 rows selected.
+
+SQL> SPOOL OFF

@@ -1,0 +1,544 @@
+SQL> 
+SQL> REM TYPES OF CHARACTER FUNCTIONS : 1 CASE MANIPULATION 2 CHARACTER MANIPULATION
+SQL> 
+SQL> REM LIST OF CASE MANIPULATION FUNCTIONS : UPPER LOWER INITCAP
+SQL> 
+SQL> REM LIST OF CHARACTER MANIPULATION FUNCTIONS : CONCAT LPAD RPAD LTRIM RTRIM TRIM LENGTH TRANSLATE REPLACE SUBSTR INSTR
+SQL> 
+SQL> REM SUBSTR : TO GET SOME PART OF THE STRING FROM LEFT, RIGHT OR MIDDLE
+SQL> 
+SQL> SELECT SUBSTR('LaxmanShivRamKrishnan',7,4) FROM DUAL;
+
+SUBS                                                                            
+----                                                                            
+Shiv                                                                            
+
+SQL> SELECT SUBSTR('LaxmanShivRamKrishnan',11,3) FROM DUAL;
+
+SUB                                                                             
+---                                                                             
+Ram                                                                             
+
+SQL> SELECT SUBSTR('LaxmanShivRamKrishnan',1,6) FROM DUAL;
+
+SUBSTR                                                                          
+------                                                                          
+Laxman                                                                          
+
+SQL> SELECT SUBSTR('LaxmanShivRamKrishnan',15) FROM DUAL;
+
+SUBSTR(                                                                         
+-------                                                                         
+rishnan                                                                         
+
+SQL> SELECT SUBSTR('LaxmanShivRamKrishnan',14) FROM DUAL;
+
+SUBSTR('                                                                        
+--------                                                                        
+Krishnan                                                                        
+
+SQL> SELECT SUBSTR('LaxmanShivRamKrishnan',-8+) FROM DUAL;
+SELECT SUBSTR('LaxmanShivRamKrishnan',-8+) FROM DUAL
+                                         *
+ERROR at line 1:
+ORA-00936: missing expression 
+
+
+SQL> SELECT SUBSTR('LaxmanShivRamKrishnan',-8) FROM DUAL;
+
+SUBSTR('                                                                        
+--------                                                                        
+Krishnan                                                                        
+
+SQL> SELECT SUBSTR('LaxmanShivRamKrishnan',-8,5) FROM DUAL;
+
+SUBST                                                                           
+-----                                                                           
+Krish                                                                           
+
+SQL> SELECT SUBSTR('LaxmanShivRamKrishnan',-8,0) FROM DUAL;
+
+S                                                                               
+-                                                                               
+                                                                                
+
+SQL> SELECT SUBSTR('LaxmanShivRamKrishnan',-8,-4) FROM DUAL;
+
+S                                                                               
+-                                                                               
+                                                                                
+
+SQL> SELECT SUBSTR('LaxmanShivRamKrishnan',-8,NULL) FROM DUAL;
+
+S                                                                               
+-                                                                               
+                                                                                
+
+SQL> SELECT HIRE_DATE FROM EMPLOYEES;
+
+HIRE_DATE                                                                       
+---------                                                                       
+17-JUL-87                                                                       
+21-SEP-89                                                                       
+13-JAN-93                                                                       
+03-JAN-90                                                                       
+21-MAY-91                                                                       
+07-FEB-99                                                                       
+16-NOV-99                                                                       
+17-OCT-95                                                                       
+29-JAN-97                                                                       
+15-MAR-98                                                                       
+09-JUL-98                                                                       
+
+HIRE_DATE                                                                       
+---------                                                                       
+29-JAN-00                                                                       
+11-MAY-96                                                                       
+24-MAR-98                                                                       
+24-MAY-99                                                                       
+17-SEP-87                                                                       
+17-FEB-96                                                                       
+17-AUG-97                                                                       
+07-JUN-94                                                                       
+07-JUN-94                                                                       
+
+20 rows selected.
+
+SQL> SET LINES 200 PAGES 24
+SQL> 
+SQL> SELECT SUBSTR('LaxmanShivRamKrishnan',0,6) FROM DUAL;
+
+SUBSTR                                                                                                                                                                                                  
+------                                                                                                                                                                                                  
+Laxman                                                                                                                                                                                                  
+
+SQL> SELECT SUBSTR('LaxmanShivRamKrishnan',1,6) FROM DUAL;
+
+SUBSTR                                                                                                                                                                                                  
+------                                                                                                                                                                                                  
+Laxman                                                                                                                                                                                                  
+
+SQL> SELECT SUBSTR('LaxmanShivRamKrishnan',-1,6) FROM DUAL;
+
+S                                                                                                                                                                                                       
+-                                                                                                                                                                                                       
+n                                                                                                                                                                                                       
+
+SQL> SELECT HIRE_DATE FROM EMPLOYEES;
+
+HIRE_DATE                                                                                                                                                                                               
+---------                                                                                                                                                                                               
+17-JUL-87                                                                                                                                                                                               
+21-SEP-89                                                                                                                                                                                               
+13-JAN-93                                                                                                                                                                                               
+03-JAN-90                                                                                                                                                                                               
+21-MAY-91                                                                                                                                                                                               
+07-FEB-99                                                                                                                                                                                               
+16-NOV-99                                                                                                                                                                                               
+17-OCT-95                                                                                                                                                                                               
+29-JAN-97                                                                                                                                                                                               
+15-MAR-98                                                                                                                                                                                               
+09-JUL-98                                                                                                                                                                                               
+29-JAN-00                                                                                                                                                                                               
+11-MAY-96                                                                                                                                                                                               
+24-MAR-98                                                                                                                                                                                               
+24-MAY-99                                                                                                                                                                                               
+17-SEP-87                                                                                                                                                                                               
+17-FEB-96                                                                                                                                                                                               
+17-AUG-97                                                                                                                                                                                               
+07-JUN-94                                                                                                                                                                                               
+07-JUN-94                                                                                                                                                                                               
+
+20 rows selected.
+
+SQL> SELECT SUBSTR('17-JUL-87',4,3) FROM DUAL;
+
+SUB                                                                                                                                                                                                     
+---                                                                                                                                                                                                     
+JUL                                                                                                                                                                                                     
+
+SQL> SELECT SUBSTR(HIRE_DATE,4,3) FROM DUAL;
+SELECT SUBSTR(HIRE_DATE,4,3) FROM DUAL
+              *
+ERROR at line 1:
+ORA-00904: "HIRE_DATE": invalid identifier 
+
+
+SQL> SELECT SUBSTR(HIRE_DATE,4,3) FROM EMPLOYEES;
+
+SUBSTR(HIRE_                                                                                                                                                                                            
+------------                                                                                                                                                                                            
+JUL                                                                                                                                                                                                     
+SEP                                                                                                                                                                                                     
+JAN                                                                                                                                                                                                     
+JAN                                                                                                                                                                                                     
+MAY                                                                                                                                                                                                     
+FEB                                                                                                                                                                                                     
+NOV                                                                                                                                                                                                     
+OCT                                                                                                                                                                                                     
+JAN                                                                                                                                                                                                     
+MAR                                                                                                                                                                                                     
+JUL                                                                                                                                                                                                     
+JAN                                                                                                                                                                                                     
+MAY                                                                                                                                                                                                     
+MAR                                                                                                                                                                                                     
+MAY                                                                                                                                                                                                     
+SEP                                                                                                                                                                                                     
+FEB                                                                                                                                                                                                     
+AUG                                                                                                                                                                                                     
+JUN                                                                                                                                                                                                     
+JUN                                                                                                                                                                                                     
+
+20 rows selected.
+
+SQL> SELECT HIRE_DATE FROM EMPLOYEES;
+
+HIRE_DATE                                                                                                                                                                                               
+---------                                                                                                                                                                                               
+17-JUL-87                                                                                                                                                                                               
+21-SEP-89                                                                                                                                                                                               
+13-JAN-93                                                                                                                                                                                               
+03-JAN-90                                                                                                                                                                                               
+21-MAY-91                                                                                                                                                                                               
+07-FEB-99                                                                                                                                                                                               
+16-NOV-99                                                                                                                                                                                               
+17-OCT-95                                                                                                                                                                                               
+29-JAN-97                                                                                                                                                                                               
+15-MAR-98                                                                                                                                                                                               
+09-JUL-98                                                                                                                                                                                               
+29-JAN-00                                                                                                                                                                                               
+11-MAY-96                                                                                                                                                                                               
+24-MAR-98                                                                                                                                                                                               
+24-MAY-99                                                                                                                                                                                               
+17-SEP-87                                                                                                                                                                                               
+17-FEB-96                                                                                                                                                                                               
+17-AUG-97                                                                                                                                                                                               
+07-JUN-94                                                                                                                                                                                               
+07-JUN-94                                                                                                                                                                                               
+
+20 rows selected.
+
+SQL> REM USE STARTING POSITION AS NEGATIVE NUMBER AND SEPARATE ONLY YEAR VALUE
+SQL> 
+SQL> SELECT SUBSTR(HIRE_DATE,-2,2) FROM EMPLOYEES;
+
+SUBSTR(H                                                                                                                                                                                                
+--------                                                                                                                                                                                                
+87                                                                                                                                                                                                      
+89                                                                                                                                                                                                      
+93                                                                                                                                                                                                      
+90                                                                                                                                                                                                      
+91                                                                                                                                                                                                      
+99                                                                                                                                                                                                      
+99                                                                                                                                                                                                      
+95                                                                                                                                                                                                      
+97                                                                                                                                                                                                      
+98                                                                                                                                                                                                      
+98                                                                                                                                                                                                      
+00                                                                                                                                                                                                      
+96                                                                                                                                                                                                      
+98                                                                                                                                                                                                      
+99                                                                                                                                                                                                      
+87                                                                                                                                                                                                      
+96                                                                                                                                                                                                      
+97                                                                                                                                                                                                      
+94                                                                                                                                                                                                      
+94                                                                                                                                                                                                      
+
+20 rows selected.
+
+SQL> SELECT SUBSTR(HIRE_DATE,-2,8) FROM EMPLOYEES;
+
+SUBSTR(H                                                                                                                                                                                                
+--------                                                                                                                                                                                                
+87                                                                                                                                                                                                      
+89                                                                                                                                                                                                      
+93                                                                                                                                                                                                      
+90                                                                                                                                                                                                      
+91                                                                                                                                                                                                      
+99                                                                                                                                                                                                      
+99                                                                                                                                                                                                      
+95                                                                                                                                                                                                      
+97                                                                                                                                                                                                      
+98                                                                                                                                                                                                      
+98                                                                                                                                                                                                      
+00                                                                                                                                                                                                      
+96                                                                                                                                                                                                      
+98                                                                                                                                                                                                      
+99                                                                                                                                                                                                      
+87                                                                                                                                                                                                      
+96                                                                                                                                                                                                      
+97                                                                                                                                                                                                      
+94                                                                                                                                                                                                      
+94                                                                                                                                                                                                      
+
+20 rows selected.
+
+SQL> SELECT HIRE_DATE , SUBSTR(HIRE_DATE,-2,8) FROM EMPLOYEES;
+
+HIRE_DATE SUBSTR(H                                                                                                                                                                                      
+--------- --------                                                                                                                                                                                      
+17-JUL-87 87                                                                                                                                                                                            
+21-SEP-89 89                                                                                                                                                                                            
+13-JAN-93 93                                                                                                                                                                                            
+03-JAN-90 90                                                                                                                                                                                            
+21-MAY-91 91                                                                                                                                                                                            
+07-FEB-99 99                                                                                                                                                                                            
+16-NOV-99 99                                                                                                                                                                                            
+17-OCT-95 95                                                                                                                                                                                            
+29-JAN-97 97                                                                                                                                                                                            
+15-MAR-98 98                                                                                                                                                                                            
+09-JUL-98 98                                                                                                                                                                                            
+29-JAN-00 00                                                                                                                                                                                            
+11-MAY-96 96                                                                                                                                                                                            
+24-MAR-98 98                                                                                                                                                                                            
+24-MAY-99 99                                                                                                                                                                                            
+17-SEP-87 87                                                                                                                                                                                            
+17-FEB-96 96                                                                                                                                                                                            
+17-AUG-97 97                                                                                                                                                                                            
+07-JUN-94 94                                                                                                                                                                                            
+07-JUN-94 94                                                                                                                                                                                            
+
+20 rows selected.
+
+SQL> SELECT HIRE_DATE , SUBSTR(HIRE_DATE,-2) FROM EMPLOYEES;
+
+HIRE_DATE SUBSTR(H                                                                                                                                                                                      
+--------- --------                                                                                                                                                                                      
+17-JUL-87 87                                                                                                                                                                                            
+21-SEP-89 89                                                                                                                                                                                            
+13-JAN-93 93                                                                                                                                                                                            
+03-JAN-90 90                                                                                                                                                                                            
+21-MAY-91 91                                                                                                                                                                                            
+07-FEB-99 99                                                                                                                                                                                            
+16-NOV-99 99                                                                                                                                                                                            
+17-OCT-95 95                                                                                                                                                                                            
+29-JAN-97 97                                                                                                                                                                                            
+15-MAR-98 98                                                                                                                                                                                            
+09-JUL-98 98                                                                                                                                                                                            
+29-JAN-00 00                                                                                                                                                                                            
+11-MAY-96 96                                                                                                                                                                                            
+24-MAR-98 98                                                                                                                                                                                            
+24-MAY-99 99                                                                                                                                                                                            
+17-SEP-87 87                                                                                                                                                                                            
+17-FEB-96 96                                                                                                                                                                                            
+17-AUG-97 97                                                                                                                                                                                            
+07-JUN-94 94                                                                                                                                                                                            
+07-JUN-94 94                                                                                                                                                                                            
+
+20 rows selected.
+
+SQL> REM USE STARTING POSITION AS POSITIVE NUMBER AND SEPARATE ONLY YEAR VALUE
+SQL> 
+SQL> SELECT SUBSTR(HIRE_DATE,8) FROM EMPLOYEES;
+
+SUBSTR(HIRE_DATE,8)                                                                                                                                                                                     
+--------------------------------------------                                                                                                                                                            
+87                                                                                                                                                                                                      
+89                                                                                                                                                                                                      
+93                                                                                                                                                                                                      
+90                                                                                                                                                                                                      
+91                                                                                                                                                                                                      
+99                                                                                                                                                                                                      
+99                                                                                                                                                                                                      
+95                                                                                                                                                                                                      
+97                                                                                                                                                                                                      
+98                                                                                                                                                                                                      
+98                                                                                                                                                                                                      
+00                                                                                                                                                                                                      
+96                                                                                                                                                                                                      
+98                                                                                                                                                                                                      
+99                                                                                                                                                                                                      
+87                                                                                                                                                                                                      
+96                                                                                                                                                                                                      
+97                                                                                                                                                                                                      
+94                                                                                                                                                                                                      
+94                                                                                                                                                                                                      
+
+20 rows selected.
+
+SQL> SELECT HIRE_DATE , SUBSTR(HIRE_DATE,8) FROM EMPLOYEES;
+
+HIRE_DATE SUBSTR(HIRE_DATE,8)                                                                                                                                                                           
+--------- --------------------------------------------                                                                                                                                                  
+17-JUL-87 87                                                                                                                                                                                            
+21-SEP-89 89                                                                                                                                                                                            
+13-JAN-93 93                                                                                                                                                                                            
+03-JAN-90 90                                                                                                                                                                                            
+21-MAY-91 91                                                                                                                                                                                            
+07-FEB-99 99                                                                                                                                                                                            
+16-NOV-99 99                                                                                                                                                                                            
+17-OCT-95 95                                                                                                                                                                                            
+29-JAN-97 97                                                                                                                                                                                            
+15-MAR-98 98                                                                                                                                                                                            
+09-JUL-98 98                                                                                                                                                                                            
+29-JAN-00 00                                                                                                                                                                                            
+11-MAY-96 96                                                                                                                                                                                            
+24-MAR-98 98                                                                                                                                                                                            
+24-MAY-99 99                                                                                                                                                                                            
+17-SEP-87 87                                                                                                                                                                                            
+17-FEB-96 96                                                                                                                                                                                            
+17-AUG-97 97                                                                                                                                                                                            
+07-JUN-94 94                                                                                                                                                                                            
+07-JUN-94 94                                                                                                                                                                                            
+
+20 rows selected.
+
+SQL> REM USE STARTING POSITION AS POSITIVE NUMBER AND SEPARATE ONLY MONTH NAME
+SQL> 
+SQL> REM USE STARTING POSITION AS NEGATIVE NUMBER AND SEPARATE ONLY MONTH NAME
+SQL> 
+SQL> SELECT SUBSTR(HIRE_DATE,4,3) FROM EMPLOYEES;
+
+SUBSTR(HIRE_                                                                                                                                                                                            
+------------                                                                                                                                                                                            
+JUL                                                                                                                                                                                                     
+SEP                                                                                                                                                                                                     
+JAN                                                                                                                                                                                                     
+JAN                                                                                                                                                                                                     
+MAY                                                                                                                                                                                                     
+FEB                                                                                                                                                                                                     
+NOV                                                                                                                                                                                                     
+OCT                                                                                                                                                                                                     
+JAN                                                                                                                                                                                                     
+MAR                                                                                                                                                                                                     
+JUL                                                                                                                                                                                                     
+JAN                                                                                                                                                                                                     
+MAY                                                                                                                                                                                                     
+MAR                                                                                                                                                                                                     
+MAY                                                                                                                                                                                                     
+SEP                                                                                                                                                                                                     
+FEB                                                                                                                                                                                                     
+AUG                                                                                                                                                                                                     
+JUN                                                                                                                                                                                                     
+JUN                                                                                                                                                                                                     
+
+20 rows selected.
+
+SQL> SELECT SUBSTR(HIRE_DATE,-6,3) FROM EMPLOYEES;
+
+SUBSTR(HIRE_                                                                                                                                                                                            
+------------                                                                                                                                                                                            
+JUL                                                                                                                                                                                                     
+SEP                                                                                                                                                                                                     
+JAN                                                                                                                                                                                                     
+JAN                                                                                                                                                                                                     
+MAY                                                                                                                                                                                                     
+FEB                                                                                                                                                                                                     
+NOV                                                                                                                                                                                                     
+OCT                                                                                                                                                                                                     
+JAN                                                                                                                                                                                                     
+MAR                                                                                                                                                                                                     
+JUL                                                                                                                                                                                                     
+JAN                                                                                                                                                                                                     
+MAY                                                                                                                                                                                                     
+MAR                                                                                                                                                                                                     
+MAY                                                                                                                                                                                                     
+SEP                                                                                                                                                                                                     
+FEB                                                                                                                                                                                                     
+AUG                                                                                                                                                                                                     
+JUN                                                                                                                                                                                                     
+JUN                                                                                                                                                                                                     
+
+20 rows selected.
+
+SQL> REM INSTR : TO FIND POSITION OF CHARACTER/STRING WITHIN ANOTHER STRING
+SQL> 
+SQL> SELECT INSTR('NEELKAMAL','L') FROM DUAL;
+
+INSTR('NEELKAMAL','L')                                                                                                                                                                                  
+----------------------                                                                                                                                                                                  
+                     4                                                                                                                                                                                  
+
+SQL> SELECT INSTR('NEELKAMAL','L',6) FROM DUAL;
+
+INSTR('NEELKAMAL','L',6)                                                                                                                                                                                
+------------------------                                                                                                                                                                                
+                       9                                                                                                                                                                                
+
+SQL> SELECT INSTR('NEELKAMAL','L',3,2) FROM DUAL;
+
+INSTR('NEELKAMAL','L',3,2)                                                                                                                                                                              
+--------------------------                                                                                                                                                                              
+                         9                                                                                                                                                                              
+
+SQL> SELECT INSTR('NEELKAMAL','X') FROM DUAL;
+
+INSTR('NEELKAMAL','X')                                                                                                                                                                                  
+----------------------                                                                                                                                                                                  
+                     0                                                                                                                                                                                  
+
+SQL> SELECT INSTR('NEELKAMAL','KAMAL') FROM DUAL;
+
+INSTR('NEELKAMAL','KAMAL')                                                                                                                                                                              
+--------------------------                                                                                                                                                                              
+                         5                                                                                                                                                                              
+
+SQL> SELECT INSTR('NEELKAMAL','AMAL') FROM DUAL;
+
+INSTR('NEELKAMAL','AMAL')                                                                                                                                                                               
+-------------------------                                                                                                                                                                               
+                        6                                                                                                                                                                               
+
+SQL> SELECT INSTR('NEELKAMAL','AML') FROM DUAL;
+
+INSTR('NEELKAMAL','AML')                                                                                                                                                                                
+------------------------                                                                                                                                                                                
+                       0                                                                                                                                                                                
+
+SQL> SELECT INSTR('NEELKAMAL','L',-1) FROM DUAL;
+
+INSTR('NEELKAMAL','L',-1)                                                                                                                                                                               
+-------------------------                                                                                                                                                                               
+                        9                                                                                                                                                                               
+
+SQL> SELECT INSTR('NEELKAMAL','L',-2) FROM DUAL;
+
+INSTR('NEELKAMAL','L',-2)                                                                                                                                                                               
+-------------------------                                                                                                                                                                               
+                        4                                                                                                                                                                               
+
+SQL> SELECT INSTR('NEELKAMAL','A',-1) FROM DUAL;
+
+INSTR('NEELKAMAL','A',-1)                                                                                                                                                                               
+-------------------------                                                                                                                                                                               
+                        8                                                                                                                                                                               
+
+SQL> SELECT INSTR('NEELKAMAL','A',-2) FROM DUAL;
+
+INSTR('NEELKAMAL','A',-2)                                                                                                                                                                               
+-------------------------                                                                                                                                                                               
+                        8                                                                                                                                                                               
+
+SQL> SELECT INSTR('NEELKAMAL','A',-3) FROM DUAL;
+
+INSTR('NEELKAMAL','A',-3)                                                                                                                                                                               
+-------------------------                                                                                                                                                                               
+                        6                                                                                                                                                                               
+
+SQL> SELECT INSTR('NEELKAMAL','A',-5) FROM DUAL;
+
+INSTR('NEELKAMAL','A',-5)                                                                                                                                                                               
+-------------------------                                                                                                                                                                               
+                        0                                                                                                                                                                               
+
+SQL> SELECT INSTR('NEELKAMAL','A',5,2) FROM DUAL;
+
+INSTR('NEELKAMAL','A',5,2)                                                                                                                                                                              
+--------------------------                                                                                                                                                                              
+                         8                                                                                                                                                                              
+
+SQL> SELECT INSTR('NEELKAMAL','A',5,3) FROM DUAL;
+
+INSTR('NEELKAMAL','A',5,3)                                                                                                                                                                              
+--------------------------                                                                                                                                                                              
+                         0                                                                                                                                                                              
+
+SQL> 
+SQL> SELECT RPAD(LPAD('RAM',6,')'),10,'(') FROM DUAL;
+
+RPAD(LPAD(                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+)))RAM((((                                                                                                                                                                                              
+
+SQL> SPOOL OF

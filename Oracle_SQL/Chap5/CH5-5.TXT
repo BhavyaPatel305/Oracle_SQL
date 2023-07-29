@@ -1,0 +1,185 @@
+SQL> 
+SQL> CL SCR
+
+SQL> REM PCM : PIVOTE REPORT/CROSS TAB REPORT/MATRIX REPORT
+SQL> 
+SQL> SET LINES 200 PAGES 24
+SQL> 
+SQL> SELECT COUNT(*) FROM EMPLOYEES;
+
+  COUNT(*)                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+        20                                                                                                                                                                                              
+
+SQL> SELECT COUNT(*) FROM EMPLOYEES WHERE DEPARTMENT_ID = 50;
+
+  COUNT(*)                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+         5                                                                                                                                                                                              
+
+SQL> SELECT COUNT(*) FROM EMPLOYEES WHERE DEPARTMENT_ID = 60;
+
+  COUNT(*)                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+         3                                                                                                                                                                                              
+
+SQL> SELECT COUNT(*) FROM EMPLOYEES WHERE DEPARTMENT_ID = 20;
+
+  COUNT(*)                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+         2                                                                                                                                                                                              
+
+SQL> SELECT DEPARTMENT_ID , COUNT(*) FROM EMPLOYEES GROUP BY DEPARTMENT_ID ORDER BY 1;
+
+DEPARTMENT_ID   COUNT(*)                                                                                                                                                                                
+------------- ----------                                                                                                                                                                                
+           10          1                                                                                                                                                                                
+           20          2                                                                                                                                                                                
+           50          5                                                                                                                                                                                
+           60          3                                                                                                                                                                                
+           80          3                                                                                                                                                                                
+           90          3                                                                                                                                                                                
+          110          2                                                                                                                                                                                
+                       1                                                                                                                                                                                
+
+8 rows selected.
+
+SQL> REM DEPT_20_CNT    DEPT_50_CNT     DEPT_60_CNT
+SQL> 
+SQL> REM           2              5               3
+SQL> 
+SQL> 
+SQL> SELECT COUNT(DECODE(DEPARTMENT_ID,20,'*')) DEPT_20_CNT,
+  2         COUNT(DECODE(DEPARTMENT_ID,50,'*')) DEPT_50_CNT,
+  3         COUNT(DECODE(DEPARTMENT_ID,60,'*')) DEPT_60_CNT
+  4  FROM EMPLOYEES;
+
+DEPT_20_CNT DEPT_50_CNT DEPT_60_CNT                                                                                                                                                                     
+----------- ----------- -----------                                                                                                                                                                     
+          2           5           3                                                                                                                                                                     
+
+SQL> SELECT COUNT(CASE DEPARTMENT_ID WHEN 20 THEN '*' END) DEPT_20_CNT,
+  2         COUNT(CASE DEPARTMENT_ID WHEN 50 THEN '*' END) DEPT_50_CNT,
+  3         COUNT(CASE DEPARTMENT_ID WHEN 60 THEN '*' END) DEPT_60_CNT
+  4  FROM EMPLOYEES;
+
+DEPT_20_CNT DEPT_50_CNT DEPT_60_CNT                                                                                                                                                                     
+----------- ----------- -----------                                                                                                                                                                     
+          2           5           3                                                                                                                                                                     
+
+SQL> SELECT COUNT(CASE WHEN DEPARTMENT_ID = 20 THEN '*' END) DEPT_20_CNT,
+  2         COUNT(CASE WHEN DEPARTMENT_ID = 50 THEN '*' END) DEPT_50_CNT,
+  3         COUNT(CASE WHEN DEPARTMENT_ID = 60 THEN '*' END) DEPT_60_CNT
+  4  FROM EMPLOYEES;
+
+DEPT_20_CNT DEPT_50_CNT DEPT_60_CNT                                                                                                                                                                     
+----------- ----------- -----------                                                                                                                                                                     
+          2           5           3                                                                                                                                                                     
+
+SQL> REM IT_PROG_CNT    ST_CLERK_CNT    AD_VP_CNT
+SQL> 
+SQL> REM DECODE         CASE I          CASE II
+SQL> 
+SQL> SELECT COUNT(CASE(JOB_ID WHEN 'IT_PROG' THEN '*')) IT_PROG_CNT,
+  2      COUNT(CASE(JOB_ID WHEN 'ST_CLERK' THEN '*')) ST_CLERK_CNT,
+  3      COUNT(CASE(JOB_ID WHEN 'AD_VP' THEN '*')) AD_VP_CNT
+  4      FROM EMPLOYEES;
+SELECT COUNT(CASE(JOB_ID WHEN 'IT_PROG' THEN '*')) IT_PROG_CNT,
+                         *
+ERROR at line 1:
+ORA-00907: missing right parenthesis 
+
+
+SQL> SELECT COUNT(DECODE(JOB_ID,'IT_PROG','*')) IT_PROG_CNT,
+  2         COUNT(CASE JOB_ID WHEN 'ST_CLERK' THEN '*') ST_CLERK_CNT,
+  3         COUNT(CASE WHEN JOB_ID = 'AD_VP' THEN '*' END) AD_VP_CNT
+  4  
+SQL> 
+SQL> SELECT COUNT(DECODE(JOB_ID,'IT_PROG','*')) IT_PROG_CNT,
+  2         COUNT(CASE JOB_ID WHEN 'ST_CLERK' THEN '*' END) ST_CLERK_CNT,
+  3         COUNT(CASE WHEN JOB_ID = 'AD_VP' THEN '*' END) AD_VP_CNT
+  4  FROM EMPLOYEES;
+
+IT_PROG_CNT ST_CLERK_CNT  AD_VP_CNT                                                                                                                                                                     
+----------- ------------ ----------                                                                                                                                                                     
+          3            4          2                                                                                                                                                                     
+
+SQL> REM MGR_100_SUM_SAL     MGR_124_AVG_SAL     MGR_149_MIN_SAL
+SQL> 
+SQL> REM DECODE              CASE I              CASE II
+SQL> 
+SQL> SELECT SUM(DECODE(MANAGER_ID,100,SALARY)) MGR_100_SUM_SAL, AVG(CASE MANAGER_ID WHEN 124 THEN SALARY END) MGR_124_AVG_SAL, MIN(CASE WHEN MANAGER_ID = 149 THEN SALARY END) MGR_149_MIN_SAL FROM EMPLOYEES;
+
+MGR_100_SUM_SAL MGR_124_AVG_SAL MGR_149_MIN_SAL                                                                                                                                                         
+--------------- --------------- ---------------                                                                                                                                                         
+          63300            2925            7000                                                                                                                                                         
+
+SQL> SELECT SUM(DECODE (MANAGER_ID,100,SALARY)) MGR_100_SUM_SAL,
+  2      AVG(CASE MANAGER_ID  WHEN 124 THEN SALARY END ) MGR_124_AVG_SAL,
+  3      MIN(CASE WHEN MANAGER_ID = 149  THEN SALARY END ) MGR_149_MIN_SAL
+  4      FROM EMPLOYEES;
+
+MGR_100_SUM_SAL MGR_124_AVG_SAL MGR_149_MIN_SAL                                                                                                                                                         
+--------------- --------------- ---------------                                                                                                                                                         
+          63300            2925            7000                                                                                                                                                         
+
+SQL> SELECT DEPARTMENT_ID , SUM(DECODE (MANAGER_ID,100,SALARY)) MGR_100_SUM_SAL,
+  2      AVG(CASE MANAGER_ID  WHEN 124 THEN SALARY END ) MGR_124_AVG_SAL,
+  3      MIN(CASE WHEN MANAGER_ID = 149  THEN SALARY END ) MGR_149_MIN_SAL
+  4      FROM EMPLOYEES
+  5  GROUP BY DEPARTMENT_ID;
+
+DEPARTMENT_ID MGR_100_SUM_SAL MGR_124_AVG_SAL MGR_149_MIN_SAL                                                                                                                                           
+------------- --------------- --------------- ---------------                                                                                                                                           
+                                                         7000                                                                                                                                           
+           90           34000                                                                                                                                                                           
+           20           13000                                                                                                                                                                           
+          110                                                                                                                                                                                           
+           50            5800            2925                                                                                                                                                           
+           80           10500                            8600                                                                                                                                           
+           60                                                                                                                                                                                           
+           10                                                                                                                                                                                           
+
+8 rows selected.
+
+SQL> REM MANAGER_ID WISE DEPT_90_CNT   DEPT_50_CNT    DEPT_110_CNT
+SQL> 
+SQL> SELECT MANAGER_ID, COUNT(DECODE(DEPARTMENT_ID,90,'*')) DEPT_90_CNT,
+  2  COUNT(DECODE(DEPARTMENT_ID,50,'*')) DEPT_50_CNT,
+  3  COUNT(DECODE(DEPARTMENT_ID,110,'*')) DEPT_110_CNT FROM EMPLOYEES GROUP BY MANAGER_ID;
+
+MANAGER_ID DEPT_90_CNT DEPT_50_CNT DEPT_110_CNT                                                                                                                                                         
+---------- ----------- ----------- ------------                                                                                                                                                         
+                     1           0            0                                                                                                                                                         
+       100           2           1            0                                                                                                                                                         
+       149           0           0            0                                                                                                                                                         
+       205           0           0            1                                                                                                                                                         
+       102           0           0            0                                                                                                                                                         
+       201           0           0            0                                                                                                                                                         
+       101           0           0            1                                                                                                                                                         
+       124           0           4            0                                                                                                                                                         
+       103           0           0            0                                                                                                                                                         
+
+9 rows selected.
+
+SQL> SELECT MANAGER_ID,COUNT(DECODE (DEPARTMENT_ID,90,'*')) DEPT_90_CNT,
+  2      COUNT(CASE DEPARTMENT_ID  WHEN 50 THEN '*' END ) DEPT_50_CNT,
+  3      COUNT(CASE WHEN DEPARTMENT_ID = 110  THEN '*' END ) DEPT_110_CNT
+  4      FROM EMPLOYEES
+  5      group by manager_id;
+
+MANAGER_ID DEPT_90_CNT DEPT_50_CNT DEPT_110_CNT                                                                                                                                                         
+---------- ----------- ----------- ------------                                                                                                                                                         
+                     1           0            0                                                                                                                                                         
+       100           2           1            0                                                                                                                                                         
+       149           0           0            0                                                                                                                                                         
+       205           0           0            1                                                                                                                                                         
+       102           0           0            0                                                                                                                                                         
+       201           0           0            0                                                                                                                                                         
+       101           0           0            1                                                                                                                                                         
+       124           0           4            0                                                                                                                                                         
+       103           0           0            0                                                                                                                                                         
+
+9 rows selected.
+
+SQL> SPOOL OFF

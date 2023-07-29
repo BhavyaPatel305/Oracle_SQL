@@ -1,0 +1,280 @@
+SQL> 
+SQL> REM TABLE NAME : RULES
+SQL> 
+SQL> REM DATA TYPES
+SQL> 
+SQL> REM COLUMN LEVEL CONSTRAINTS : CHECK NOT NULL PRIMARY KEY UNIQUE REFERENCES
+SQL> 
+SQL> REM USER DEFINED CONSTRAINT NAME
+SQL> 
+SQL> REM CREATE TABLE USING SUB QUERY
+SQL> 
+SQL> REM TABLE LEVEL CONSTRAINTS : CHECK NOT NULL PRIMARY KEY UNIQUE FOEIGN KEY ... REFERENCES
+SQL> 
+SQL> REM TABLE LEVEL CONSTRAINTS : CHECK NOT NULL PRIMARY KEY UNIQUE FOREIGN KEY ... REFERENCES
+SQL> 
+SQL> REM RELATIONSHIP TYPES
+SQL> 
+SQL> 
+SQL> 
+SQL> REM TABLE LEVEL CONSTRAINTS :
+SQL> 
+SQL> REM COLUMN LEVEL CONSTRAINT ALLOWS US TO REFER SINGLE COLUMN REFERENCE INSIDE CONSTRAINT.
+SQL> 
+SQL> REM TABLE LEVEL CONSTRAINT ALLOWS US TO REFER MULTIPLE COLUMNS INSIDE CONSTRAINT.
+SQL> 
+SQL> REM WHEN WE REFER MULTIPLE COLUMNS WITHIN SINGLE CONSTRAINT, IT IS CALLED COMPOSITE CONSTRAINTS.
+SQL> 
+SQL>  DROP TABLE RESULT;
+
+Table dropped.
+
+SQL> DROP TABLE SCHOOL;
+
+Table dropped.
+
+SQL> REM CHECK CONSTRAINT :
+SQL> 
+SQL> REM STD : 1-12
+SQL> 
+SQL> REM CLASSROOM : SAME SIZE : SAME NUMBER BENCHES :
+SQL> 
+SQL> REM STD : 1-4  , RNO : 1-75
+SQL> 
+SQL> REM STD : 5-8  , RNO : 1-60
+SQL> 
+SQL> REM STD : 9-12  , RNO : 1-45
+SQL> 
+SQL> 
+SQL> CREATE TABLE SCHOOL (STD NUMBER(2) , DIV CHAR CHECK (DIV IN ('A','B','C')), RNO NUMBER(2) , NM VARCHAR(20) ,
+  2  CHECK (( STD BETWEEN 1 AND 4 AND RNO BETWEEN 1 AND 75)
+  3      OR ( STD BETWEEN 5 AND 8 AND RNO BETWEEN 1 AND 60)
+  4      OR ( STD BETWEEN 9 AND 12 AND RNO BETWEEN 1 AND 45)));
+
+Table created.
+
+SQL> INSERT INTO STD VALUES (5,'A',1,'GANESH');
+INSERT INTO STD VALUES (5,'A',1,'GANESH')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> INSERT INTO SCHOOL VALUES (5,'A',1,'GANESH');
+
+1 row created.
+
+SQL> INSERT INTO SCHOOL VALUES (5,'A',2,'RIDDHI');
+
+1 row created.
+
+SQL> INSERT INTO SCHOOL VALUES (5,'A',3,'SIDDHI');
+
+1 row created.
+
+SQL> INSERT INTO SCHOOL VALUES (5,'B',1,'SHUBH');
+
+1 row created.
+
+SQL> INSERT INTO SCHOOL VALUES (5,'B',2,'LABH');
+
+1 row created.
+
+SQL> INSERT INTO SCHOOL VALUES (5,'A',3,'HI');
+
+1 row created.
+
+SQL> /
+
+1 row created.
+
+SQL> INSERT INTO SCHOOL VALUES (4,'A',75,'HI');
+
+1 row created.
+
+SQL> INSERT INTO SCHOOL VALUES (4,'A',76,'HI');
+INSERT INTO SCHOOL VALUES (4,'A',76,'HI')
+*
+ERROR at line 1:
+ORA-02290: check constraint (SCOTT.SYS_C0053745) violated 
+
+
+SQL> INSERT INTO SCHOOL VALUES (5,'A',60,'HI');
+
+1 row created.
+
+SQL> INSERT INTO SCHOOL VALUES (5,'A',61,'HI');
+INSERT INTO SCHOOL VALUES (5,'A',61,'HI')
+*
+ERROR at line 1:
+ORA-02290: check constraint (SCOTT.SYS_C0053745) violated 
+
+
+SQL> INSERT INTO SCHOOL VALUES (9,'A',45,'HI');
+
+1 row created.
+
+SQL> INSERT INTO SCHOOL VALUES (9,'A',46,'HI');
+INSERT INTO SCHOOL VALUES (9,'A',46,'HI')
+*
+ERROR at line 1:
+ORA-02290: check constraint (SCOTT.SYS_C0053745) violated 
+
+
+SQL> SELECT * FROM SCHOOL;
+
+       STD D        RNO NM                                                                                                                                                                              
+---------- - ---------- --------------------                                                                                                                                                            
+         5 A          1 GANESH                                                                                                                                                                          
+         5 A          2 RIDDHI                                                                                                                                                                          
+         5 A          3 SIDDHI                                                                                                                                                                          
+         5 B          1 SHUBH                                                                                                                                                                           
+         5 B          2 LABH                                                                                                                                                                            
+         5 A          3 HI                                                                                                                                                                              
+         5 A          3 HI                                                                                                                                                                              
+         4 A         75 HI                                                                                                                                                                              
+         5 A         60 HI                                                                                                                                                                              
+         9 A         45 HI                                                                                                                                                                              
+
+10 rows selected.
+
+SQL> DROP TABLE SCHOOL;
+
+Table dropped.
+
+SQL> REM STD DIV RNO : COMBINATION / UNIQUENESS
+SQL> 
+SQL> CREATE TABLE SCHOOL(STD NUMBER(2), DIV CHAR , RNO NUMBER(2) , NM VARCHAR(10) ,
+  2  PRIMARY KEY (STD , DIV , RNO));
+
+Table created.
+
+SQL> INSERT INTO SCHOOL VALUES (5,'A',1,'GANESH');
+
+1 row created.
+
+SQL> INSERT INTO SCHOOL VALUES (5,'A',2,'RIDDHI');
+
+1 row created.
+
+SQL> INSERT INTO SCHOOL VALUES (6,'A',1,'SIDDHI');
+
+1 row created.
+
+SQL> INSERT INTO SCHOOL VALUES (6,'A',2,'SHUBH');
+
+1 row created.
+
+SQL> INSERT INTO SCHOOL VALUES (6,'A',3,'LABH');
+
+1 row created.
+
+SQL> INSERT INTO SCHOOL VALUES (5,'A',2,'HI');
+INSERT INTO SCHOOL VALUES (5,'A',2,'HI')
+*
+ERROR at line 1:
+ORA-00001: unique constraint (SCOTT.SYS_C0053746) violated 
+
+
+SQL> DROP TABLE SCHOOL;
+
+Table dropped.
+
+SQL> REM NOT NULL CONSTRAINT IS NOT ALLOWED AT TABLE LEVEL.
+SQL> 
+SQL> REM REFERENCES CONSTRAINT HAS DIFFERENCE SYNTAX FOR COLUMN AND TABLE LEVEL.
+SQL> 
+SQL> CREATE TABLE SCHOOL(STD NUMBER(2), DIV CHAR , RNO NUMBER(2) , NM VARCHAR(10) ,
+  2  UNIQUE (STD , DIV , RNO) , NOT NULL (STD , DIV , RNO));
+UNIQUE (STD , DIV , RNO) , NOT NULL (STD , DIV , RNO))
+                           *
+ERROR at line 2:
+ORA-00904: : invalid identifier 
+
+
+SQL> CREATE TABLE SCHOOL(STD NUMBER(2) NOT NULL, DIV CHAR NOT NULL, RNO NUMBER(2) NOT NULL, NM VARCHAR(10) ,
+  2  UNIQUE (STD , DIV , RNO));
+
+Table created.
+
+SQL> INSERT INTO SCHOOL VALUES (5,'A',1,'GANESH');
+
+1 row created.
+
+SQL> INSERT INTO SCHOOL VALUES (5,'A',2,'RIDDHI');
+
+1 row created.
+
+SQL> INSERT INTO SCHOOL VALUES (6,'A',1,'SIDDHI');
+
+1 row created.
+
+SQL> INSERT INTO SCHOOL VALUES (6,'A',2,'SHUBH');
+
+1 row created.
+
+SQL> INSERT INTO SCHOOL VALUES (6,'A',3,'LABH');
+
+1 row created.
+
+SQL> INSERT INTO SCHOOL VALUES (5,'A',2,'HI');
+INSERT INTO SCHOOL VALUES (5,'A',2,'HI')
+*
+ERROR at line 1:
+ORA-00001: unique constraint (SCOTT.SYS_C0053750) violated 
+
+
+SQL> CREATE TABLE RESULT (STD NUMBER(2) , DIV CHAR , ROLLNO NUMBER(2) , RESULT VARCHAR(4) ,
+  2  REFERENCES SCHOOL(STD,DIV,RNO));
+REFERENCES SCHOOL(STD,DIV,RNO))
+                 *
+ERROR at line 2:
+ORA-00907: missing right parenthesis 
+
+
+SQL> CREATE TABLE RESULT (STD NUMBER(2) , DIV CHAR , ROLLNO NUMBER(2) , RESULT VARCHAR(4) ,
+  2  FOREIGN KEY (STD , DIV , ROLLNO) REFERENCES SCHOOL(STD,DIV,RNO));
+
+Table created.
+
+SQL> DROP TABLE RESULT;
+
+Table dropped.
+
+SQL> FOREIGN KEY (STD , DIV , ROLLNO) REFERENCES SCHOOL(STD,DIV,RNO));
+SP2-0734: unknown command beginning "FOREIGN KE..." - rest of line ignored.
+SQL> 
+SQL> 
+SQL> CREATE TABLE RESULT (STD NUMBER(2) , DIV CHAR , ROLLNO NUMBER(2) , RESULT VARCHAR(4) ,
+  2  FOREIGN KEY (DIV , ROLLNO , STD) REFERENCES SCHOOL(DIV,RNO,STD));
+
+Table created.
+
+SQL> DROP TABLE RESULT;
+
+Table dropped.
+
+SQL> 
+SQL> CREATE TABLE RESULT (STD NUMBER(2) , DIV CHAR , ROLLNO NUMBER(2) , RESULT VARCHAR(4) ,
+  2  FOREIGN KEY (STD , DIV , ROLLNO) REFERENCES SCHOOL);
+FOREIGN KEY (STD , DIV , ROLLNO) REFERENCES SCHOOL)
+                                            *
+ERROR at line 2:
+ORA-02268: referenced table does not have a primary key 
+
+
+SQL> DROP TABLE SCHOOL;
+
+Table dropped.
+
+SQL> CREATE TABLE SCHOOL(STD NUMBER(2), DIV CHAR , RNO NUMBER(2) , NM VARCHAR(10) ,
+  2  PRIMARY KEY (STD , DIV , RNO));
+
+Table created.
+
+SQL> CREATE TABLE RESULT (STD NUMBER(2) , DIV CHAR , ROLLNO NUMBER(2) , RESULT VARCHAR(4) ,
+  2  FOREIGN KEY (STD , DIV , ROLLNO) REFERENCES SCHOOL);
+
+Table created.
+
+SQL> SPOOL OFF

@@ -1,0 +1,113 @@
+                                 : TABLE 1 :
+
+
+    DETAILS FOR BE STORED             |     DATA TYPES
+                                      |
+ 1. PRODUCT_ID                        |  A. TIMESTAMP
+                                      |
+ 2. ITEM_NAME                         |  B. DATE
+                                      |
+ 3. GENDER                            |  C. NUMBER
+                                      |
+ 4. JOINDATE                          |  D. INTERVAL YEAR TO MONTH
+                                      |
+ 5. ATM TRANSACTION DATE TIME INFO.   |  E. CHAR
+                                      |
+ 6. FIXED DEPOSIT DURATION            |  F. VARCHAR2
+                                      |
+                                      |
+
+
+
+
+
+
+
+
+
+
+                                 : TABLE 2 :
+
+
+    DETAILS TO BE STORED              |     DATA TYPES
+                                      |
+ 1. PHOTOGRAPH, SCANNED IMAGE		  |  A. TIME STAMP WITH TIME ZONE
+                                      |
+ 2. TRANSACTION TIME FOR MNC          |  B. INTERVAL DAY TO SECOND
+                                      |
+ 3. EUROPE STAY DURATION              |  C. NVARCHAR2
+                                      |
+ 4. REACHING TIME TO SINGAPORE        |  D. BFILE (TEXT OF BINARY DATA LIKE AUDIO,VIDEO)
+                                      |
+ 5. STORING DATA USING ASIAN LANGUAGE |  E. TIME STAMP WITH LOCAL TIME ZONE
+                                      |
+                                        
+
+
+
+
+
+
+
+
+
+                                  : TABLE 3 :                                        
+
+
+     DATA TYPES                       |      MAX STORAGE ALLOWED
+                                      |
+  1. CHAR                             |   A. 38
+                                      |
+  2. VARCHAR2                         |   B. 7
+                                      |
+  3. NUMBER                           |   C. 4000 
+                                      |
+  4. DATE                             |   D. 4GB
+                                      |
+  5. BFILE                            |   E. 2000
+                                      |   
+  
+           
+
+1.
+CREATE TABLE PERSONAL_INFO(
+NAME       _____________,
+BIRTH_DATE _____________,
+WEIGHT     _____________,
+PHOTOGRAPH _____________);
+
+2.
+CREATE TABLE FIXED_DEPOSIT(
+BANK_NAME       __________,
+INVESTMENT_DATE __________,
+YM_PERIOD       __________,
+DAYS_PERIOD		_________);
+
+3.
+CREATE TABLE EUROPE_TOUR(
+DESTINATION     _____________,
+REACH_DATE      _____________,
+STAY_DAYS_HOURS _____________);
+
+4.
+CREATE TABLE DISCOVERY_SERIALS(
+SERIAL_NAME  ______________,
+SHOW_NO      ______________,
+DURATION     ______________,
+VIDEO_FILE   ______________);
+
+5.
+CREATE TABLE BOOK_LIBRARY(
+BOOK_NAME    ______________,
+AUTHOR       ______________,
+NO_OF_PAGES  ______________,
+BOOK_PDF     ______________);
+
+6.
+CREATE TABLE MNC(
+CUSTOMER_NAME ______________,
+CONTACT_NO    ______________,
+MOBILE_NO     ______________,
+BILL_AMOUNT   ______________);
+
+

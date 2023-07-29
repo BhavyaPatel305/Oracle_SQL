@@ -1,0 +1,838 @@
+SQL> 
+SQL> CL SCR
+
+SQL> REM FIRST_NAME , DEPARTMENT_NAME FOR EMPLOYEE AND MANAGER
+SQL> 
+SQL> REM EMPLOYEES : E  EMPLOYEES' FIRST_NAME                   M MANAGER'S FIRST_NAME
+SQL> 
+SQL> REM DEPARTMENTS : ED : EMPLOYEE'S DEPARTMENT_NAME          MD : MANAGER'S DEPARTMENT_NAME
+SQL> 
+SQL> 
+SQL> REM E : M : SELF JOIN
+SQL> 
+SQL> REM ED : E -> ED
+SQL> 
+SQL> REM MD : M -> MD
+SQL> 
+SQL> 
+SQL> SELECT E.FIRST_NAME EMP_NAME , M.FIRST_NAME MGR_NAME , ED.DEPARTMENT_NAME EMP_DNAME , MD.DEPARTMENT_NAME MGR_DNAME
+  2  FROM EMPLOYEES E
+  3  JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID
+  4  JOIN DEPARTMENTS ED ON E.DEPARTMENT_ID = ED.DEPARTMENT_ID
+  5  JOIN DEPARTMENTS MD ON M.DEPARTMENT_ID = MD.DEPARTMENT_ID;
+
+EMP_NAME        MGR_NAME        EMP_DNAME                                       
+--------------- --------------- ------------------------------                  
+MGR_DNAME                                                                       
+------------------------------                                                  
+Pat             Michael         Marketing                                       
+Marketing                                                                       
+                                                                                
+Peter           Kevin           Shiping                                         
+Shiping                                                                         
+                                                                                
+Randall         Kevin           Shiping                                         
+Shiping                                                                         
+                                                                                
+
+EMP_NAME        MGR_NAME        EMP_DNAME                                       
+--------------- --------------- ------------------------------                  
+MGR_DNAME                                                                       
+------------------------------                                                  
+Curtis          Kevin           Shiping                                         
+Shiping                                                                         
+                                                                                
+Trenna          Kevin           Shiping                                         
+Shiping                                                                         
+                                                                                
+Diana           Alexander       IT                                              
+IT                                                                              
+                                                                                
+
+EMP_NAME        MGR_NAME        EMP_DNAME                                       
+--------------- --------------- ------------------------------                  
+MGR_DNAME                                                                       
+------------------------------                                                  
+Bruce           Alexander       IT                                              
+IT                                                                              
+                                                                                
+Ellen           Eleni           Sales                                           
+Sales                                                                           
+                                                                                
+Jonathon        Eleni           Sales                                           
+Sales                                                                           
+                                                                                
+
+EMP_NAME        MGR_NAME        EMP_DNAME                                       
+--------------- --------------- ------------------------------                  
+MGR_DNAME                                                                       
+------------------------------                                                  
+Michael         Steven          Marketing                                       
+Executive                                                                       
+                                                                                
+Kevin           Steven          Shiping                                         
+Executive                                                                       
+                                                                                
+Eleni           Steven          Sales                                           
+Executive                                                                       
+                                                                                
+
+EMP_NAME        MGR_NAME        EMP_DNAME                                       
+--------------- --------------- ------------------------------                  
+MGR_DNAME                                                                       
+------------------------------                                                  
+Lex             Steven          Executive                                       
+Executive                                                                       
+                                                                                
+Neena           Steven          Executive                                       
+Executive                                                                       
+                                                                                
+Jennifer        Neena           Administration                                  
+Executive                                                                       
+                                                                                
+
+EMP_NAME        MGR_NAME        EMP_DNAME                                       
+--------------- --------------- ------------------------------                  
+MGR_DNAME                                                                       
+------------------------------                                                  
+Shelley         Neena           Accounting                                      
+Executive                                                                       
+                                                                                
+Alexander       Lex             IT                                              
+Executive                                                                       
+                                                                                
+William         Shelley         Accounting                                      
+Accounting                                                                      
+                                                                                
+
+18 rows selected.
+
+SQL> SET LINES 200 PAGES 24
+SQL> 
+SQL> R
+  1  SELECT E.FIRST_NAME EMP_NAME , M.FIRST_NAME MGR_NAME , ED.DEPARTMENT_NAME EMP_DNAME , MD.DEPARTMENT_NAME MGR_DNAME
+  2  FROM EMPLOYEES E
+  3  JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID
+  4  JOIN DEPARTMENTS ED ON E.DEPARTMENT_ID = ED.DEPARTMENT_ID
+  5* JOIN DEPARTMENTS MD ON M.DEPARTMENT_ID = MD.DEPARTMENT_ID
+
+EMP_NAME        MGR_NAME        EMP_DNAME                      MGR_DNAME                                                                                                                                
+--------------- --------------- ------------------------------ ------------------------------                                                                                                           
+Pat             Michael         Marketing                      Marketing                                                                                                                                
+Peter           Kevin           Shiping                        Shiping                                                                                                                                  
+Randall         Kevin           Shiping                        Shiping                                                                                                                                  
+Curtis          Kevin           Shiping                        Shiping                                                                                                                                  
+Trenna          Kevin           Shiping                        Shiping                                                                                                                                  
+Diana           Alexander       IT                             IT                                                                                                                                       
+Bruce           Alexander       IT                             IT                                                                                                                                       
+Ellen           Eleni           Sales                          Sales                                                                                                                                    
+Jonathon        Eleni           Sales                          Sales                                                                                                                                    
+Michael         Steven          Marketing                      Executive                                                                                                                                
+Kevin           Steven          Shiping                        Executive                                                                                                                                
+Eleni           Steven          Sales                          Executive                                                                                                                                
+Lex             Steven          Executive                      Executive                                                                                                                                
+Neena           Steven          Executive                      Executive                                                                                                                                
+Jennifer        Neena           Administration                 Executive                                                                                                                                
+Shelley         Neena           Accounting                     Executive                                                                                                                                
+Alexander       Lex             IT                             Executive                                                                                                                                
+William         Shelley         Accounting                     Accounting                                                                                                                               
+
+18 rows selected.
+
+SQL> SELECT E.FIRST_NAME EMP_NAME , ED.DEPARTMENT_NAME EMP_DNAME , M.FIRST_NAME MGR_NAME , MD.DEPARTMENT_NAME MGR_DNAME
+  2  FROM EMPLOYEES E
+  3  JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID
+  4  JOIN DEPARTMENTS ED ON E.DEPARTMENT_ID = ED.DEPARTMENT_ID
+  5  JOIN DEPARTMENTS MD ON M.DEPARTMENT_ID = MD.DEPARTMENT_ID;
+
+EMP_NAME        EMP_DNAME                      MGR_NAME        MGR_DNAME                                                                                                                                
+--------------- ------------------------------ --------------- ------------------------------                                                                                                           
+Pat             Marketing                      Michael         Marketing                                                                                                                                
+Peter           Shiping                        Kevin           Shiping                                                                                                                                  
+Randall         Shiping                        Kevin           Shiping                                                                                                                                  
+Curtis          Shiping                        Kevin           Shiping                                                                                                                                  
+Trenna          Shiping                        Kevin           Shiping                                                                                                                                  
+Diana           IT                             Alexander       IT                                                                                                                                       
+Bruce           IT                             Alexander       IT                                                                                                                                       
+Ellen           Sales                          Eleni           Sales                                                                                                                                    
+Jonathon        Sales                          Eleni           Sales                                                                                                                                    
+Michael         Marketing                      Steven          Executive                                                                                                                                
+Kevin           Shiping                        Steven          Executive                                                                                                                                
+Eleni           Sales                          Steven          Executive                                                                                                                                
+Lex             Executive                      Steven          Executive                                                                                                                                
+Neena           Executive                      Steven          Executive                                                                                                                                
+Jennifer        Administration                 Neena           Executive                                                                                                                                
+Shelley         Accounting                     Neena           Executive                                                                                                                                
+Alexander       IT                             Lex             Executive                                                                                                                                
+William         Accounting                     Shelley         Accounting                                                                                                                               
+
+18 rows selected.
+
+SQL> REM DISPLAY FIRST_NAME , DEPARTMENT_NAME , CITY FOR EMPLOYEE AND MANAGER
+SQL> 
+SQL> REM         EMPLOYEES    DEPARTMENTS       LOCATIONS
+SQL> 
+SQL> REM         E M          ED MD             EL ML
+SQL> 
+SQL> SELECT E.FIRST_NAME EMP_NAME, M.FIRST_NAME MAN_NAME, ED.DEPARTMENT_NAME EMP_DEP, MD.DEPARTMENT_NAME MAN_DEP, EL.CITY EMP_CITY, ML.CITY MAN_CITY FROM EMPLOYEES E JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID
+  2  JOIN DEPARTMENTS ED ON ED.DEPARTMENT_ID = E.DEPARTMENT_ID
+  3  JOIN DEPARTMENTS MD ON MD.DEPARTMENT_ID = M.DEPARTMENT_ID
+  4  JOIN LOCATIONS EL ON EL.LOCATION_ID = E.LOCATION_ID
+  5  JOIN LOCATIONS ML ON ML.LOCATION_ID = M.LOCATION_ID;
+JOIN LOCATIONS EL ON EL.LOCATION_ID = E.LOCATION_ID
+                                      *
+ERROR at line 4:
+ORA-00904: "E"."LOCATION_ID": invalid identifier 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT E.FIRST_NAME EMP_NAME, M.FIRST_NAME MAN_NAME, ED.DEPARTMENT_NAME EMP_DEP, MD.DEPARTMENT_NAME MAN_DEP, EL.CITY EMP_CITY, ML.CITY MAN_CITY 
+  2  FROM EMPLOYEES E JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID
+  3  JOIN DEPARTMENTS ED ON ED.DEPARTMENT_ID = E.DEPARTMENT_ID
+  4  JOIN DEPARTMENTS MD ON MD.DEPARTMENT_ID = M.DEPARTMENT_ID
+  5  JOIN LOCATIONS EL ON EL.LOCATION_ID = ED.LOCATION_ID
+  6* JOIN LOCATIONS ML ON ML.LOCATION_ID = MD.LOCATION_ID
+SQL> /
+
+EMP_NAME        MAN_NAME        EMP_DEP                        MAN_DEP                        EMP_CITY                       MAN_CITY                                                                   
+--------------- --------------- ------------------------------ ------------------------------ ------------------------------ ------------------------------                                             
+Diana           Alexander       IT                             IT                             Southlake                      Southlake                                                                  
+Bruce           Alexander       IT                             IT                             Southlake                      Southlake                                                                  
+Peter           Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco                                                        
+Randall         Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco                                                        
+Curtis          Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco                                                        
+Trenna          Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco                                                        
+Alexander       Lex             IT                             Executive                      Southlake                      Seattle                                                                    
+Kevin           Steven          Shiping                        Executive                      South San Francisco            Seattle                                                                    
+Lex             Steven          Executive                      Executive                      Seattle                        Seattle                                                                    
+Neena           Steven          Executive                      Executive                      Seattle                        Seattle                                                                    
+Jennifer        Neena           Administration                 Executive                      Seattle                        Seattle                                                                    
+Shelley         Neena           Accounting                     Executive                      Seattle                        Seattle                                                                    
+William         Shelley         Accounting                     Accounting                     Seattle                        Seattle                                                                    
+Michael         Steven          Marketing                      Executive                      Toronto                        Seattle                                                                    
+Eleni           Steven          Sales                          Executive                      Oxford                         Seattle                                                                    
+Pat             Michael         Marketing                      Marketing                      Toronto                        Toronto                                                                    
+Ellen           Eleni           Sales                          Sales                          Oxford                         Oxford                                                                     
+Jonathon        Eleni           Sales                          Sales                          Oxford                         Oxford                                                                     
+
+18 rows selected.
+
+SQL> SELECT E.FIRST_NAME EMP_NAME , ED.DEPARTMENT_NAME EMP_DEPT_NAME , EL.CITY EMP_CITY
+  2  M.FIRST_NAME MGR_NAME , MD.DEPARTMENT_NAME MGR_DEPT_NAME , ML.CITY MGR_CITY
+  3  FROM EMPLOYEES E
+  4  JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID
+  5  JOIN DEPARTMENTS ED ON E.DEPARTMENT_ID = ED.DEPARTMENT_ID
+  6  JOIN DEPARTMENTS MD ON M.DEPARTMENT_ID = MD.DEPARTMENT_ID
+  7  JOIN LOCATOINS EL ON E.LOCATION_ID = EL.LOCATION_ID
+  8  JOIN LOCATOINS ML ON M.LOCATION_ID = ML.LOCATION_ID ;
+M.FIRST_NAME MGR_NAME , MD.DEPARTMENT_NAME MGR_DEPT_NAME , ML.CITY MGR_CITY
+*
+ERROR at line 2:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT E.FIRST_NAME EMP_NAME , ED.DEPARTMENT_NAME EMP_DEPT_NAME , EL.CITY EMP_CITY
+  2  M.FIRST_NAME MGR_NAME , MD.DEPARTMENT_NAME MGR_DEPT_NAME , ML.CITY MGR_CITY
+  3  FROM EMPLOYEES E
+  4  JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID
+  5  JOIN DEPARTMENTS ED ON E.DEPARTMENT_ID = ED.DEPARTMENT_ID
+  6  JOIN DEPARTMENTS MD ON M.DEPARTMENT_ID = MD.DEPARTMENT_ID
+  7  JOIN LOCATOINS EL ON ED.LOCATION_ID = EL.LOCATION_ID
+  8* JOIN LOCATOINS ML ON MD.LOCATION_ID = ML.LOCATION_ID 
+SQL> /
+M.FIRST_NAME MGR_NAME , MD.DEPARTMENT_NAME MGR_DEPT_NAME , ML.CITY MGR_CITY
+*
+ERROR at line 2:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT E.FIRST_NAME EMP_NAME , ED.DEPARTMENT_NAME EMP_DEPT_NAME , EL.CITY EMP_CITY,
+  2  M.FIRST_NAME MGR_NAME , MD.DEPARTMENT_NAME MGR_DEPT_NAME , ML.CITY MGR_CITY
+  3  FROM EMPLOYEES E
+  4  JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID
+  5  JOIN DEPARTMENTS ED ON E.DEPARTMENT_ID = ED.DEPARTMENT_ID
+  6  JOIN DEPARTMENTS MD ON M.DEPARTMENT_ID = MD.DEPARTMENT_ID
+  7  JOIN LOCATOINS EL ON ED.LOCATION_ID = EL.LOCATION_ID
+  8* JOIN LOCATOINS ML ON MD.LOCATION_ID = ML.LOCATION_ID 
+SQL> /
+JOIN LOCATOINS ML ON MD.LOCATION_ID = ML.LOCATION_ID 
+     *
+ERROR at line 8:
+ORA-00942: table or view does not exist 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT E.FIRST_NAME EMP_NAME , ED.DEPARTMENT_NAME EMP_DEPT_NAME , EL.CITY EMP_CITY,
+  2  M.FIRST_NAME MGR_NAME , MD.DEPARTMENT_NAME MGR_DEPT_NAME , ML.CITY MGR_CITY
+  3  FROM EMPLOYEES E
+  4  JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID
+  5  JOIN DEPARTMENTS ED ON E.DEPARTMENT_ID = ED.DEPARTMENT_ID
+  6  JOIN DEPARTMENTS MD ON M.DEPARTMENT_ID = MD.DEPARTMENT_ID
+  7  JOIN LOCATIONS EL ON ED.LOCATION_ID = EL.LOCATION_ID
+  8* JOIN LOCATIONS ML ON MD.LOCATION_ID = ML.LOCATION_ID 
+SQL> /
+
+EMP_NAME        EMP_DEPT_NAME                  EMP_CITY                       MGR_NAME        MGR_DEPT_NAME                  MGR_CITY                                                                   
+--------------- ------------------------------ ------------------------------ --------------- ------------------------------ ------------------------------                                             
+Diana           IT                             Southlake                      Alexander       IT                             Southlake                                                                  
+Bruce           IT                             Southlake                      Alexander       IT                             Southlake                                                                  
+Peter           Shiping                        South San Francisco            Kevin           Shiping                        South San Francisco                                                        
+Randall         Shiping                        South San Francisco            Kevin           Shiping                        South San Francisco                                                        
+Curtis          Shiping                        South San Francisco            Kevin           Shiping                        South San Francisco                                                        
+Trenna          Shiping                        South San Francisco            Kevin           Shiping                        South San Francisco                                                        
+Alexander       IT                             Southlake                      Lex             Executive                      Seattle                                                                    
+Kevin           Shiping                        South San Francisco            Steven          Executive                      Seattle                                                                    
+Lex             Executive                      Seattle                        Steven          Executive                      Seattle                                                                    
+Neena           Executive                      Seattle                        Steven          Executive                      Seattle                                                                    
+Jennifer        Administration                 Seattle                        Neena           Executive                      Seattle                                                                    
+Shelley         Accounting                     Seattle                        Neena           Executive                      Seattle                                                                    
+William         Accounting                     Seattle                        Shelley         Accounting                     Seattle                                                                    
+Michael         Marketing                      Toronto                        Steven          Executive                      Seattle                                                                    
+Eleni           Sales                          Oxford                         Steven          Executive                      Seattle                                                                    
+Pat             Marketing                      Toronto                        Michael         Marketing                      Toronto                                                                    
+Ellen           Sales                          Oxford                         Eleni           Sales                          Oxford                                                                     
+Jonathon        Sales                          Oxford                         Eleni           Sales                          Oxford                                                                     
+
+18 rows selected.
+
+SQL> SELECT E.FIRST_NAME EMP_NAME,M.FIRST_NAME MAN_NAME,ED.DEPARTMENT_NAME EMP_DEP,MD.DEPARTMENT_NAME MAN_DEP,EL.CITY EMP_CITY,ML.CITY MAN_CITY
+  2  FROM EMPLOYEES E JOIN EMPLOYEES M ON E.EMPLOYEE_ID = M.EMPLOYEE_ID
+  3  INNER JOIN DEPARTMENTS ED ON  ED.DEPARTMENT_ID = E.DEPARTMENT_ID
+  4  INNER JOIN DEPARTMENTS  MD ON  MD.DEPARTMENT_ID = M.DEPARTMENT_ID
+  5  INNER JOIN LOCATIONS EL ON EL.LOCATION_ID = ED.LOCATION_ID
+  6  INNER JOIN LOCATIONS ML ON ML.LOCATION_ID = MD.LOCATION_ID;
+
+EMP_NAME        MAN_NAME        EMP_DEP                        MAN_DEP                        EMP_CITY                       MAN_CITY                                                                   
+--------------- --------------- ------------------------------ ------------------------------ ------------------------------ ------------------------------                                             
+Alexander       Alexander       IT                             IT                             Southlake                      Southlake                                                                  
+Bruce           Bruce           IT                             IT                             Southlake                      Southlake                                                                  
+Diana           Diana           IT                             IT                             Southlake                      Southlake                                                                  
+Kevin           Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco                                                        
+Trenna          Trenna          Shiping                        Shiping                        South San Francisco            South San Francisco                                                        
+Curtis          Curtis          Shiping                        Shiping                        South San Francisco            South San Francisco                                                        
+Randall         Randall         Shiping                        Shiping                        South San Francisco            South San Francisco                                                        
+Peter           Peter           Shiping                        Shiping                        South San Francisco            South San Francisco                                                        
+Jennifer        Jennifer        Administration                 Administration                 Seattle                        Seattle                                                                    
+Steven          Steven          Executive                      Executive                      Seattle                        Seattle                                                                    
+Neena           Neena           Executive                      Executive                      Seattle                        Seattle                                                                    
+Lex             Lex             Executive                      Executive                      Seattle                        Seattle                                                                    
+Shelley         Shelley         Accounting                     Accounting                     Seattle                        Seattle                                                                    
+William         William         Accounting                     Accounting                     Seattle                        Seattle                                                                    
+Michael         Michael         Marketing                      Marketing                      Toronto                        Toronto                                                                    
+Pat             Pat             Marketing                      Marketing                      Toronto                        Toronto                                                                    
+Eleni           Eleni           Sales                          Sales                          Oxford                         Oxford                                                                     
+Ellen           Ellen           Sales                          Sales                          Oxford                         Oxford                                                                     
+Jonathon        Jonathon        Sales                          Sales                          Oxford                         Oxford                                                                     
+
+19 rows selected.
+
+SQL> SELECT E.FIRST_NAME EMP_NAME,M.FIRST_NAME MAN_NAME,ED.DEPARTMENT_NAME EMP_DEP,MD.DEPARTMENT_NAME MAN_DEP,EL.CITY EMP_CITY,ML.CITY MAN_CITY
+  2  FROM EMPLOYEES E JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID
+  3  INNER JOIN DEPARTMENTS ED ON  ED.DEPARTMENT_ID = E.DEPARTMENT_ID
+  4  INNER JOIN DEPARTMENTS  MD ON  MD.DEPARTMENT_ID = M.DEPARTMENT_ID
+  5  INNER JOIN LOCATIONS EL ON EL.LOCATION_ID = ED.LOCATION_ID
+  6  INNER JOIN LOCATIONS ML ON ML.LOCATION_ID = MD.LOCATION_ID;
+
+EMP_NAME        MAN_NAME        EMP_DEP                        MAN_DEP                        EMP_CITY                       MAN_CITY                                                                   
+--------------- --------------- ------------------------------ ------------------------------ ------------------------------ ------------------------------                                             
+Diana           Alexander       IT                             IT                             Southlake                      Southlake                                                                  
+Bruce           Alexander       IT                             IT                             Southlake                      Southlake                                                                  
+Peter           Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco                                                        
+Randall         Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco                                                        
+Curtis          Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco                                                        
+Trenna          Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco                                                        
+Alexander       Lex             IT                             Executive                      Southlake                      Seattle                                                                    
+Kevin           Steven          Shiping                        Executive                      South San Francisco            Seattle                                                                    
+Lex             Steven          Executive                      Executive                      Seattle                        Seattle                                                                    
+Neena           Steven          Executive                      Executive                      Seattle                        Seattle                                                                    
+Jennifer        Neena           Administration                 Executive                      Seattle                        Seattle                                                                    
+Shelley         Neena           Accounting                     Executive                      Seattle                        Seattle                                                                    
+William         Shelley         Accounting                     Accounting                     Seattle                        Seattle                                                                    
+Michael         Steven          Marketing                      Executive                      Toronto                        Seattle                                                                    
+Eleni           Steven          Sales                          Executive                      Oxford                         Seattle                                                                    
+Pat             Michael         Marketing                      Marketing                      Toronto                        Toronto                                                                    
+Ellen           Eleni           Sales                          Sales                          Oxford                         Oxford                                                                     
+Jonathon        Eleni           Sales                          Sales                          Oxford                         Oxford                                                                     
+
+18 rows selected.
+
+SQL> REM FIRST_NAME , DEPARTMENT_NAME , CITY , COUNTRY_NAME FOR EMPLOYEE AND MANAGER
+SQL> 
+SQL> SELECT E.FIRST_NAME EMP_NAME,M.FIRST_NAME MAN_NAME,ED.DEPARTMENT_NAME EMP_DEP,MD.DEPARTMENT_NAME MAN_DEP,EL.CITY EMP_CITY,ML.CITY MAN_CITY,EC.COUNTRY_NAME EMP_COU,MC.COUNTRY_NAME MAN_COU
+  2  FROM EMPLOYEES E JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID
+  3  INNER JOIN DEPARTMENTS ED ON  ED.DEPARTMENT_ID = E.DEPARTMENT_ID
+  4  INNER JOIN DEPARTMENTS  MD ON  MD.DEPARTMENT_ID = M.DEPARTMENT_ID
+  5  INNER JOIN LOCATIONS EL ON EL.LOCATION_ID = ED.LOCATION_ID
+  6  INNER JOIN LOCATIONS ML ON ML.LOCATION_ID = MD.LOCATION_ID
+  7  INNER JOIN COUNTRIES EC ON EC.COUNTRY_ID = EL.COUNTRY_ID
+  8  INNER JOIN COUNTRIES MC ON MC.COUNTRY_ID = ML.COUNTRY_ID;
+
+EMP_NAME        MAN_NAME        EMP_DEP                        MAN_DEP                        EMP_CITY                       MAN_CITY                       EMP_COU                                     
+--------------- --------------- ------------------------------ ------------------------------ ------------------------------ ------------------------------ ----------------------------------------    
+MAN_COU                                                                                                                                                                                                 
+----------------------------------------                                                                                                                                                                
+Michael         Steven          Marketing                      Executive                      Toronto                        Seattle                        Canada                                      
+United States of America                                                                                                                                                                                
+                                                                                                                                                                                                        
+Pat             Michael         Marketing                      Marketing                      Toronto                        Toronto                        Canada                                      
+Canada                                                                                                                                                                                                  
+                                                                                                                                                                                                        
+Eleni           Steven          Sales                          Executive                      Oxford                         Seattle                        United Kingdom                              
+United States of America                                                                                                                                                                                
+                                                                                                                                                                                                        
+Ellen           Eleni           Sales                          Sales                          Oxford                         Oxford                         United Kingdom                              
+United Kingdom                                                                                                                                                                                          
+                                                                                                                                                                                                        
+Jonathon        Eleni           Sales                          Sales                          Oxford                         Oxford                         United Kingdom                              
+United Kingdom                                                                                                                                                                                          
+                                                                                                                                                                                                        
+Alexander       Lex             IT                             Executive                      Southlake                      Seattle                        United States of America                    
+United States of America                                                                                                                                                                                
+                                                                                                                                                                                                        
+Bruce           Alexander       IT                             IT                             Southlake                      Southlake                      United States of America                    
+
+EMP_NAME        MAN_NAME        EMP_DEP                        MAN_DEP                        EMP_CITY                       MAN_CITY                       EMP_COU                                     
+--------------- --------------- ------------------------------ ------------------------------ ------------------------------ ------------------------------ ----------------------------------------    
+MAN_COU                                                                                                                                                                                                 
+----------------------------------------                                                                                                                                                                
+United States of America                                                                                                                                                                                
+                                                                                                                                                                                                        
+Diana           Alexander       IT                             IT                             Southlake                      Southlake                      United States of America                    
+United States of America                                                                                                                                                                                
+                                                                                                                                                                                                        
+Kevin           Steven          Shiping                        Executive                      South San Francisco            Seattle                        United States of America                    
+United States of America                                                                                                                                                                                
+                                                                                                                                                                                                        
+Trenna          Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                    
+United States of America                                                                                                                                                                                
+                                                                                                                                                                                                        
+Curtis          Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                    
+United States of America                                                                                                                                                                                
+                                                                                                                                                                                                        
+Randall         Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                    
+United States of America                                                                                                                                                                                
+                                                                                                                                                                                                        
+Peter           Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                    
+United States of America                                                                                                                                                                                
+
+EMP_NAME        MAN_NAME        EMP_DEP                        MAN_DEP                        EMP_CITY                       MAN_CITY                       EMP_COU                                     
+--------------- --------------- ------------------------------ ------------------------------ ------------------------------ ------------------------------ ----------------------------------------    
+MAN_COU                                                                                                                                                                                                 
+----------------------------------------                                                                                                                                                                
+                                                                                                                                                                                                        
+Jennifer        Neena           Administration                 Executive                      Seattle                        Seattle                        United States of America                    
+United States of America                                                                                                                                                                                
+                                                                                                                                                                                                        
+Neena           Steven          Executive                      Executive                      Seattle                        Seattle                        United States of America                    
+United States of America                                                                                                                                                                                
+                                                                                                                                                                                                        
+Lex             Steven          Executive                      Executive                      Seattle                        Seattle                        United States of America                    
+United States of America                                                                                                                                                                                
+                                                                                                                                                                                                        
+Shelley         Neena           Accounting                     Executive                      Seattle                        Seattle                        United States of America                    
+United States of America                                                                                                                                                                                
+                                                                                                                                                                                                        
+William         Shelley         Accounting                     Accounting                     Seattle                        Seattle                        United States of America                    
+United States of America                                                                                                                                                                                
+                                                                                                                                                                                                        
+
+18 rows selected.
+
+SQL> SET LINES 400
+SQL> 
+SQL> R
+  1  SELECT E.FIRST_NAME EMP_NAME,M.FIRST_NAME MAN_NAME,ED.DEPARTMENT_NAME EMP_DEP,MD.DEPARTMENT_NAME MAN_DEP,EL.CITY EMP_CITY,ML.CITY MAN_CITY,EC.COUNTRY_NAME EMP_COU,MC.COUNTRY_NAME MAN_COU
+  2  FROM EMPLOYEES E JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID
+  3  INNER JOIN DEPARTMENTS ED ON  ED.DEPARTMENT_ID = E.DEPARTMENT_ID
+  4  INNER JOIN DEPARTMENTS  MD ON  MD.DEPARTMENT_ID = M.DEPARTMENT_ID
+  5  INNER JOIN LOCATIONS EL ON EL.LOCATION_ID = ED.LOCATION_ID
+  6  INNER JOIN LOCATIONS ML ON ML.LOCATION_ID = MD.LOCATION_ID
+  7  INNER JOIN COUNTRIES EC ON EC.COUNTRY_ID = EL.COUNTRY_ID
+  8* INNER JOIN COUNTRIES MC ON MC.COUNTRY_ID = ML.COUNTRY_ID
+
+EMP_NAME        MAN_NAME        EMP_DEP                        MAN_DEP                        EMP_CITY                       MAN_CITY                       EMP_COU                                  MAN_COU                                                                                                                                                                                                    
+--------------- --------------- ------------------------------ ------------------------------ ------------------------------ ------------------------------ ---------------------------------------- ----------------------------------------                                                                                                                                                                   
+Michael         Steven          Marketing                      Executive                      Toronto                        Seattle                        Canada                                   United States of America                                                                                                                                                                                   
+Pat             Michael         Marketing                      Marketing                      Toronto                        Toronto                        Canada                                   Canada                                                                                                                                                                                                     
+Eleni           Steven          Sales                          Executive                      Oxford                         Seattle                        United Kingdom                           United States of America                                                                                                                                                                                   
+Ellen           Eleni           Sales                          Sales                          Oxford                         Oxford                         United Kingdom                           United Kingdom                                                                                                                                                                                             
+Jonathon        Eleni           Sales                          Sales                          Oxford                         Oxford                         United Kingdom                           United Kingdom                                                                                                                                                                                             
+Alexander       Lex             IT                             Executive                      Southlake                      Seattle                        United States of America                 United States of America                                                                                                                                                                                   
+Bruce           Alexander       IT                             IT                             Southlake                      Southlake                      United States of America                 United States of America                                                                                                                                                                                   
+Diana           Alexander       IT                             IT                             Southlake                      Southlake                      United States of America                 United States of America                                                                                                                                                                                   
+Kevin           Steven          Shiping                        Executive                      South San Francisco            Seattle                        United States of America                 United States of America                                                                                                                                                                                   
+Trenna          Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                                                                                                                                                                                   
+Curtis          Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                                                                                                                                                                                   
+Randall         Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                                                                                                                                                                                   
+Peter           Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                                                                                                                                                                                   
+Jennifer        Neena           Administration                 Executive                      Seattle                        Seattle                        United States of America                 United States of America                                                                                                                                                                                   
+Neena           Steven          Executive                      Executive                      Seattle                        Seattle                        United States of America                 United States of America                                                                                                                                                                                   
+Lex             Steven          Executive                      Executive                      Seattle                        Seattle                        United States of America                 United States of America                                                                                                                                                                                   
+Shelley         Neena           Accounting                     Executive                      Seattle                        Seattle                        United States of America                 United States of America                                                                                                                                                                                   
+William         Shelley         Accounting                     Accounting                     Seattle                        Seattle                        United States of America                 United States of America                                                                                                                                                                                   
+
+18 rows selected.
+
+SQL> SELECT E.FIRST_NAME EMP_NAME, M.FIRST_NAME MAN_NAME, ED.DEPARTMENT_NAME EMP_DEP, MD.DEPARTMENT_NAME MAN_DEP, EL.CITY EMP_CITY, ML.CITY MAN_CITY, EC.COUNTRY_NAME EMP_COUNTRY, MC.COUNTRY_NAME MAN_COUNTRY FROM EMPLOYEES E JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID
+  2  JOIN DEPARTMENTS ED ON ED.DEPARTMENT_ID = E.DEPARTMENT_ID
+  3  JOIN DEPARTMENTS MD ON MD.DEPARTMENT_ID = M.DEPARTMENT_ID
+  4  JOIN LOCATIONS EL ON EL.LOCATION_ID = ED.LOCATION_ID
+  5  JOIN LOCATIONS ML ON ML.LOCATION_ID = MD.LOCATION_ID
+  6  JOIN COUNTRIES EC ON EC.COUNTRY_ID = EL.COUNTRY_ID
+  7  JOIN COUNTRIES MC ON MC.COUNTRY_ID = ML.COUNTRY_ID;
+
+EMP_NAME        MAN_NAME        EMP_DEP                        MAN_DEP                        EMP_CITY                       MAN_CITY                       EMP_COUNTRY                              MAN_COUNTRY                                                                                                                                                                                                
+--------------- --------------- ------------------------------ ------------------------------ ------------------------------ ------------------------------ ---------------------------------------- ----------------------------------------                                                                                                                                                                   
+Michael         Steven          Marketing                      Executive                      Toronto                        Seattle                        Canada                                   United States of America                                                                                                                                                                                   
+Pat             Michael         Marketing                      Marketing                      Toronto                        Toronto                        Canada                                   Canada                                                                                                                                                                                                     
+Eleni           Steven          Sales                          Executive                      Oxford                         Seattle                        United Kingdom                           United States of America                                                                                                                                                                                   
+Ellen           Eleni           Sales                          Sales                          Oxford                         Oxford                         United Kingdom                           United Kingdom                                                                                                                                                                                             
+Jonathon        Eleni           Sales                          Sales                          Oxford                         Oxford                         United Kingdom                           United Kingdom                                                                                                                                                                                             
+Alexander       Lex             IT                             Executive                      Southlake                      Seattle                        United States of America                 United States of America                                                                                                                                                                                   
+Bruce           Alexander       IT                             IT                             Southlake                      Southlake                      United States of America                 United States of America                                                                                                                                                                                   
+Diana           Alexander       IT                             IT                             Southlake                      Southlake                      United States of America                 United States of America                                                                                                                                                                                   
+Kevin           Steven          Shiping                        Executive                      South San Francisco            Seattle                        United States of America                 United States of America                                                                                                                                                                                   
+Trenna          Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                                                                                                                                                                                   
+Curtis          Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                                                                                                                                                                                   
+Randall         Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                                                                                                                                                                                   
+Peter           Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                                                                                                                                                                                   
+Jennifer        Neena           Administration                 Executive                      Seattle                        Seattle                        United States of America                 United States of America                                                                                                                                                                                   
+Neena           Steven          Executive                      Executive                      Seattle                        Seattle                        United States of America                 United States of America                                                                                                                                                                                   
+Lex             Steven          Executive                      Executive                      Seattle                        Seattle                        United States of America                 United States of America                                                                                                                                                                                   
+Shelley         Neena           Accounting                     Executive                      Seattle                        Seattle                        United States of America                 United States of America                                                                                                                                                                                   
+William         Shelley         Accounting                     Accounting                     Seattle                        Seattle                        United States of America                 United States of America                                                                                                                                                                                   
+
+18 rows selected.
+
+SQL> SELECT E.FIRST_NAME EMP_NAME , ED.DEPARTMENT_NAME EMP_DEPT_NAME , EL.CITY EMP_CITY , EC.COUNTRY_NAME EMP_COUNTRY
+  2  M.FIRST_NAME MGR_NAME , MD.DEPARTMENT_NAME MGR_DEPT_NAME , ML.CITY MGR_CITY , MC.COUNTRY_NAME MGR_COUNTRY
+  3  FROM EMPLOYEES E
+  4  JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID
+  5  JOIN DEPARTMENTS ED ON E.DEPARTMENT_ID = ED.DEPARTMENT_ID
+  6  JOIN DEPARTMENTS MD ON M.DEPARTMENT_ID = MD.DEPARTMENT_ID
+  7  JOIN LOCATIONS EL ON ED.LOCATION_ID = EL.LOCATION_ID
+  8  JOIN LOCATIONS ML ON MD.LOCATION_ID = ML.LOCATION_ID
+  9  JOIN COUNTRIES EC ON EL.COUNTRY_ID = EC.COUNTRY_ID
+ 10  JOIN COUNTRIES MC ON ML.COUNTRY_ID = MC.COUNTRY_ID;
+M.FIRST_NAME MGR_NAME , MD.DEPARTMENT_NAME MGR_DEPT_NAME , ML.CITY MGR_CITY , MC.COUNTRY_NAME MGR_COUNTRY
+*
+ERROR at line 2:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> SELECT E.FIRST_NAME EMP_NAME , ED.DEPARTMENT_NAME EMP_DEPT_NAME , EL.CITY EMP_CITY , EC.COUNTRY_NAME EMP_COUNTRY ,
+  2  M.FIRST_NAME MGR_NAME , MD.DEPARTMENT_NAME MGR_DEPT_NAME , ML.CITY MGR_CITY , MC.COUNTRY_NAME MGR_COUNTRY
+  3  FROM EMPLOYEES E
+  4  JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID
+  5  JOIN DEPARTMENTS ED ON E.DEPARTMENT_ID = ED.DEPARTMENT_ID
+  6  JOIN DEPARTMENTS MD ON M.DEPARTMENT_ID = MD.DEPARTMENT_ID
+  7  JOIN LOCATIONS EL ON ED.LOCATION_ID = EL.LOCATION_ID
+  8  JOIN LOCATIONS ML ON MD.LOCATION_ID = ML.LOCATION_ID
+  9  JOIN COUNTRIES EC ON EL.COUNTRY_ID = EC.COUNTRY_ID
+ 10  JOIN COUNTRIES MC ON ML.COUNTRY_ID = MC.COUNTRY_ID;
+
+EMP_NAME        EMP_DEPT_NAME                  EMP_CITY                       EMP_COUNTRY                              MGR_NAME        MGR_DEPT_NAME                  MGR_CITY                       MGR_COUNTRY                                                                                                                                                                                                
+--------------- ------------------------------ ------------------------------ ---------------------------------------- --------------- ------------------------------ ------------------------------ ----------------------------------------                                                                                                                                                                   
+Michael         Marketing                      Toronto                        Canada                                   Steven          Executive                      Seattle                        United States of America                                                                                                                                                                                   
+Pat             Marketing                      Toronto                        Canada                                   Michael         Marketing                      Toronto                        Canada                                                                                                                                                                                                     
+Eleni           Sales                          Oxford                         United Kingdom                           Steven          Executive                      Seattle                        United States of America                                                                                                                                                                                   
+Ellen           Sales                          Oxford                         United Kingdom                           Eleni           Sales                          Oxford                         United Kingdom                                                                                                                                                                                             
+Jonathon        Sales                          Oxford                         United Kingdom                           Eleni           Sales                          Oxford                         United Kingdom                                                                                                                                                                                             
+Alexander       IT                             Southlake                      United States of America                 Lex             Executive                      Seattle                        United States of America                                                                                                                                                                                   
+Bruce           IT                             Southlake                      United States of America                 Alexander       IT                             Southlake                      United States of America                                                                                                                                                                                   
+Diana           IT                             Southlake                      United States of America                 Alexander       IT                             Southlake                      United States of America                                                                                                                                                                                   
+Kevin           Shiping                        South San Francisco            United States of America                 Steven          Executive                      Seattle                        United States of America                                                                                                                                                                                   
+Trenna          Shiping                        South San Francisco            United States of America                 Kevin           Shiping                        South San Francisco            United States of America                                                                                                                                                                                   
+Curtis          Shiping                        South San Francisco            United States of America                 Kevin           Shiping                        South San Francisco            United States of America                                                                                                                                                                                   
+Randall         Shiping                        South San Francisco            United States of America                 Kevin           Shiping                        South San Francisco            United States of America                                                                                                                                                                                   
+Peter           Shiping                        South San Francisco            United States of America                 Kevin           Shiping                        South San Francisco            United States of America                                                                                                                                                                                   
+Jennifer        Administration                 Seattle                        United States of America                 Neena           Executive                      Seattle                        United States of America                                                                                                                                                                                   
+Neena           Executive                      Seattle                        United States of America                 Steven          Executive                      Seattle                        United States of America                                                                                                                                                                                   
+Lex             Executive                      Seattle                        United States of America                 Steven          Executive                      Seattle                        United States of America                                                                                                                                                                                   
+Shelley         Accounting                     Seattle                        United States of America                 Neena           Executive                      Seattle                        United States of America                                                                                                                                                                                   
+William         Accounting                     Seattle                        United States of America                 Shelley         Accounting                     Seattle                        United States of America                                                                                                                                                                                   
+
+18 rows selected.
+
+SQL> REM FIRST_NAME , DEPARTMENT_NAME , CITY , COUNTRY_NAME , REGION_NAME FOR EMPLOYEE AND MANAGER
+SQL> 
+SQL> SELECT E.FIRST_NAME EMP_NAME, M.FIRST_NAME MAN_NAME, ED.DEPARTMENT_NAME EMP_DEP, MD.DEPARTMENT_NAME MAN_DEP, EL.CITY EMP_CITY, ML.CITY MAN_CITY, EC.COUNTRY_NAME EMP_COUNTRY, MC.COUNTRY_NAME MAN_COUNTRY, ER.REGION_NAME EMP_REGION, MR.REGION_NAME MAN_REGION FROM EMPLOYEES E JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID
+  2  JOIN DEPARTMENTS ED ON ED.DEPARTMENT_ID = E.DEPARTMENT_ID
+  3  JOIN DEPARTMENTS MD ON MD.DEPARTMENT_ID = M.DEPARTMENT_ID
+  4  JOIN LOCATIONS EL ON EL.LOCATION_ID = ED.LOCATION_ID
+  5  JOIN LOCATIONS ML ON ML.LOCATION_ID = MD.LOCATION_ID
+  6  JOIN COUNTRIES EC ON EC.COUNTRY_ID = EL.COUNTRY_ID
+  7  JOIN COUNTRIES MC ON MC.COUNTRY_ID = ML.COUNTRY_ID
+  8  JOIN REGIONS ER ON ER.REGION_ID = EC.REGION_ID
+  9  JOIN REGIONS MR ON MR.REGION_ID = MC.REGION_ID;
+
+EMP_NAME        MAN_NAME        EMP_DEP                        MAN_DEP                        EMP_CITY                       MAN_CITY                       EMP_COUNTRY                              MAN_COUNTRY                              EMP_REGION                MAN_REGION                                                                                                                              
+--------------- --------------- ------------------------------ ------------------------------ ------------------------------ ------------------------------ ---------------------------------------- ---------------------------------------- ------------------------- -------------------------                                                                                                               
+Eleni           Steven          Sales                          Executive                      Oxford                         Seattle                        United Kingdom                           United States of America                 Europe                    Americas                                                                                                                                
+Ellen           Eleni           Sales                          Sales                          Oxford                         Oxford                         United Kingdom                           United Kingdom                           Europe                    Europe                                                                                                                                  
+Jonathon        Eleni           Sales                          Sales                          Oxford                         Oxford                         United Kingdom                           United Kingdom                           Europe                    Europe                                                                                                                                  
+Michael         Steven          Marketing                      Executive                      Toronto                        Seattle                        Canada                                   United States of America                 Americas                  Americas                                                                                                                                
+Pat             Michael         Marketing                      Marketing                      Toronto                        Toronto                        Canada                                   Canada                                   Americas                  Americas                                                                                                                                
+Alexander       Lex             IT                             Executive                      Southlake                      Seattle                        United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+Bruce           Alexander       IT                             IT                             Southlake                      Southlake                      United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+Diana           Alexander       IT                             IT                             Southlake                      Southlake                      United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+Kevin           Steven          Shiping                        Executive                      South San Francisco            Seattle                        United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+Trenna          Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+Curtis          Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+Randall         Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+Peter           Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+Jennifer        Neena           Administration                 Executive                      Seattle                        Seattle                        United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+Neena           Steven          Executive                      Executive                      Seattle                        Seattle                        United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+Lex             Steven          Executive                      Executive                      Seattle                        Seattle                        United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+Shelley         Neena           Accounting                     Executive                      Seattle                        Seattle                        United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+William         Shelley         Accounting                     Accounting                     Seattle                        Seattle                        United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+
+18 rows selected.
+
+SQL> SELECT E.FIRST_NAME EMP_NAME,M.FIRST_NAME MAN_NAME,ED.DEPARTMENT_NAME EMP_DEP,MD.DEPARTMENT_NAME MAN_DEP,EL.CITY EMP_CITY,ML.CITY MAN_CITY,
+  2  EC.COUNTRY_NAME EMP_COU,MC.COUNTRY_NAME MAN_COU,ER.REGION_NAME,MR.REGION_NAME
+  3  FROM EMPLOYEES E JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID
+  4  INNER JOIN DEPARTMENTS ED ON  ED.DEPARTMENT_ID = E.DEPARTMENT_ID
+  5  INNER JOIN DEPARTMENTS  MD ON  MD.DEPARTMENT_ID = M.DEPARTMENT_ID
+  6  INNER JOIN LOCATIONS EL ON EL.LOCATION_ID = ED.LOCATION_ID
+  7  INNER JOIN LOCATIONS ML ON ML.LOCATION_ID = MD.LOCATION_ID
+  8  INNER JOIN COUNTRIES EC ON EC.COUNTRY_ID = EL.COUNTRY_ID
+  9  INNER JOIN COUNTRIES MC ON MC.COUNTRY_ID = ML.COUNTRY_ID
+ 10  INNER JOIN REGIONS ER ON ER.REGION_ID  = EC.REGION_ID
+ 11  INNER JOIN REGIONS MR ON MR.REGION_ID  = MC.REGION_ID;
+
+EMP_NAME        MAN_NAME        EMP_DEP                        MAN_DEP                        EMP_CITY                       MAN_CITY                       EMP_COU                                  MAN_COU                                  REGION_NAME               REGION_NAME                                                                                                                             
+--------------- --------------- ------------------------------ ------------------------------ ------------------------------ ------------------------------ ---------------------------------------- ---------------------------------------- ------------------------- -------------------------                                                                                                               
+Eleni           Steven          Sales                          Executive                      Oxford                         Seattle                        United Kingdom                           United States of America                 Europe                    Americas                                                                                                                                
+Ellen           Eleni           Sales                          Sales                          Oxford                         Oxford                         United Kingdom                           United Kingdom                           Europe                    Europe                                                                                                                                  
+Jonathon        Eleni           Sales                          Sales                          Oxford                         Oxford                         United Kingdom                           United Kingdom                           Europe                    Europe                                                                                                                                  
+Michael         Steven          Marketing                      Executive                      Toronto                        Seattle                        Canada                                   United States of America                 Americas                  Americas                                                                                                                                
+Pat             Michael         Marketing                      Marketing                      Toronto                        Toronto                        Canada                                   Canada                                   Americas                  Americas                                                                                                                                
+Alexander       Lex             IT                             Executive                      Southlake                      Seattle                        United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+Bruce           Alexander       IT                             IT                             Southlake                      Southlake                      United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+Diana           Alexander       IT                             IT                             Southlake                      Southlake                      United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+Kevin           Steven          Shiping                        Executive                      South San Francisco            Seattle                        United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+Trenna          Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+Curtis          Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+Randall         Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+Peter           Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+Jennifer        Neena           Administration                 Executive                      Seattle                        Seattle                        United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+Neena           Steven          Executive                      Executive                      Seattle                        Seattle                        United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+Lex             Steven          Executive                      Executive                      Seattle                        Seattle                        United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+Shelley         Neena           Accounting                     Executive                      Seattle                        Seattle                        United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+William         Shelley         Accounting                     Accounting                     Seattle                        Seattle                        United States of America                 United States of America                 Americas                  Americas                                                                                                                                
+
+18 rows selected.
+
+SQL> SELECT E.FIRST_NAME EMP_NAME , ED.DEPARTMENT_NAME EMP_DEPT_NAME , EL.CITY EMP_CITY , EC.COUNTRY_NAME EMP_COUNTRY , ER.REGION_NAME EMP_REGION ,
+  2  M.FIRST_NAME MGR_NAME , MD.DEPARTMENT_NAME MGR_DEPT_NAME , ML.CITY MGR_CITY , MC.COUNTRY_NAME MGR_COUNTRY , MR.REGION_NAME MGR_REGION
+  3  FROM EMPLOYEES E
+  4  JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID
+  5  JOIN DEPARTMENTS ED ON E.DEPARTMENT_ID = ED.DEPARTMENT_ID
+  6  JOIN DEPARTMENTS MD ON M.DEPARTMENT_ID = MD.DEPARTMENT_ID
+  7  JOIN LOCATIONS EL ON ED.LOCATION_ID = EL.LOCATION_ID
+  8  JOIN LOCATIONS ML ON MD.LOCATION_ID = ML.LOCATION_ID
+  9  JOIN COUNTRIES EC ON EL.COUNTRY_ID = EC.COUNTRY_ID
+ 10  JOIN COUNTRIES MC ON ML.COUNTRY_ID = MC.COUNTRY_ID
+ 11  JOIN REGIONS ER ON EC.REGION_ID = ER.REGION_ID
+ 12  JOIN REGIONS MR ON MC.REGION_ID = MR.REGION_ID;
+
+EMP_NAME        EMP_DEPT_NAME                  EMP_CITY                       EMP_COUNTRY                              EMP_REGION                MGR_NAME        MGR_DEPT_NAME                  MGR_CITY                       MGR_COUNTRY                              MGR_REGION                                                                                                                              
+--------------- ------------------------------ ------------------------------ ---------------------------------------- ------------------------- --------------- ------------------------------ ------------------------------ ---------------------------------------- -------------------------                                                                                                               
+Eleni           Sales                          Oxford                         United Kingdom                           Europe                    Steven          Executive                      Seattle                        United States of America                 Americas                                                                                                                                
+Ellen           Sales                          Oxford                         United Kingdom                           Europe                    Eleni           Sales                          Oxford                         United Kingdom                           Europe                                                                                                                                  
+Jonathon        Sales                          Oxford                         United Kingdom                           Europe                    Eleni           Sales                          Oxford                         United Kingdom                           Europe                                                                                                                                  
+Michael         Marketing                      Toronto                        Canada                                   Americas                  Steven          Executive                      Seattle                        United States of America                 Americas                                                                                                                                
+Pat             Marketing                      Toronto                        Canada                                   Americas                  Michael         Marketing                      Toronto                        Canada                                   Americas                                                                                                                                
+Alexander       IT                             Southlake                      United States of America                 Americas                  Lex             Executive                      Seattle                        United States of America                 Americas                                                                                                                                
+Bruce           IT                             Southlake                      United States of America                 Americas                  Alexander       IT                             Southlake                      United States of America                 Americas                                                                                                                                
+Diana           IT                             Southlake                      United States of America                 Americas                  Alexander       IT                             Southlake                      United States of America                 Americas                                                                                                                                
+Kevin           Shiping                        South San Francisco            United States of America                 Americas                  Steven          Executive                      Seattle                        United States of America                 Americas                                                                                                                                
+Trenna          Shiping                        South San Francisco            United States of America                 Americas                  Kevin           Shiping                        South San Francisco            United States of America                 Americas                                                                                                                                
+Curtis          Shiping                        South San Francisco            United States of America                 Americas                  Kevin           Shiping                        South San Francisco            United States of America                 Americas                                                                                                                                
+Randall         Shiping                        South San Francisco            United States of America                 Americas                  Kevin           Shiping                        South San Francisco            United States of America                 Americas                                                                                                                                
+Peter           Shiping                        South San Francisco            United States of America                 Americas                  Kevin           Shiping                        South San Francisco            United States of America                 Americas                                                                                                                                
+Jennifer        Administration                 Seattle                        United States of America                 Americas                  Neena           Executive                      Seattle                        United States of America                 Americas                                                                                                                                
+Neena           Executive                      Seattle                        United States of America                 Americas                  Steven          Executive                      Seattle                        United States of America                 Americas                                                                                                                                
+Lex             Executive                      Seattle                        United States of America                 Americas                  Steven          Executive                      Seattle                        United States of America                 Americas                                                                                                                                
+Shelley         Accounting                     Seattle                        United States of America                 Americas                  Neena           Executive                      Seattle                        United States of America                 Americas                                                                                                                                
+William         Accounting                     Seattle                        United States of America                 Americas                  Shelley         Accounting                     Seattle                        United States of America                 Americas                                                                                                                                
+
+18 rows selected.
+
+SQL> SELECT * FROM JOBS;
+
+JOB_ID     JOB_TITLE                           MIN_SALARY MAX_SALARY                                                                                                                                                                                                                                                                                                                                            
+---------- ----------------------------------- ---------- ----------                                                                                                                                                                                                                                                                                                                                            
+AD_PRES    President                                20000      40000                                                                                                                                                                                                                                                                                                                                            
+AD_VP      Administration Vice President            15000      30000                                                                                                                                                                                                                                                                                                                                            
+AD_ASST    Administration Assistant                  3000       6000                                                                                                                                                                                                                                                                                                                                            
+AC_MGR     Accounting Manager                        8200      16000                                                                                                                                                                                                                                                                                                                                            
+AC_ACCOUNT Public Accountant                         4200       9000                                                                                                                                                                                                                                                                                                                                            
+SA_MAN     Sales Manager                            10000      20000                                                                                                                                                                                                                                                                                                                                            
+SA_REP     Sales Representative                      6000      12000                                                                                                                                                                                                                                                                                                                                            
+ST_MAN     Stock Manager                             5500       8500                                                                                                                                                                                                                                                                                                                                            
+ST_CLERK   Stock Clerk                               2000       5000                                                                                                                                                                                                                                                                                                                                            
+IT_PROG    Programmer                                4000      10000                                                                                                                                                                                                                                                                                                                                            
+MK_MAN     Marketing Manager                         9000      15000                                                                                                                                                                                                                                                                                                                                            
+MK_REP     Marketing Representative                  4000       9000                                                                                                                                                                                                                                                                                                                                            
+
+12 rows selected.
+
+SQL> REM FIRST_NAME , JOB_TITLE , DEPARTMENT_NAME , CITY , COUNTRY_NAME , REGION_NAME FOR EMPLOYEE AND MANAGER
+SQL> 
+SQL> SELECT E.FIRST_NAME EMP_NAME,M.FIRST_NAME MAN_NAME,ED.DEPARTMENT_NAME EMP_DEP,MD.DEPARTMENT_NAME MAN_DEP,EL.CITY EMP_CITY,ML.CITY MAN_CITY,
+  2  EC.COUNTRY_NAME EMP_COU,MC.COUNTRY_NAME MAN_COU,ER.REGION_NAME,MR.REGION_NAME,EJ.JOB_TITLE EMP_TITLE,MJ.JOB_TITLE MAN_TITLE
+  3  FROM EMPLOYEES E JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID
+  4  INNER JOIN DEPARTMENTS ED ON  ED.DEPARTMENT_ID = E.DEPARTMENT_ID
+  5  INNER JOIN DEPARTMENTS  MD ON  MD.DEPARTMENT_ID = M.DEPARTMENT_ID
+  6  INNER JOIN LOCATIONS EL ON EL.LOCATION_ID = ED.LOCATION_ID
+  7  INNER JOIN LOCATIONS ML ON ML.LOCATION_ID = MD.LOCATION_ID
+  8  INNER JOIN COUNTRIES EC ON EC.COUNTRY_ID = EL.COUNTRY_ID
+  9  INNER JOIN COUNTRIES MC ON MC.COUNTRY_ID = ML.COUNTRY_ID
+ 10  INNER JOIN REGIONS ER ON ER.REGION_ID  = EC.REGION_ID
+ 11  INNER JOIN REGIONS MR ON MR.REGION_ID  = MC.REGION_ID
+ 12  INNER JOIN JOBS EJ ON EJ.JOB_ID = E.JOB_ID
+ 13  INNER JOIN JOBS MJ ON MJ.JOB_ID = M.JOB_ID;
+
+EMP_NAME        MAN_NAME        EMP_DEP                        MAN_DEP                        EMP_CITY                       MAN_CITY                       EMP_COU                                  MAN_COU                                  REGION_NAME               REGION_NAME               EMP_TITLE                           MAN_TITLE                                                                 
+--------------- --------------- ------------------------------ ------------------------------ ------------------------------ ------------------------------ ---------------------------------------- ---------------------------------------- ------------------------- ------------------------- ----------------------------------- -----------------------------------                                       
+Eleni           Steven          Sales                          Executive                      Oxford                         Seattle                        United Kingdom                           United States of America                 Europe                    Americas                  Sales Manager                       President                                                                 
+Ellen           Eleni           Sales                          Sales                          Oxford                         Oxford                         United Kingdom                           United Kingdom                           Europe                    Europe                    Sales Representative                Sales Manager                                                             
+Jonathon        Eleni           Sales                          Sales                          Oxford                         Oxford                         United Kingdom                           United Kingdom                           Europe                    Europe                    Sales Representative                Sales Manager                                                             
+Michael         Steven          Marketing                      Executive                      Toronto                        Seattle                        Canada                                   United States of America                 Americas                  Americas                  Marketing Manager                   President                                                                 
+Pat             Michael         Marketing                      Marketing                      Toronto                        Toronto                        Canada                                   Canada                                   Americas                  Americas                  Marketing Representative            Marketing Manager                                                         
+Alexander       Lex             IT                             Executive                      Southlake                      Seattle                        United States of America                 United States of America                 Americas                  Americas                  Programmer                          Administration Vice President                                             
+Bruce           Alexander       IT                             IT                             Southlake                      Southlake                      United States of America                 United States of America                 Americas                  Americas                  Programmer                          Programmer                                                                
+Diana           Alexander       IT                             IT                             Southlake                      Southlake                      United States of America                 United States of America                 Americas                  Americas                  Programmer                          Programmer                                                                
+Kevin           Steven          Shiping                        Executive                      South San Francisco            Seattle                        United States of America                 United States of America                 Americas                  Americas                  Stock Manager                       President                                                                 
+Trenna          Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                 Americas                  Americas                  Stock Clerk                         Stock Manager                                                             
+Curtis          Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                 Americas                  Americas                  Stock Clerk                         Stock Manager                                                             
+Randall         Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                 Americas                  Americas                  Stock Clerk                         Stock Manager                                                             
+Peter           Kevin           Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                 Americas                  Americas                  Stock Clerk                         Stock Manager                                                             
+Neena           Steven          Executive                      Executive                      Seattle                        Seattle                        United States of America                 United States of America                 Americas                  Americas                  Administration Vice President       President                                                                 
+Lex             Steven          Executive                      Executive                      Seattle                        Seattle                        United States of America                 United States of America                 Americas                  Americas                  Administration Vice President       President                                                                 
+Jennifer        Neena           Administration                 Executive                      Seattle                        Seattle                        United States of America                 United States of America                 Americas                  Americas                  Administration Assistant            Administration Vice President                                             
+Shelley         Neena           Accounting                     Executive                      Seattle                        Seattle                        United States of America                 United States of America                 Americas                  Americas                  Accounting Manager                  Administration Vice President                                             
+William         Shelley         Accounting                     Accounting                     Seattle                        Seattle                        United States of America                 United States of America                 Americas                  Americas                  Public Accountant                   Accounting Manager                                                        
+
+18 rows selected.
+
+SQL> SELECT E.FIRST_NAME EMP_NAME , ED.DEPARTMENT_NAME EMP_DEPT_NAME , EL.CITY EMP_CITY , EC.COUNTRY_NAME EMP_COUNTRY , ER.REGION_NAME EMP_REGION , EJ.JOB_TITLE EMP_JTITLE ,
+  2  M.FIRST_NAME MGR_NAME , MD.DEPARTMENT_NAME MGR_DEPT_NAME , ML.CITY MGR_CITY , MC.COUNTRY_NAME MGR_COUNTRY , MR.REGION_NAME MGR_REGION , MJ.JOB_TITLE MGR_JTITLE
+  3  FROM EMPLOYEES E
+  4  JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID
+  5  JOIN DEPARTMENTS ED ON E.DEPARTMENT_ID = ED.DEPARTMENT_ID
+  6  JOIN DEPARTMENTS MD ON M.DEPARTMENT_ID = MD.DEPARTMENT_ID
+  7  JOIN LOCATIONS EL ON ED.LOCATION_ID = EL.LOCATION_ID
+  8  JOIN LOCATIONS ML ON MD.LOCATION_ID = ML.LOCATION_ID
+  9  JOIN COUNTRIES EC ON EL.COUNTRY_ID = EC.COUNTRY_ID
+ 10  JOIN COUNTRIES MC ON ML.COUNTRY_ID = MC.COUNTRY_ID
+ 11  JOIN REGIONS ER ON EC.REGION_ID = ER.REGION_ID
+ 12  JOIN REGIONS MR ON MC.REGION_ID = MR.REGION_ID
+ 13  JOIN JOBS EJ ON E.JOB_ID = EJ.JOB_ID
+ 14  JOIN JOBS MJ ON M.JOB_ID = MJ.JOB_ID ;
+
+EMP_NAME        EMP_DEPT_NAME                  EMP_CITY                       EMP_COUNTRY                              EMP_REGION                EMP_JTITLE                          MGR_NAME        MGR_DEPT_NAME                  MGR_CITY                       MGR_COUNTRY                              MGR_REGION                MGR_JTITLE                                                                
+--------------- ------------------------------ ------------------------------ ---------------------------------------- ------------------------- ----------------------------------- --------------- ------------------------------ ------------------------------ ---------------------------------------- ------------------------- -----------------------------------                                       
+Eleni           Sales                          Oxford                         United Kingdom                           Europe                    Sales Manager                       Steven          Executive                      Seattle                        United States of America                 Americas                  President                                                                 
+Ellen           Sales                          Oxford                         United Kingdom                           Europe                    Sales Representative                Eleni           Sales                          Oxford                         United Kingdom                           Europe                    Sales Manager                                                             
+Jonathon        Sales                          Oxford                         United Kingdom                           Europe                    Sales Representative                Eleni           Sales                          Oxford                         United Kingdom                           Europe                    Sales Manager                                                             
+Michael         Marketing                      Toronto                        Canada                                   Americas                  Marketing Manager                   Steven          Executive                      Seattle                        United States of America                 Americas                  President                                                                 
+Pat             Marketing                      Toronto                        Canada                                   Americas                  Marketing Representative            Michael         Marketing                      Toronto                        Canada                                   Americas                  Marketing Manager                                                         
+Alexander       IT                             Southlake                      United States of America                 Americas                  Programmer                          Lex             Executive                      Seattle                        United States of America                 Americas                  Administration Vice President                                             
+Bruce           IT                             Southlake                      United States of America                 Americas                  Programmer                          Alexander       IT                             Southlake                      United States of America                 Americas                  Programmer                                                                
+Diana           IT                             Southlake                      United States of America                 Americas                  Programmer                          Alexander       IT                             Southlake                      United States of America                 Americas                  Programmer                                                                
+Kevin           Shiping                        South San Francisco            United States of America                 Americas                  Stock Manager                       Steven          Executive                      Seattle                        United States of America                 Americas                  President                                                                 
+Trenna          Shiping                        South San Francisco            United States of America                 Americas                  Stock Clerk                         Kevin           Shiping                        South San Francisco            United States of America                 Americas                  Stock Manager                                                             
+Curtis          Shiping                        South San Francisco            United States of America                 Americas                  Stock Clerk                         Kevin           Shiping                        South San Francisco            United States of America                 Americas                  Stock Manager                                                             
+Randall         Shiping                        South San Francisco            United States of America                 Americas                  Stock Clerk                         Kevin           Shiping                        South San Francisco            United States of America                 Americas                  Stock Manager                                                             
+Peter           Shiping                        South San Francisco            United States of America                 Americas                  Stock Clerk                         Kevin           Shiping                        South San Francisco            United States of America                 Americas                  Stock Manager                                                             
+Neena           Executive                      Seattle                        United States of America                 Americas                  Administration Vice President       Steven          Executive                      Seattle                        United States of America                 Americas                  President                                                                 
+Lex             Executive                      Seattle                        United States of America                 Americas                  Administration Vice President       Steven          Executive                      Seattle                        United States of America                 Americas                  President                                                                 
+Jennifer        Administration                 Seattle                        United States of America                 Americas                  Administration Assistant            Neena           Executive                      Seattle                        United States of America                 Americas                  Administration Vice President                                             
+Shelley         Accounting                     Seattle                        United States of America                 Americas                  Accounting Manager                  Neena           Executive                      Seattle                        United States of America                 Americas                  Administration Vice President                                             
+William         Accounting                     Seattle                        United States of America                 Americas                  Public Accountant                   Shelley         Accounting                     Seattle                        United States of America                 Americas                  Accounting Manager                                                        
+
+18 rows selected.
+
+SQL> SELECT E.FIRST_NAME EMP_NAME, M.FIRST_NAME MAN_NAME, EJ.JOBS EMP_JOB, MJ.JOBS MAN_JOBS,ED.DEPARTMENT_NAME EMP_DEP, MD.DEPARTMENT_NAME MAN_DEP, EL.CITY EMP_CITY, ML.CITY MAN_CITY, EC.COUNTRY_NAME EMP_COUNTRY, MC.COUNTRY_NAME MAN_COUNTRY, ER.REGION_NAME EMP_REGION, MR.REGION_NAME MAN_REGION FROM EMPLOYEES E JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID
+  2  JOIN JOBS EJ ON EJ.JOB_ID = E.JOB_ID
+  3  JOIN JOBS MJ ON MJ.JOB_ID = M.JOB_ID
+  4  JOIN DEPARTMENTS ED ON ED.DEPARTMENT_ID = E.DEPARTMENT_ID
+  5  JOIN DEPARTMENTS MD ON MD.DEPARTMENT_ID = M.DEPARTMENT_ID
+  6  JOIN LOCATIONS EL ON EL.LOCATION_ID = ED.LOCATION_ID
+  7  JOIN LOCATIONS ML ON ML.LOCATION_ID = MD.LOCATION_ID
+  8  JOIN COUNTRIES EC ON EC.COUNTRY_ID = EL.COUNTRY_ID
+  9  JOIN COUNTRIES MC ON MC.COUNTRY_ID = ML.COUNTRY_ID
+ 10  JOIN REGIONS ER ON ER.REGION_ID = EC.REGION_ID
+ 11  JOIN REGIONS MR ON MR.REGION_ID = MC.REGION_ID;
+SELECT E.FIRST_NAME EMP_NAME, M.FIRST_NAME MAN_NAME, EJ.JOBS EMP_JOB, MJ.JOBS MAN_JOBS,ED.DEPARTMENT_NAME EMP_DEP, MD.DEPARTMENT_NAME MAN_DEP, EL.CITY EMP_CITY, ML.CITY MAN_CITY, EC.COUNTRY_NAME EMP_COUNTRY, MC.COUNTRY_NAME MAN_COUNTRY, ER.REGION_NAME EMP_REGION, MR.REGION_NAME MAN_REGION FROM EMPLOYEES E JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID
+                                                                      *
+ERROR at line 1:
+ORA-00904: "MJ"."JOBS": invalid identifier 
+
+
+SQL> SELECT E.FIRST_NAME EMP_NAME, M.FIRST_NAME MAN_NAME, EJ.JOB_TITLE EMP_JOB, MJ.JOB_TITLE MAN_JOBS,ED.DEPARTMENT_NAME EMP_DEP, MD.DEPARTMENT_NAME MAN_DEP, EL.CITY EMP_CITY, ML.CITY MAN_CITY, EC.COUNTRY_NAME EMP_COUNTRY, MC.COUNTRY_NAME MAN_COUNTRY, ER.REGION_NAME EMP_REGION, MR.REGION_NAME MAN_REGION FROM EMPLOYEES E JOIN EMPLOYEES M ON E.MANAGER_ID = M.EMPLOYEE_ID
+  2  JOIN JOBS EJ ON EJ.JOB_ID = E.JOB_ID
+  3  JOIN JOBS MJ ON MJ.JOB_ID = M.JOB_ID
+  4  JOIN DEPARTMENTS ED ON ED.DEPARTMENT_ID = E.DEPARTMENT_ID
+  5  JOIN DEPARTMENTS MD ON MD.DEPARTMENT_ID = M.DEPARTMENT_ID
+  6  JOIN LOCATIONS EL ON EL.LOCATION_ID = ED.LOCATION_ID
+  7  JOIN LOCATIONS ML ON ML.LOCATION_ID = MD.LOCATION_ID
+  8  JOIN COUNTRIES EC ON EC.COUNTRY_ID = EL.COUNTRY_ID
+  9  JOIN COUNTRIES MC ON MC.COUNTRY_ID = ML.COUNTRY_ID
+ 10  JOIN REGIONS ER ON ER.REGION_ID = EC.REGION_ID
+ 11  JOIN REGIONS MR ON MR.REGION_ID = MC.REGION_ID;
+
+EMP_NAME        MAN_NAME        EMP_JOB                             MAN_JOBS                            EMP_DEP                        MAN_DEP                        EMP_CITY                       MAN_CITY                       EMP_COUNTRY                              MAN_COUNTRY                              EMP_REGION                MAN_REGION                                                      
+--------------- --------------- ----------------------------------- ----------------------------------- ------------------------------ ------------------------------ ------------------------------ ------------------------------ ---------------------------------------- ---------------------------------------- ------------------------- -------------------------                                       
+Eleni           Steven          Sales Manager                       President                           Sales                          Executive                      Oxford                         Seattle                        United Kingdom                           United States of America                 Europe                    Americas                                                        
+Ellen           Eleni           Sales Representative                Sales Manager                       Sales                          Sales                          Oxford                         Oxford                         United Kingdom                           United Kingdom                           Europe                    Europe                                                          
+Jonathon        Eleni           Sales Representative                Sales Manager                       Sales                          Sales                          Oxford                         Oxford                         United Kingdom                           United Kingdom                           Europe                    Europe                                                          
+Michael         Steven          Marketing Manager                   President                           Marketing                      Executive                      Toronto                        Seattle                        Canada                                   United States of America                 Americas                  Americas                                                        
+Pat             Michael         Marketing Representative            Marketing Manager                   Marketing                      Marketing                      Toronto                        Toronto                        Canada                                   Canada                                   Americas                  Americas                                                        
+Alexander       Lex             Programmer                          Administration Vice President       IT                             Executive                      Southlake                      Seattle                        United States of America                 United States of America                 Americas                  Americas                                                        
+Bruce           Alexander       Programmer                          Programmer                          IT                             IT                             Southlake                      Southlake                      United States of America                 United States of America                 Americas                  Americas                                                        
+Diana           Alexander       Programmer                          Programmer                          IT                             IT                             Southlake                      Southlake                      United States of America                 United States of America                 Americas                  Americas                                                        
+Kevin           Steven          Stock Manager                       President                           Shiping                        Executive                      South San Francisco            Seattle                        United States of America                 United States of America                 Americas                  Americas                                                        
+Trenna          Kevin           Stock Clerk                         Stock Manager                       Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                 Americas                  Americas                                                        
+Curtis          Kevin           Stock Clerk                         Stock Manager                       Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                 Americas                  Americas                                                        
+Randall         Kevin           Stock Clerk                         Stock Manager                       Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                 Americas                  Americas                                                        
+Peter           Kevin           Stock Clerk                         Stock Manager                       Shiping                        Shiping                        South San Francisco            South San Francisco            United States of America                 United States of America                 Americas                  Americas                                                        
+Neena           Steven          Administration Vice President       President                           Executive                      Executive                      Seattle                        Seattle                        United States of America                 United States of America                 Americas                  Americas                                                        
+Lex             Steven          Administration Vice President       President                           Executive                      Executive                      Seattle                        Seattle                        United States of America                 United States of America                 Americas                  Americas                                                        
+Jennifer        Neena           Administration Assistant            Administration Vice President       Administration                 Executive                      Seattle                        Seattle                        United States of America                 United States of America                 Americas                  Americas                                                        
+Shelley         Neena           Accounting Manager                  Administration Vice President       Accounting                     Executive                      Seattle                        Seattle                        United States of America                 United States of America                 Americas                  Americas                                                        
+William         Shelley         Public Accountant                   Accounting Manager                  Accounting                     Accounting                     Seattle                        Seattle                        United States of America                 United States of America                 Americas                  Americas                                                        
+
+18 rows selected.
+
+SQL> SELECT * FROM JOB_GRADES;
+
+GRA LOWEST_SAL HIGHEST_SAL                                                                                                                                                                                                                                                                                                                                                                                      
+--- ---------- -----------                                                                                                                                                                                                                                                                                                                                                                                      
+A         1000        2999                                                                                                                                                                                                                                                                                                                                                                                      
+B         3000        5999                                                                                                                                                                                                                                                                                                                                                                                      
+C         6000        9999                                                                                                                                                                                                                                                                                                                                                                                      
+D        10000       14999                                                                                                                                                                                                                                                                                                                                                                                      
+E        15000       24999                                                                                                                                                                                                                                                                                                                                                                                      
+F        25000       40000                                                                                                                                                                                                                                                                                                                                                                                      
+
+6 rows selected.
+
+SQL> REM FIRST_NAME , SALARY , GRADE_LEVEL , JOB_TITLE , DEPARTMENT_NAME , CITY , COUNTRY_NAME , REGION_NAME FOR EMPLOYEE AND MANAGER
+SQL> 
+SQL> SET LINES 1000
+SQL> 
+SQL> SPOOL OFF

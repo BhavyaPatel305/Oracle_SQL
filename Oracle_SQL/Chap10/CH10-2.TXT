@@ -1,0 +1,645 @@
+SQL> 
+SQL> REM DEFAULT : IT IS USED TO SET DEFAULT VALUE FOR THE COLUMN. WHILE INSERTING NEW ROW, IF WE OMIT VALUE FOR THE COLUMN, THE DEFAULT VALUE WILL GET STORED.
+SQL> 
+SQL> REM IF WE PROVIDE OUR VALUE, THEN THAT WILL GET STORED. PREFERENCE IS GIVEN TO USER SUPPLIED VALUE.
+SQL> 
+SQL> CREATE TABLE INV(INVNO NUMBER(4),INVDT DATE DEFAULT SYSDATE,BAMT NUMBER(8,2));
+CREATE TABLE INV(INVNO NUMBER(4),INVDT DATE DEFAULT SYSDATE,BAMT NUMBER(8,2))
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+SQL> DROP TABLE INV;
+
+Table dropped.
+
+SQL> CREATE TABLE INV(INVNO NUMBER(4),INVDT DATE DEFAULT SYSDATE,BAMT NUMBER(8,2));
+
+Table created.
+
+SQL> INSERT INTO INV VALUES (1,'04-APR-04',40000);
+
+1 row created.
+
+SQL> SELECT * FROM INV;
+
+     INVNO INVDT           BAMT                                                                                                                                                                                                                                                                                                                                                                                 
+---------- --------- ----------                                                                                                                                                                                                                                                                                                                                                                                 
+         1 04-APR-04      40000                                                                                                                                                                                                                                                                                                                                                                                 
+
+SQL> INSERT INTO INV (INVNO,BAMT) VALUES (2,60000);
+
+1 row created.
+
+SQL> SELECT * FROM INV;
+
+     INVNO INVDT           BAMT                                                                                                                                                                                                                                                                                                                                                                                 
+---------- --------- ----------                                                                                                                                                                                                                                                                                                                                                                                 
+         1 04-APR-04      40000                                                                                                                                                                                                                                                                                                                                                                                 
+         2 30-MAR-23      60000                                                                                                                                                                                                                                                                                                                                                                                 
+
+SQL> INSERT INTO INV (INVNO) VALUES (3);
+
+1 row created.
+
+SQL> SELECT * FROM INV;
+
+     INVNO INVDT           BAMT                                                                                                                                                                                                                                                                                                                                                                                 
+---------- --------- ----------                                                                                                                                                                                                                                                                                                                                                                                 
+         1 04-APR-04      40000                                                                                                                                                                                                                                                                                                                                                                                 
+         2 30-MAR-23      60000                                                                                                                                                                                                                                                                                                                                                                                 
+         3 30-MAR-23                                                                                                                                                                                                                                                                                                                                                                                            
+
+SQL> UPDATE INV SET INVDT = DEFAULT WHERE INVONO = 1;
+UPDATE INV SET INVDT = DEFAULT WHERE INVONO = 1
+                                     *
+ERROR at line 1:
+ORA-00904: "INVONO": invalid identifier 
+
+
+SQL> UPDATE INV SET INVDT = DEFAULT WHERE INVNO = 1;
+
+1 row updated.
+
+SQL> SELECT * FROM INV;
+
+     INVNO INVDT           BAMT                                                                                                                                                                                                                                                                                                                                                                                 
+---------- --------- ----------                                                                                                                                                                                                                                                                                                                                                                                 
+         1 30-MAR-23      40000                                                                                                                                                                                                                                                                                                                                                                                 
+         2 30-MAR-23      60000                                                                                                                                                                                                                                                                                                                                                                                 
+         3 30-MAR-23                                                                                                                                                                                                                                                                                                                                                                                            
+
+SQL> INSERT INTO INV VALUES (5,DEFAULT,40000);
+
+1 row created.
+
+SQL> INSERT INTO INV VALUES (6,NULL,40000);
+
+1 row created.
+
+SQL> SELECT * FROM INV;
+
+     INVNO INVDT           BAMT                                                                                                                                                                                                                                                                                                                                                                                 
+---------- --------- ----------                                                                                                                                                                                                                                                                                                                                                                                 
+         1 30-MAR-23      40000                                                                                                                                                                                                                                                                                                                                                                                 
+         2 30-MAR-23      60000                                                                                                                                                                                                                                                                                                                                                                                 
+         3 30-MAR-23                                                                                                                                                                                                                                                                                                                                                                                            
+         5 30-MAR-23      40000                                                                                                                                                                                                                                                                                                                                                                                 
+         6                40000                                                                                                                                                                                                                                                                                                                                                                                 
+
+SQL> INSERT INTO INV VALUES (7,DEFAULT,DEFAULT);
+
+1 row created.
+
+SQL> SELECT * FROM INV;
+
+     INVNO INVDT           BAMT                                                                                                                                                                                                                                                                                                                                                                                 
+---------- --------- ----------                                                                                                                                                                                                                                                                                                                                                                                 
+         1 30-MAR-23      40000                                                                                                                                                                                                                                                                                                                                                                                 
+         2 30-MAR-23      60000                                                                                                                                                                                                                                                                                                                                                                                 
+         3 30-MAR-23                                                                                                                                                                                                                                                                                                                                                                                            
+         5 30-MAR-23      40000                                                                                                                                                                                                                                                                                                                                                                                 
+         6                40000                                                                                                                                                                                                                                                                                                                                                                                 
+         7 30-MAR-23                                                                                                                                                                                                                                                                                                                                                                                            
+
+6 rows selected.
+
+SQL> DROP TABLE INV;
+
+Table dropped.
+
+SQL> DROP SEQUENCE INVNO;
+DROP SEQUENCE INVNO
+              *
+ERROR at line 1:
+ORA-02289: sequence does not exist 
+
+
+SQL> CREATE SEQUENCE INVNO;
+
+Sequence created.
+
+SQL> CREATE TABLE INV(INVNO NUMBER(4) DEFAULT INVNO.NEXTVAL,INVDT DATE DEFAULT SYSDATE,BAMT NUMBER(8,2));
+
+Table created.
+
+SQL> INSERT INTO INV (INVDT,BAMT) VALUES ('6-JUN-6',60000);
+
+1 row created.
+
+SQL> INSERT INTO INV (BAMT) VALUES (90000);
+
+1 row created.
+
+SQL> SELECT * FROM INV;
+
+     INVNO INVDT           BAMT                                                                                                                                                                                                                                                                                                                                                                                 
+---------- --------- ----------                                                                                                                                                                                                                                                                                                                                                                                 
+         1 06-JUN-06      60000                                                                                                                                                                                                                                                                                                                                                                                 
+         2 30-MAR-23      90000                                                                                                                                                                                                                                                                                                                                                                                 
+
+SQL> REM CONSTRAINTS : IT IS NOTHING BUT DATA VALIDATION RULES.
+SQL> 
+SQL> DROP TABLE STD5A;
+
+Table dropped.
+
+SQL> CREATE TABLE ST5A(RNO NUMBER(2),NM VARHCAR(10));
+CREATE TABLE ST5A(RNO NUMBER(2),NM VARHCAR(10))
+                                          *
+ERROR at line 1:
+ORA-00907: missing right parenthesis 
+
+
+SQL> CREATE TABLE ST5A(RNO NUMBER(2),NM VARCHAR(10));
+
+Table created.
+
+SQL> REM NUMBER(2) : -99 TO +99 : 1-30 IS ACTUAL REQUIREMENT
+SQL> 
+SQL> INSERT INTO STD5A VALUES (1,'GANESH');
+INSERT INTO STD5A VALUES (1,'GANESH')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> INSERT INTO ST5A VALUES (1,'GANESH');
+
+1 row created.
+
+SQL> INSERT INTO ST5A VALUES (2,'RIDDHI');
+
+1 row created.
+
+SQL> INSERT INTO ST5A VALUES (3,'SIDDHI');
+
+1 row created.
+
+SQL> INSERT INTO ST5A VALUES (4,'SHUBH');
+
+1 row created.
+
+SQL> INSERT INTO ST5A VALUES (5,'LABH');
+
+1 row created.
+
+SQL> INSERT INTO ST5A VALUES (-5,'ADASF');
+
+1 row created.
+
+SQL> INSERT INTO ST5A VALUES (0,'ADASF');
+
+1 row created.
+
+SQL> INSERT INTO ST5A VALUES (99,'ADASF');
+
+1 row created.
+
+SQL> INSERT INTO ST5A VALUES (NULL,'ADASF');
+
+1 row created.
+
+SQL> INSERT INTO ST5A VALUES ('','ADASF');
+
+1 row created.
+
+SQL> SELECT * FROM ST5A;
+
+       RNO NM                                                                                                                                                                                                                                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                                                                                                                                                                                                                           
+         1 GANESH                                                                                                                                                                                                                                                                                                                                                                                               
+         2 RIDDHI                                                                                                                                                                                                                                                                                                                                                                                               
+         3 SIDDHI                                                                                                                                                                                                                                                                                                                                                                                               
+         4 SHUBH                                                                                                                                                                                                                                                                                                                                                                                                
+         5 LABH                                                                                                                                                                                                                                                                                                                                                                                                 
+        -5 ADASF                                                                                                                                                                                                                                                                                                                                                                                                
+         0 ADASF                                                                                                                                                                                                                                                                                                                                                                                                
+        99 ADASF                                                                                                                                                                                                                                                                                                                                                                                                
+           ADASF                                                                                                                                                                                                                                                                                                                                                                                                
+           ADASF                                                                                                                                                                                                                                                                                                                                                                                                
+
+10 rows selected.
+
+SQL> INSERT INTO ST5A VALUES (1,'GANESH');
+
+1 row created.
+
+SQL> REM TYPES OF CONSTRAINTS : 1 CHECK 2 NOT NULL 3 UNIQUE 4 PRIMARY KEY 5 REFERENCES
+SQL> 
+SQL> REM CHECK : TO CHECK VALUE AGAINST THE CONDITION ATTACHED.
+SQL> 
+SQL> REM NOT NULL : IT WILL NOT ALLOW NULL VALUE TO BE STORED IN COLUMN. VALUE/DATA IS MANDATORY.
+SQL> 
+SQL> REM UNIQUE : IT WILL NOT ALLOW DUPLICATE VALUE WITHIN COLUMN.
+SQL> 
+SQL> REM PRIMARY KEY : IT IS COMBO OF NOT NULL + UNIQUE. NOTE : WE CAN USE PRIMARY KEY CONSTRAINTS ONCE PER TABLE.
+SQL> 
+SQL> REM REFERENCES : IT IS USED ALLOW ONLY THOSE VALUES IN COLUMN WHICH ARE ALREADY STORED IN ANY OTHER COLUMN OF SAME OR OTHER TABLE.
+SQL> 
+SQL> 
+SQL> DROP TABLE ST5A;
+
+Table dropped.
+
+SQL> CREATE TABLE STD5A(RNO NUMBER(2) CHECK (RNO BETWEEN 1 AND 30),NM VARCHAR(10));
+
+Table created.
+
+SQL> INSERT INTO STD5A VALUES (1,'GANESH');
+
+1 row created.
+
+SQL> INSERT INTO STD5A VALUES (1,'RIDDHI');
+
+1 row created.
+
+SQL> INSERT INTO STD5A VALUES (NULL,'RIDDHI');
+
+1 row created.
+
+SQL> INSERT INTO STD5A VALUES (0,'RIDDHI');
+INSERT INTO STD5A VALUES (0,'RIDDHI')
+*
+ERROR at line 1:
+ORA-02290: check constraint (SCOTT.SYS_C0052254) violated 
+
+
+SQL> INSERT INTO STD5A VALUES (30,'RIDDHI');
+
+1 row created.
+
+SQL> INSERT INTO STD5A VALUES (31,'RIDDHI');
+INSERT INTO STD5A VALUES (31,'RIDDHI')
+*
+ERROR at line 1:
+ORA-02290: check constraint (SCOTT.SYS_C0052254) violated 
+
+
+SQL> INSERT INTO STD5A VALUES (-31,'RIDDHI');
+INSERT INTO STD5A VALUES (-31,'RIDDHI')
+*
+ERROR at line 1:
+ORA-02290: check constraint (SCOTT.SYS_C0052254) violated 
+
+
+SQL> SELECT * FROM STD5A;
+
+       RNO NM                                                                                                                                                                                                                                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                                                                                                                                                                                                                           
+         1 GANESH                                                                                                                                                                                                                                                                                                                                                                                               
+         1 RIDDHI                                                                                                                                                                                                                                                                                                                                                                                               
+           RIDDHI                                                                                                                                                                                                                                                                                                                                                                                               
+        30 RIDDHI                                                                                                                                                                                                                                                                                                                                                                                               
+
+SQL> DROP TABLE STD5A;
+
+Table dropped.
+
+SQL> CREATE TABLE STD5A(RNO NUMBER(2) CHECK (RNO BETWEEN 1 AND 30) NOT NULL,NM VARCHAR(10));
+
+Table created.
+
+SQL> INSERT INTO STD5A VALUES (1,'GANESH');
+
+1 row created.
+
+SQL> INSERT INTO STD5A VALUES (1,'RIDDHI');
+
+1 row created.
+
+SQL> INSERT INTO STD5A VALUES (NULL,'RIDDHI');
+INSERT INTO STD5A VALUES (NULL,'RIDDHI')
+                          *
+ERROR at line 1:
+ORA-01400: cannot insert NULL into ("SCOTT"."STD5A"."RNO") 
+
+
+SQL> INSERT INTO STD5A VALUES (0,'RIDDHI');
+INSERT INTO STD5A VALUES (0,'RIDDHI')
+*
+ERROR at line 1:
+ORA-02290: check constraint (SCOTT.SYS_C0052256) violated 
+
+
+SQL> INSERT INTO STD5A VALUES (30,'RIDDHI');
+
+1 row created.
+
+SQL> INSERT INTO STD5A VALUES (31,'RIDDHI');
+INSERT INTO STD5A VALUES (31,'RIDDHI')
+*
+ERROR at line 1:
+ORA-02290: check constraint (SCOTT.SYS_C0052256) violated 
+
+
+SQL> INSERT INTO STD5A VALUES (-31,'RIDDHI');
+INSERT INTO STD5A VALUES (-31,'RIDDHI')
+*
+ERROR at line 1:
+ORA-02290: check constraint (SCOTT.SYS_C0052256) violated 
+
+
+SQL> SELECT * FROM STD5A;
+
+       RNO NM                                                                                                                                                                                                                                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                                                                                                                                                                                                                           
+         1 GANESH                                                                                                                                                                                                                                                                                                                                                                                               
+         1 RIDDHI                                                                                                                                                                                                                                                                                                                                                                                               
+        30 RIDDHI                                                                                                                                                                                                                                                                                                                                                                                               
+
+SQL> DROP TABLE STD5A;
+
+Table dropped.
+
+SQL> CREATE TABLE STD5A(RNO NUMBER(2) CHECK (RNO BETWEEN 1 AND 30) NOT NULL UNIQUE,NM VARCHAR(10));
+
+Table created.
+
+SQL> INSERT INTO STD5A VALUES (1,'GANESH');
+
+1 row created.
+
+SQL> INSERT INTO STD5A VALUES (1,'RIDDHI');
+INSERT INTO STD5A VALUES (1,'RIDDHI')
+*
+ERROR at line 1:
+ORA-00001: unique constraint (SCOTT.SYS_C0052259) violated 
+
+
+SQL> INSERT INTO STD5A VALUES (NULL,'RIDDHI');
+INSERT INTO STD5A VALUES (NULL,'RIDDHI')
+                          *
+ERROR at line 1:
+ORA-01400: cannot insert NULL into ("SCOTT"."STD5A"."RNO") 
+
+
+SQL> INSERT INTO STD5A VALUES (0,'RIDDHI');
+INSERT INTO STD5A VALUES (0,'RIDDHI')
+*
+ERROR at line 1:
+ORA-02290: check constraint (SCOTT.SYS_C0052258) violated 
+
+
+SQL> INSERT INTO STD5A VALUES (30,'RIDDHI');
+
+1 row created.
+
+SQL> INSERT INTO STD5A VALUES (31,'RIDDHI');
+INSERT INTO STD5A VALUES (31,'RIDDHI')
+*
+ERROR at line 1:
+ORA-02290: check constraint (SCOTT.SYS_C0052258) violated 
+
+
+SQL> INSERT INTO STD5A VALUES (-31,'RIDDHI');
+INSERT INTO STD5A VALUES (-31,'RIDDHI')
+*
+ERROR at line 1:
+ORA-02290: check constraint (SCOTT.SYS_C0052258) violated 
+
+
+SQL> SELECT * FROM STD5A;
+
+       RNO NM                                                                                                                                                                                                                                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                                                                                                                                                                                                                           
+         1 GANESH                                                                                                                                                                                                                                                                                                                                                                                               
+        30 RIDDHI                                                                                                                                                                                                                                                                                                                                                                                               
+
+SQL> DROP TABLE STD5A;
+
+Table dropped.
+
+SQL> SELECT * FROM REGIONS;
+
+ REGION_ID REGION_NAME                                                                                                                                                                                                                                                                                                                                                                                          
+---------- -------------------------                                                                                                                                                                                                                                                                                                                                                                            
+         1 Europe                                                                                                                                                                                                                                                                                                                                                                                               
+         2 Americas                                                                                                                                                                                                                                                                                                                                                                                             
+         3 Asia                                                                                                                                                                                                                                                                                                                                                                                                 
+         4 Middle East and Africa                                                                                                                                                                                                                                                                                                                                                                               
+
+SQL> DESC REGIONS
+ Name                                                                                                                                                                                                                                      Null?    Type
+ ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -------- ------------------------------------------------------------------------------------------------------------------------------------------------------------
+ REGION_ID                                                                                                                                                                                                                                 NOT NULL NUMBER
+ REGION_NAME                                                                                                                                                                                                                                        VARCHAR2(25)
+
+SQL> SET LINES 50
+SQL> 
+SQL> SELECT * FROM REGIONS;
+
+ REGION_ID REGION_NAME                            
+---------- -------------------------              
+         1 Europe                                 
+         2 Americas                               
+         3 Asia                                   
+         4 Middle East and Africa                 
+
+SQL> DESC REGIONS
+ Name                    Null?    Type
+ ----------------------- -------- ----------------
+ REGION_ID               NOT NULL NUMBER
+ REGION_NAME                      VARCHAR2(25)
+
+SQL> SET LINES 200
+SQL> 
+SQL> CREATE SEQUENCE RSEQ;
+
+Sequence created.
+
+SQL> CREATE TABLE R1(RID NUMBER(3) DEFAULT RSEQ.NEXTVAL CHECK (RID BETWEEN 1 AND 100) PRIMARY KEY,RNM VARCHAR(20) CHECK (RNM=UPPER(RNM)));
+CREATE TABLE R1(RID NUMBER(3) DEFAULT RSEQ.NEXTVAL CHECK (RID BETWEEN 1 AND 100) PRIMARY KEY,RNM VARCHAR(20) CHECK (RNM=UPPER(RNM)))
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+SQL> DROP TABLE R1;
+
+Table dropped.
+
+SQL> CREATE TABLE R1(RID NUMBER(3) DEFAULT RSEQ.NEXTVAL CHECK (RID BETWEEN 1 AND 100) PRIMARY KEY,RNM VARCHAR(20) CHECK (RNM=UPPER(RNM)));
+
+Table created.
+
+SQL> DROP TABLE EMP;
+
+Table dropped.
+
+SQL> SELECT EMPLOYEE_ID , FIRST_NAME , MANAGER_ID FROM EMPLOYEES;
+
+EMPLOYEE_ID FIRST_NAME      MANAGER_ID                                                                                                                                                                  
+----------- --------------- ----------                                                                                                                                                                  
+        100 Steven                                                                                                                                                                                      
+        101 Neena                  100                                                                                                                                                                  
+        102 Lex                    100                                                                                                                                                                  
+        103 Alexander              102                                                                                                                                                                  
+        104 Bruce                  103                                                                                                                                                                  
+        107 Diana                  103                                                                                                                                                                  
+        124 Kevin                  100                                                                                                                                                                  
+        141 Trenna                 124                                                                                                                                                                  
+        142 Curtis                 124                                                                                                                                                                  
+        143 Randall                124                                                                                                                                                                  
+        144 Peter                  124                                                                                                                                                                  
+        149 Eleni                  100                                                                                                                                                                  
+        174 Ellen                  149                                                                                                                                                                  
+        176 Jonathon               149                                                                                                                                                                  
+        178 Kimerely               149                                                                                                                                                                  
+        200 Jennifer               101                                                                                                                                                                  
+        201 Michael                100                                                                                                                                                                  
+        202 Pat                    201                                                                                                                                                                  
+        205 Shelley                101                                                                                                                                                                  
+        206 William                205                                                                                                                                                                  
+
+20 rows selected.
+
+SQL> CREATE TABLE EMP (EID NUMBER(3) , ENM VARCHAR2(20) , MID NUMBER(3) REFERENCES EMP(EID));
+CREATE TABLE EMP (EID NUMBER(3) , ENM VARCHAR2(20) , MID NUMBER(3) REFERENCES EMP(EID))
+                                                                              *
+ERROR at line 1:
+ORA-02270: no matching unique or primary key for this column-list 
+
+
+SQL> CREATE TABLE EMP (EID NUMBER(3) UNIQUE NOT NULL, ENM VARCHAR2(20) , MID NUMBER(3) REFERENCES EMP(EID));
+
+Table created.
+
+SQL> DROP TABLE EMKP;
+DROP TABLE EMKP
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> DROP TABLE EMP;
+
+Table dropped.
+
+SQL> 
+SQL> CREATE TABLE EMP (EID NUMBER(3) PRIMARY KEY, ENM VARCHAR2(20) , MID NUMBER(3) REFERENCES EMP(EID));
+
+Table created.
+
+SQL> INSERT INTO EMP VALUES (1,'GANESH',NULL);
+
+1 row created.
+
+SQL> INSERT INTO EMP VALUES (2,'RIDDHI',1);
+
+1 row created.
+
+SQL> INSERT INTO EMP VALUES (3,'SIDDHI',1);
+
+1 row created.
+
+SQL> INSERT INTO EMP VALUES (4,'SHUBH',5);
+INSERT INTO EMP VALUES (4,'SHUBH',5)
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (SCOTT.SYS_C0052267) violated - parent key not found 
+
+
+SQL> DROP TABLE EMP;
+
+Table dropped.
+
+SQL> DROP TABLE DEPT;
+
+Table dropped.
+
+SQL> CREATE TABLE DEPT(DID NUMBER(2) PRIMARY KEY,DNM VARCHAR2(10));
+
+Table created.
+
+SQL> CREAET TABLE EMP(EID NUMBER(3) PRIMARY KEY, ENM VARCHAR2(20) , MID NUMBER(3) REFERENCES EMP(EID) , DID NUMBER(2) REFERENCES DEPT(DID));
+SP2-0734: unknown command beginning "CREAET TAB..." - rest of line ignored.
+SQL> 
+SQL> 
+SQL> CREATE TABLE EMP(EID NUMBER(3) PRIMARY KEY, ENM VARCHAR2(20) , MID NUMBER(3) REFERENCES EMP(EID) , DID NUMBER(2) REFERENCES DEPT(DID));
+
+Table created.
+
+SQL> INSERT INTO DEPT VALUES (10,'ACC');
+
+1 row created.
+
+SQL> INSERT INTO DEPT VALUES (20,'RES');
+
+1 row created.
+
+SQL> INSERT INTO DEPT VALUES (30,'SAL');
+
+1 row created.
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> SELECT * FROM DEPT;
+
+       DID DNM                                                                                                                                                                                          
+---------- ----------                                                                                                                                                                                   
+        10 ACC                                                                                                                                                                                          
+        20 RES                                                                                                                                                                                          
+        30 SAL                                                                                                                                                                                          
+
+SQL> INSERT INTO EMP VALUES (1,'GANESH',NULL,10);
+
+1 row created.
+
+SQL> INSERT INTO EMP VALUES (2,'RIDDHI',1,20);
+
+1 row created.
+
+SQL> INSERT INTO EMP VALUES (3,'SIDDHI',3,20);
+
+1 row created.
+
+SQL> INSERT INTO EMP VALUES (4,'SHUBH',5,20);
+INSERT INTO EMP VALUES (4,'SHUBH',5,20)
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (SCOTT.SYS_C0052270) violated - parent key not found 
+
+
+SQL> INSERT INTO EMP VALUES (4,'SHUBH',2,40);
+INSERT INTO EMP VALUES (4,'SHUBH',2,40)
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (SCOTT.SYS_C0052271) violated - parent key not found 
+
+
+SQL> SELECT * FROM COUNTRIES;
+
+CO COUNTRY_NAME                              REGION_ID                                                                                                                                                  
+-- ---------------------------------------- ----------                                                                                                                                                  
+CA Canada                                            2                                                                                                                                                  
+DE Germany                                           1                                                                                                                                                  
+UK United Kingdom                                    1                                                                                                                                                  
+US United States of America                          2                                                                                                                                                  
+
+SQL> SELECT * FROM REGIONS;
+
+ REGION_ID REGION_NAME                                                                                                                                                                                  
+---------- -------------------------                                                                                                                                                                    
+         1 Europe                                                                                                                                                                                       
+         2 Americas                                                                                                                                                                                     
+         3 Asia                                                                                                                                                                                         
+         4 Middle East and Africa                                                                                                                                                                       
+
+SQL> DESC COUNTRIES
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ COUNTRY_ID                                                                                                        NOT NULL CHAR(2)
+ COUNTRY_NAME                                                                                                               VARCHAR2(40)
+ REGION_ID                                                                                                                  NUMBER
+
+SQL> DESC REGIONS
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ REGION_ID                                                                                                         NOT NULL NUMBER
+ REGION_NAME                                                                                                                VARCHAR2(25)
+
+SQL> SPOOL OFF

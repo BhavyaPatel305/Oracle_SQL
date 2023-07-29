@@ -1,0 +1,319 @@
+SQL> 
+SQL> CL SCR
+
+SQL> REM FILE / OBJECT
+SQL> 
+SQL> REM OS : 1 FILE 2 FOLDER
+SQL> 
+SQL> REM FILE : CONTAINS ACTUAL CONTENTS/TEXT/PICTURE/SIGNATURE/PHOTO GRAPH/AUDIO/VIDEO
+SQL> 
+SQL> REM FOLDER : IS CREATED TO ARRANGE/MANAGE FILES IN SYSTEMATIC WAY
+SQL> 
+SQL> REM ORACLE : ALLOWS US TO CREATE OBJECT
+SQL> 
+SQL> REM FILE HAS PHYSICAL EXISTENCE , WE CAN SEE IT'S INFO. USING EITHER OS COMMAND OR UTILITY
+SQL> 
+SQL> REM OBJECT IS LOGICAL AND HAS NO PHYSICAL EXISTENCE.
+SQL> 
+SQL> REM INFO. ABOUT OBJECT IS NOT AVAILABLE THRU OS COMMAND OR UTILITY
+SQL> 
+SQL> REM DATA FILE : HOLDS DATA OF ORACLE OBJECTS
+SQL> 
+SQL> REM SINGLE DATA FILE CAN HOLD DATA OF MULTIPLE OBJECTS OF MULTIPLE TYPES OWNED BY MULTIPLE USERS
+SQL> 
+SQL> REM OBJECTS INFO. CAN BE AVAILABLE FROM INSIDE DATABASE ONLY.
+SQL> 
+SQL> REM THE BUNCH OF OBJECTS WHICH CAN PROVIDE INFO. ABOUT OBJECTS CREATED BY USERS IS CALLED DATA DICTIONARY.
+SQL> 
+SQL> REM TYPES OF OBJETS : TABLE VIEW SYNONYM SEQUENCE INDEX DIRECTORY
+SQL> 
+SQL> REM TABLE : IT IS USED TO STORE DATA PERMANENTLY INSIDE DATABASE.
+SQL> 
+SQL> REM DATA : FIGURE AND FACTS ABOUT BUSINESS TRANSACTIONS
+SQL> 
+SQL> REM BUSINESS TRANSACTIONS : PURCHASE SALES PURCHASE RETURN SALES RETURN CREDIT NOTE DEBIT NOTE WITHDRAW PAYMENT RECIPT DEPOSIT ...
+SQL> 
+SQL> REM DATABASE : IT IS COLLECTION MEANING FUL DATA PERTAINING TO SINGLE BUSINESS
+SQL> 
+SQL> REM TABLE : 1 DEFINITION 2 DATA
+SQL> 
+SQL> REM DEFINITION : CREATE ALTER DROP
+SQL> 
+SQL> REM DATA : INSERT UPDATE DELETE MERGE
+SQL> 
+SQL> REM CREATE : TO CREATE NEW OBJECT/TABLE
+SQL> 
+SQL> REM ALTER : TO CHANGE EXISTING OBJECT/TABLE
+SQL> 
+SQL> REM DROP : TO REMOVE EXISTING OBJECT/TABLE
+SQL> 
+SQL> 
+SQL> 
+SQL> REM INSERT : TO ADD NEW ROW TO THE TABLE
+SQL> 
+SQL> REM UPDATE : TO MODIFY/EDIT/CHANGE/UPDATE EXISTING ROW OF THE TABLE
+SQL> 
+SQL> REM DELETE : TO REMOVE/DELETE EXISTING ROWS FROM TABLE
+SQL> 
+SQL> REM MERGE : TO IMPLEMENT CHANGES DONE IN NEWER VERSION OF THE TABLE ONTO OLDER VERSION OF THE SAME TABLE
+SQL> 
+SQL> 
+SQL> REM TWO WAYS TO CREATE TABLE : 1 FROM SCRATCH/ALTOGETHER A NEW TABLE 2 USING SUBQUERY/USING EXISTING TABLE
+SQL> 
+SQL> 
+SQL> REM FROM SCTRACTH/NEW TABLE
+SQL> 
+SQL> REM PRE-REQUISITES FOR CREATING TABLE :
+SQL> 
+SQL> REM 1 USER MUST KNOW USERNAME, PASSWORD
+SQL> 
+SQL> REM 2 USER MUST HAVE CREATE SESSION , CREATE TABLE PRIVILEGE/PERMISSION
+SQL> 
+SQL> REM 3 BEFORE INSERTING ROWS TO THE TABLE, USER MUST HAVE STORAGE QUOTA ALLOTTED ON TABLESPACE
+SQL> 
+SQL> SET LINES 50
+SQL> 
+SQL> DESC EMPLOYEES
+ Name                    Null?    Type
+ ----------------------- -------- ----------------
+ EMPLOYEE_ID             NOT NULL NUMBER(6)
+ FIRST_NAME                       VARCHAR2(20)
+ LAST_NAME               NOT NULL VARCHAR2(25)
+ EMAIL                   NOT NULL VARCHAR2(25)
+ PHONE_NUMBER                     VARCHAR2(20)
+ HIRE_DATE               NOT NULL DATE
+ JOB_ID                  NOT NULL VARCHAR2(10)
+ SALARY                           NUMBER(8,2)
+ COMMISSION_PCT                   NUMBER(2,2)
+ MANAGER_ID                       NUMBER(6)
+ DEPARTMENT_ID                    NUMBER(4)
+
+SQL> SET LINES 200
+SQL> 
+SQL> SELECT * FROM EMPLOYEES;
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME                 EMAIL                     PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                       
+----------- -------------------- ------------------------- ------------------------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                       
+        100 Steven               King                      SKING                     515.123.4567         17-JUL-87 AD_PRES         24000                                      90                       
+        101 Neena                Kochhar                   NKOCHHAR                  515.123.4568         21-SEP-89 AD_VP           17000                       100            90                       
+        102 Lex                  De Haan                   LDEHAAN                   515.123.4569         13-JAN-93 AD_VP           17000                       100            90                       
+        103 Alexander            Hunold                    AHUNOLD                   590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                       
+        104 Bruce                Ernst                     BERNST                    590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                       
+        107 Diana                Lorentz                   DLORENTZ                  590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                       
+        124 Kevin                Mourgos                   KMOURGOS                  650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                       
+        141 Trenna               Rajs                      TRAJS                     650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                       
+        142 Curtis               Davies                    CDAVIES                   650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                       
+        143 Randall              Matos                     RMATOS                    650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                       
+        144 Peter                Vargas                    PVARGAS                   650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                       
+        149 Eleni                Zlotkey                   EZLOTKEY                  011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                       
+        174 Ellen                Abel                      EABEL                     011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                       
+        176 Jonathon             Taylor                    JTAYLOR                   011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                       
+        178 Kimerely             Grant                     KGRANT                    011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                     
+        200 Jennifer             Whalen                    JWAHLEN                   515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                       
+        201 Michael              Hartstein                 MHARTSTE                  515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                       
+        202 Pat                  Fay                       PFAY                      603.123.6666         17-AUG-97 MK_REP           6000                       201            20                       
+        205 Shelley              Higgins                   SHIGGINS                  515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                       
+        206 William              Gietz                     WGIETZ                    515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                       
+
+20 rows selected.
+
+SQL> DESC USER_TS_QUOTAS
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ TABLESPACE_NAME                                                                                                   NOT NULL VARCHAR2(30)
+ BYTES                                                                                                                      NUMBER
+ MAX_BYTES                                                                                                                  NUMBER
+ BLOCKS                                                                                                                     NUMBER
+ MAX_BLOCKS                                                                                                                 NUMBER
+ DROPPED                                                                                                                    VARCHAR2(3)
+
+SQL> SELECT TABLESPACE_NAME , BYTES/POWER(2,20) MB_USED , MAX_BYTES/POWER(2,20) MB_ALLOTTED FROM USER_TS_QUOTAS;
+
+TABLESPACE_NAME                   MB_USED MB_ALLOTTED                                                                                                                                                   
+------------------------------ ---------- -----------                                                                                                                                                   
+USERS                              4.6875  -9.537E-07                                                                                                                                                   
+
+SQL> CREATE TABLE T123 AS SELECT * FROM EMPLOYEES;
+
+Table created.
+
+SQL> SELECT TABLESPACE_NAME , BYTES/POWER(2,20) MB_USED , MAX_BYTES/POWER(2,20) MB_ALLOTTED FROM USER_TS_QUOTAS;
+
+TABLESPACE_NAME                   MB_USED MB_ALLOTTED                                                                                                                                                   
+------------------------------ ---------- -----------                                                                                                                                                   
+USERS                                4.75  -9.537E-07                                                                                                                                                   
+
+SQL> INSERT INTO T123 SELECT * FROM T123 CONNECT BY LEVEL <= 3;
+
+8420 rows created.
+
+SQL> SELECT TABLESPACE_NAME , BYTES/POWER(2,20) MB_USED , MAX_BYTES/POWER(2,20) MB_ALLOTTED FROM USER_TS_QUOTAS;
+
+TABLESPACE_NAME                   MB_USED MB_ALLOTTED                                                                                                                                                   
+------------------------------ ---------- -----------                                                                                                                                                   
+USERS                              5.4375  -9.537E-07                                                                                                                                                   
+
+SQL> DELETE T123;
+
+8440 rows deleted.
+
+SQL> SELECT * FROM T123;
+
+no rows selected
+
+SQL> DESC T123
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ EMPLOYEE_ID                                                                                                       NOT NULL NUMBER(6)
+ FIRST_NAME                                                                                                                 VARCHAR2(20)
+ LAST_NAME                                                                                                         NOT NULL VARCHAR2(25)
+ EMAIL                                                                                                             NOT NULL VARCHAR2(25)
+ PHONE_NUMBER                                                                                                               VARCHAR2(20)
+ HIRE_DATE                                                                                                         NOT NULL DATE
+ JOB_ID                                                                                                            NOT NULL VARCHAR2(10)
+ SALARY                                                                                                                     NUMBER(8,2)
+ COMMISSION_PCT                                                                                                             NUMBER(2,2)
+ MANAGER_ID                                                                                                                 NUMBER(6)
+ DEPARTMENT_ID                                                                                                              NUMBER(4)
+
+SQL> SELECT TABLESPACE_NAME , BYTES/POWER(2,20) MB_USED , MAX_BYTES/POWER(2,20) MB_ALLOTTED FROM USER_TS_QUOTAS;
+
+TABLESPACE_NAME                   MB_USED MB_ALLOTTED                                                                                                                                                   
+------------------------------ ---------- -----------                                                                                                                                                   
+USERS                              5.4375  -9.537E-07                                                                                                                                                   
+
+SQL> TRUNCATE TABLE T123;
+
+Table truncated.
+
+SQL> SELECT TABLESPACE_NAME , BYTES/POWER(2,20) MB_USED , MAX_BYTES/POWER(2,20) MB_ALLOTTED FROM USER_TS_QUOTAS;
+
+TABLESPACE_NAME                   MB_USED MB_ALLOTTED                                                                                                                                                   
+------------------------------ ---------- -----------                                                                                                                                                   
+USERS                                4.75  -9.537E-07                                                                                                                                                   
+
+SQL> DROP TABLE T123;
+
+Table dropped.
+
+SQL> SHOW RECYC
+ORIGINAL NAME    RECYCLEBIN NAME                OBJECT TYPE  DROP TIME                                                                                                                                  
+---------------- ------------------------------ ------------ -------------------                                                                                                                        
+T123             BIN$lIWvGJKYQw6GXomVjaSr2A==$0 TABLE        2020-02-17:19:07:39                                                                                                                        
+SQL> PURGE TABLE T123;
+
+Table purged.
+
+SQL> SHOW RECYC
+SQL> SELECT TABLESPACE_NAME , BYTES/POWER(2,20) MB_USED , MAX_BYTES/POWER(2,20) MB_ALLOTTED FROM USER_TS_QUOTAS;
+
+TABLESPACE_NAME                   MB_USED MB_ALLOTTED                                                                                                                                                   
+------------------------------ ---------- -----------                                                                                                                                                   
+USERS                              4.6875  -9.537E-07                                                                                                                                                   
+
+SQL> REM TABLESPACE : IT IS NOTHING BUT HARD DISK STORAGE AREA/SPACE RESEVED BY ORACLE DATABASE TO STORE OBJECT DATA.
+SQL> 
+SQL> 
+SQL> REM SYNTAX FOR CREATE TABLE FROM SCRATCH : CREATE TABLE TN(CN DATATYPE (SIZE) DEFAULT DV COLUMN LEVEL CONSTRAINTS,...,TABLE LEVEL CONSTRAINTS);
+SQL> 
+SQL> REM SYNTAX FOR CREATE TABLE USING SUB QUERY : CREATE TABLE NEW_TABLE_NAME AS SELECT * FROM EXISTING_TABLE_NAME WHERE ... GROUP BY / HAVING ... ORDER BY ...;
+SQL> 
+SQL> 
+SQL> REM ORACLE SUPPORTS TWO TYPES OF NAMING CONVENTIONS :
+SQL> 
+SQL> REM 1 CASE INSENSITIVE (DEFAULT)  2 CASE SENSITIVE
+SQL> 
+SQL> 
+SQL> REM RULES FOR CASE INSENSITIVE NAMING
+SQL> 
+SQL> REM 1 MIN 1 CHARACTER, MAX 128 CHARACTER
+SQL> 
+SQL> REM 2 FIRST MUST BE ALPHABET
+SQL> 
+SQL> REM 3 REMAINING CHARACTERS MAY BE ALPHABET , DIGITS OR _ # $
+SQL> 
+SQL> REM 4 WE CAN'T USE SQL/ORACLE KEY/RESERVE WORD AS OBJECT NAME
+SQL> 
+SQL> REM 5 WE CAN'T USE EXISTING OBJECT NAME UNDER SAME USER/WITHIN SAME SCHEMA
+SQL> 
+SQL> 
+SQL> 
+SQL> REM RULES FOR CASE SENSITIVE NAMING
+SQL> 
+SQL> REM 1 MIN 1 CHARACTER , MAX 128 CHARACTERS
+SQL> 
+SQL> REM 2 YOU MAY USE ANY CHARACTER FOR NAMING
+SQL> 
+SQL> REM 3 YOU MAY USE SQL/ORACLE KEY/RESERVE WORD FOR OBJECT NAMING
+SQL> 
+SQL> REM 4 YOU MAY CREATE OBJECT WITH IDENTICAL NAME WITHIN SAME SCHEMA/UNDER SAME USER
+SQL> 
+SQL> REM 5 NAME MUST BE DELIMITED BY " (DOUBLE QUOTES)
+SQL> 
+SQL> REM 6 NAME CAN'T USE ALL CAPITAL LATTERS.
+SQL> 
+SQL> REM 7 WHENEVER WE REFER THE OBJECT : 1 IT MUST BE DELIMITED WITH " 2 MUST USE SAME SPELLING 3 MUST USE SAME CASE
+SQL> 
+SQL> 
+SQL> REM SCHEMA : COLLECTION OF OBJECTS OWNED BY SINGLE USER
+SQL> 
+SQL> REM TYPES OF CHARACTERS : 1 ALPHABETS (A-Z, a-z) 2 DIGITS/NUMBERS : 0-9 3 SPECIAL CHARACTERS ~!@#$%^&*()_+|{}:"<>?[];',./
+SQL> 
+SQL> 
+SQL> REM "aBC" , "aBC" , "Abc" , "aBc"
+SQL> 
+SQL> REM "aBC" , "AbC" , "Abc" , "aBc"
+SQL> 
+SQL> CREATE TABLE T234(NO NUMBER);
+
+Table created.
+
+SQL> INSERT INTO T234 VALUES (10);
+
+1 row created.
+
+SQL> INSERT INTO T234 VALUES (20);
+
+1 row created.
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> SELECT* FROM T234;
+
+        NO                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+        10                                                                                                                                                                                              
+        20                                                                                                                                                                                              
+
+SQL> DROP TABLE T234;
+
+Table dropped.
+
+SQL> SHOW RECYC
+ORIGINAL NAME    RECYCLEBIN NAME                OBJECT TYPE  DROP TIME                                                                                                                                  
+---------------- ------------------------------ ------------ -------------------                                                                                                                        
+T234             BIN$PPhJ1nUQT32GumkG1j0sPw==$0 TABLE        2020-02-17:19:34:02                                                                                                                        
+SQL> SELECT * FROM T234;
+SELECT * FROM T234
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> SELECT * FROM BIN$PPhJ1nUQT32GumkG1j0sPw==$0;
+SELECT * FROM BIN$PPhJ1nUQT32GumkG1j0sPw==$0
+                                        *
+ERROR at line 1:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT * FROM "BIN$PPhJ1nUQT32GumkG1j0sPw==$0";
+
+        NO                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+        10                                                                                                                                                                                              
+        20                                                                                                                                                                                              
+
+SQL> SPOOL OFF
